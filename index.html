@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | ASHIK AFRIDI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <nav>
+        <div class="container nav-content">
+            <h1>ASIKUR RAHMAN</h1>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <img src="images/profile.jpg" alt="ASIKUR RAHMAN" class="profile-img">
+            <h1>Computer Science Student & Developer</h1>
+            <p>"Passionate Computer Science Engineering Student | Innovator in the Making | Eager to Learn and
+                Contribute | Interested in Competitive Programming & Software Development | A creative Developer"</p>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>As a first-year student embarking on my journey in Computer Science Engineering, I am driven by an
+                insatiable curiosity and passion for technology. My interests span a wide spectrum, with a particular
+                focus on artificial intelligence, programming languages, and software engineering. <br><br>
+
+                With each line of code I write and every algorithm I delve into, I am fueled by the excitement of
+                unraveling complex problems and finding elegant solutions. Whether it's debugging a stubborn bug or
+                optimizing the efficiency of an algorithm, I thrive on the challenges that come with being a developer.
+                <br><br>
+
+                My enthusiasm for software development extends beyond the classroom, as I constantly seek out new
+                opportunities to expand my skills and knowledge. From attending coding competitions to participating in
+                hackathons, I embrace every chance to hone my craft and push the boundaries of what I can achieve.
+                <br><br>
+
+                But beyond the technical aspects, I am also deeply committed to the principles of collaboration and
+                teamwork. I believe that the most impactful projects are born from diverse perspectives and collective
+                efforts. As such, I actively seek out opportunities to collaborate with peers and mentors, knowing that
+                together, we can accomplish far more than any one of us could alone. <br><br>
+
+                Looking ahead, my goal is not only to become a proficient developer but also to leverage technology for
+                positive change. Whether it's through creating innovative solutions to real-world problems or
+                contributing to open-source projects that benefit society, I am dedicated to using my skills for the
+                greater good. <br><br>
+
+                In summary, I am a passionate and driven individual with a love for technology and a desire to make a
+                difference. I am excited to continue my journey in Computer Science Engineering, eager to learn, grow,
+                and make an impact in the world of technology. Let's connect and embark on this journey together!
+            </p>
+        </div>
+    </section>
+
+    <section id="skills" class="section">
+        <div class="container">
+            <h2>Technical Skills</h2>
+            <div class="skills">
+                <span class="skill-tag">C</span>
+                <span class="skill-tag">C++</span>
+                <span class="skill-tag">Web Development</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <div class="container">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Own Portfolio</h3>
+                    <p>In this project I've used HTML, CSS & JavaScript. This website also able to send me E-mail if
+                        someone wants to contact me...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="contact-container">
+                <div class="contact-form">
+                    <form id="contactForm" action="https://formspree.io/f/xzzebqrd" method="POST">
+                        <input type="text" name="_gotcha" style="display:none">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Your Message" rows="5"
+                                required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                    <div id="successMessage" class="success-message"></div>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://github.com/asikafridi" target="_blank">
+                        <i class="fab fa-github"></i>
+                        GitHub
+                    </a>
+                    <a href="https://linkedin.com/in/asikafridi" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                        LinkedIn
+                    </a>
+                    <a href="mailto:asikafridi0@gmail.com">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </a>
+                    <a href="https://codeforces.com/profile/asikafridi" target="_blank">
+                        <i class="fas fa-code"></i>
+                        Codeforces
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear">2025</span> All rights reserved to <strong>ASIKUR RAHMAN</strong></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
