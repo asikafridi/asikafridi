@@ -261,58 +261,54 @@ document.querySelectorAll('.skills').forEach(section => {
 // Enhanced form handling
 const contactForm = document.getElementById('contactForm');
 const submitBtn = contactForm.querySelector('button[type="submit"]');
+const statusPopup = document.getElementById('statusPopup');
 
 contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // Disable button and show sending state
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending...';
+    showPopup('Sending your message...', 'sending');
 
     try {
-        document.getElementById('contactForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        const formData = new FormData(contactForm);
 
-            const formData = new FormData(this);
-            const successMessage = document.getElementById('successMessage');
-
-            try {
-                const response = await fetch('https://formspree.io/f/xzzebqrd', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    successMessage.textContent = "Message sent successfully!";
-                    successMessage.style.color = '#4CAF50';
-                    successMessage.style.borderColor = '#4CAF50';
-                    successMessage.style.display = 'block';
-                    this.reset();
-
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 3000);
-                } else {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Unknown error');
-                }
-            } catch (error) {
-                successMessage.textContent = `Error: ${error.message}`;
-                successMessage.style.color = '#ff4444';
-                successMessage.style.borderColor = '#ff4444';
-                successMessage.style.display = 'block';
-
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 5000);
-            }
+        const response = await fetch('https://formspree.io/f/xzzebqrd', {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
         });
+
+        if (response.ok) {
+            showPopup('Message sent successfully! 🎉', 'success');
+            contactForm.reset();
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to send message');
+        }
+    } catch (error) {
+        showPopup(`Error: ${error.message}`, 'error');
     } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Send Message';
+
+        // Hide popup after 3 seconds for success, 5 seconds for errors
+        const delay = statusPopup.classList.contains('error') ? 5000 : 3000;
+        setTimeout(() => {
+            statusPopup.classList.remove('active', 'success', 'error', 'sending');
+        }, delay);
     }
 });
+
+function showPopup(message, type) {
+    statusPopup.textContent = message;
+    statusPopup.className = 'active'; // Reset classes
+    statusPopup.classList.add(type);
+
+    // Force reflow to enable CSS transition
+    void statusPopup.offsetWidth;
+
+    statusPopup.classList.add('active');
+}
 
 //bottom for dynamic year
 document.getElementById('currentYear').textContent = new Date().getFullYear();
