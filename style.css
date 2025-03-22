@@ -1,28 +1,5 @@
 /* Upadte 22-03-25 */
 /* Font loading fix in Brave */
-
-/* Prevent horizontal scroll */
-html, body {
-    overflow-x: hidden;
-}
-
-/* Mobile body lock when menu is open */
-body.menu-open {
-    overflow: hidden;
-}
-
-/* Improve skill bar visibility */
-@media (max-width: 480px) {
-    .skill-bar {
-        height: 40px;
-    }
-    
-    .skill-label,
-    .skill-percentage {
-        font-size: 0.7rem;
-    }
-}
-
 @font-face {
     font-family: 'Poppins';
     font-style: normal;
@@ -776,6 +753,43 @@ textarea:focus {
 .submit-btn:hover {
     background: #45a049;
     transform: translateY(-2px);
+}
+
+.statusPopup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.statusPopup.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.statusPopup.sending {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    color: #856404;
+}
+
+.statusPopup.success {
+    background: #d4edda;
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+.statusPopup.error {
+    background: #f8d7da;
+    border-left: 4px solid #dc3545;
+    color: #721c24;
 }
 
 .social-links {
