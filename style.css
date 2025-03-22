@@ -1,5 +1,28 @@
 /* Upadte 22-03-25 */
 /* Font loading fix in Brave */
+
+/* Prevent horizontal scroll */
+html, body {
+    overflow-x: hidden;
+}
+
+/* Mobile body lock when menu is open */
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Improve skill bar visibility */
+@media (max-width: 480px) {
+    .skill-bar {
+        height: 40px;
+    }
+    
+    .skill-label,
+    .skill-percentage {
+        font-size: 0.7rem;
+    }
+}
+
 @font-face {
     font-family: 'Poppins';
     font-style: normal;
