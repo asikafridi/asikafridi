@@ -25,21 +25,6 @@ function updateThemeIndicator() {
         : 'Dark';
 }
 
-// Service Worker Registration
-// In script.js, modify service worker registration
-if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
-    // Only register in production
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('SW registered:', registration);
-            })
-            .catch(error => {
-                console.log('SW registration failed:', error);
-            });
-    });
-}
-
 // Lazy Loading
 const lazyLoad = targets => {
     const observer = new IntersectionObserver((entries, observer) => {
@@ -77,16 +62,18 @@ skillBars.forEach(bar => {
 });
 
 // Scroll to next section on indicator click
-document.querySelector('.hero-scroll-indicator').addEventListener('click', () => {
-    const aboutSection = document.getElementById('about');
-    const navHeight = document.querySelector('nav').offsetHeight;
-
-    window.scrollTo({
-        top: aboutSection.offsetTop - navHeight + 20,
-        behavior: 'smooth'
+const scrollIndicator = document.querySelector('.hero-scroll-indicator');
+if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', () => {
+        const aboutSection = document.getElementById('about');
+        const navHeight = document.querySelector('nav').offsetHeight;
+        
+        window.scrollTo({
+            top: aboutSection.offsetTop - navHeight + 20,
+            behavior: 'smooth'
+        });
     });
-});
-
+}
 // Mobile menu toggle
 const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('.nav-links');
