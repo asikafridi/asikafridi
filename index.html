@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Update existing title and add these -->
+    <!-- Next two line for Brave opt -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="no-referrer-when-downgrade">
     <title>Asikur Rahman | Computer Science Student & Developer Portfolio</title>
     <meta name="description"
         content="Portfolio of Asikur Rahman - Computer Science student specializing in competitive programming and web development. Explore projects, achievements, and technical skills.">
@@ -25,15 +28,17 @@
     <meta name="twitter:description" content="Computer Science student & competitive programmer from Bangladesh">
     <meta name="twitter:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Ensure all external resources use HTTPS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet"
+        integrity="sha384-..." crossorigin="anonymous">
 
     <script type="application/ld+json">
         {
           "@context": "https://schema.org",
           "@type": "Person",
           "name": "Asikur Rahman",
-          "url": "https://yourdomain.com",
+          "url": "https://asikafridi.github.io/asikafridi/",
           "image": "https://asikafridi.github.io/asikafridi/images/profile.jpg",
           "jobTitle": "Computer Science Student & Developer",
           "alumniOf": "Daffodil International University",
@@ -49,10 +54,8 @@
 </head>
 
 <body>
+    <button class="theme-toggle" aria-label="Toggle theme" title="Theme"></button>
     <div class="interactive-bg"></div>
-    <!-- Update existing nav and add these -->
-    <nav aria-label="Main navigation"></nav>
-    <!--updated-->
     <nav>
         <div class="container nav-content">
             <h1>ASIKUR RAHMAN</h1>
@@ -68,10 +71,15 @@
 
     <section class="hero">
         <div class="container hero-content">
+            <div class="hero-scroll-indicator">
+                <i class="fas fa-chevron-down"></i>
+            </div>
             <!-- profile image seo-->
-            <img src="images/profile1.jpg" alt="Asikur Rahman - Computer Science Student" class="profile-img"
-                loading="lazy" width="200" height="200">
-            <h1>Computer Science Student & Developer</h1>
+            <img src="images/profile1.jpg" data-src="images/profile1.jpg" alt="Profile" loading="lazy"
+                class="profile-img">
+            <h1 data-text="Computer Science Student & Developer">
+                <span>Computer Science Student & Developer</span>
+            </h1>
             <p>"Passionate Computer Science Engineering Student | Innovator in the Making | Eager to Learn and
                 Contribute | Interested in Competitive Programming & Software Development | A creative Developer"</p>
         </div>
@@ -84,7 +92,7 @@
             <div class="about-grid">
                 <div class="about-content">
                     <div class="about-header">
-                        <img src="images/profile2.jpg" alt="Asikur Rahman" class="about-img">
+                        <img data-src="images/profile2.jpg" alt="Asikur Rahman" class="about-img">
                         <div class="about-badges">
                             <span class="badge">
                                 <i class="fas fa-code"></i>
@@ -182,10 +190,33 @@
         <div class="container">
             <h2>Technical Skills</h2>
             <div class="skills">
-                <span class="skill-tag">C</span>
-                <span class="skill-tag">C++</span>
-                <span class="skill-tag">Web Development(Beginner)</span>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 80%">
+                        <span class="skill-label">C</span>
+                        <span class="skill-percentage">80%</span>
+                    </div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 60%">
+                        <span class="skill-label">C++</span>
+                        <span class="skill-percentage">60%</span>
+                    </div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 45%">
+                        <span class="skill-label">Problem Solving</span>
+                        <span class="skill-percentage">45%</span>
+                    </div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-progress" style="width: 25%">
+                        <span class="skill-label">Web Development</span>
+                        <span class="skill-percentage">25%</span>
+                    </div>
+                </div>
             </div>
+            <p class="skill-disclaimer">*Skill levels represent approximate proficiency estimates based on
+                self-assessment</p>
         </div>
     </section>
 
@@ -195,7 +226,7 @@
             <div class="languages-grid">
                 <div class="language-card">
                     <h3>Bengali</h3>
-                    <p>Native Proficiency</p>
+                    <p>Native Proficiency.</p>
                 </div>
                 <div class="language-card">
                     <h3>English</h3>
@@ -206,7 +237,7 @@
                 </div>
                 <div class="language-card">
                     <h3>Hindi</h3>
-                    <p>Limited Working Proficiency</p>
+                    <p>Limited Working Proficiency.</p>
                 </div>
             </div>
         </div>
