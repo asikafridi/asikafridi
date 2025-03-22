@@ -1,10 +1,5 @@
 //upadte 22-03-2025
-// Theme toggle with localStorage
-try {
-    localStorage.setItem('theme', theme);
-} catch (e) {
-    console.log('LocalStorage blocked - using default theme');
-}
+
 const themeToggle = document.querySelector('.theme-toggle');
 const themeIndicator = document.createElement('span');
 themeIndicator.className = 'theme-indicator';
