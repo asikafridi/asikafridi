@@ -270,15 +270,21 @@
                     <form id="contactForm" action="https://formspree.io/f/xzzebqrd" method="POST">
                         <input type="text" name="_gotcha" style="display:none">
                         <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                            <input type="text" id="name" name="name" placeholder="Your Name" autocomplete="name"
+                                required>
                         </div>
                         <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                            <input type="email" id="email" name="email" placeholder="Your Email" autocomplete="email"
+                                required>
                         </div>
                         <div class="form-group">
-                            <textarea id="message" name="message" placeholder="Your Message" rows="5"
+                            <textarea id="message" name="message" placeholder="Your Message" rows="5" autocomplete="off"
                                 required></textarea>
                         </div>
+
+                        <!-- For spam trap field -->
+                        <input type="text" name="_gotcha" style="display:none" autocomplete="off">
+                        <!-- Prevent accidental autofill -->
                         <button type="submit" class="submit-btn">Send Message</button>
                     </form>
 
