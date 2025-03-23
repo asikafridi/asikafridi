@@ -281,14 +281,13 @@
                             <textarea id="message" name="message" placeholder="Your Message" rows="5" autocomplete="off"
                                 required></textarea>
                         </div>
-
-                        <!-- For spam trap field -->
-                        <input type="text" name="_gotcha" style="display:none" autocomplete="off">
-                        <!-- Prevent accidental autofill -->
-                        <button type="submit" class="submit-btn">Send Message</button>
+                        <div class="form-button-wrapper">
+                            <button type="submit" class="submit-btn">Send Message</button>
+                            <div id="statusPopup" class="statusPopup"></div>
+                        </div>
                     </form>
 
-                    <div class="statusPopup"></div>
+                    <div id="statusPopup" class="statusPopup"></div>
                 </div>
 
                 <div class="social-links">
