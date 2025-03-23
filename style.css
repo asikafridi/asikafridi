@@ -44,6 +44,10 @@
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.light-mode .particles {
+    display: none;
+}
+
 .light-mode .project-card,
 .light-mode .achievement-card,
 .light-mode .language-card {
@@ -97,25 +101,97 @@
     font-size: 1.5rem;
 }
 
+/* Hamburger */
+
+/* Ensure nav stays on top */
+nav {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+}
+
+/* Remove duplicate mobile menu styles and fix z-index */
+/* Add to style.css */
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
-
     .nav-links {
-        position: fixed;
-        top: 4rem;
-        right: -100%;
-        flex-direction: column;
-        background: var(--bg-primary);
-        padding: 2rem;
-        box-shadow: var(--shadow);
-        transition: right 0.3s ease;
+        background: linear-gradient(135deg, rgba(18, 18, 18, 0.95), rgba(33, 150, 243, 0.1));
+        backdrop-filter: blur(10px);
+        border-left: 2px solid var(--primary);
+        padding: 2rem 1.5rem;
     }
 
-    .nav-links.active {
-        right: 0;
+    .nav-links a {
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        margin: 0.8rem 0;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
     }
+
+    .nav-links a::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: var(--primary);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background: rgba(76, 175, 80, 0.15);
+        transform: translateX(10px);
+    }
+
+    .nav-links a:hover::before {
+        opacity: 1;
+    }
+
+    /* Add menu overlay */
+    .menu-overlay {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-links.active~.menu-overlay {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    /* Close button */
+    .menu-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        cursor: pointer;
+        opacity: 0.8;
+    }
+}
+
+.menu-toggle[aria-expanded="true"] i {
+    transform: rotate(90deg);
+}
+
+.menu-toggle i {
+    transition: transform 0.3s ease;
 }
 
 /* Upadte 22-03-25 end */
@@ -132,6 +208,7 @@ body {
         url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover fixed;
     color: #fff;
     line-height: 1.6;
+    background: var(--background);
 }
 
 /* background effect */
