@@ -151,6 +151,7 @@ animate();
 // Generate particles
 function createParticles() {
     const particles = document.querySelector('.particles');
+    if (!particles) return;
     for (let i = 0; i < 50; i++) {
         const particle = document.createElement('div');
         particle.style.cssText = `
