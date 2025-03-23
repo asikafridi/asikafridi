@@ -103,34 +103,50 @@
 
 /* Hamburger */
 
-/* Ensure nav stays on top */
-nav {
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-}
-
-/* Remove duplicate mobile menu styles and fix z-index */
-/* Add to style.css */
 @media (max-width: 768px) {
+    .menu-toggle {
+        display: block !important;
+        z-index: 1001;
+        position: relative;
+    }
+
+    /* Mobile menu styling */
     .nav-links {
-        background: linear-gradient(135deg, rgba(18, 18, 18, 0.95), rgba(33, 150, 243, 0.1));
-        backdrop-filter: blur(10px);
-        border-left: 2px solid var(--primary);
-        padding: 2rem 1.5rem;
+        padding: 4rem 0.2rem 1rem;
+        /* Top | Horizontal | Bottom */
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 250px;
+        background: rgba(18, 18, 18, 0.411);
+        backdrop-filter: blur(20px);
+        border-left: 1px solid rgba(51, 145, 54, 0.353);
+        display: flex !important;
+        flex-direction: column;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+    }
+
+
+    .nav-links.active {
+        right: 0;
     }
 
     .nav-links a {
+        overflow: hidden;
         color: var(--text-primary);
         font-size: 1.1rem;
-        margin: 0.8rem 0;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
+        border-radius: 20px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        justify-content: flex-start;
+        padding: 0.8rem 1.5rem;
+        margin: 0.4rem 0;
+        width: 100%;
+        text-align: left;
+        transform: translateX(0);
         position: relative;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
+        z-index: 1;
     }
 
     .nav-links a::before {
@@ -138,60 +154,137 @@ nav {
         width: 6px;
         height: 6px;
         background: var(--primary);
-        border-radius: 50%;
+        border-radius: 15px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        position: absolute;
+        left: 0.5rem;
+        top: 50%;
+        transform: translateY(-45%);
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 20px;
+        z-index: -1;
+        background: rgba(76, 175, 80, 0.15);
         opacity: 0;
         transition: opacity 0.3s ease;
     }
 
     .nav-links a:hover {
         background: rgba(76, 175, 80, 0.15);
-        transform: translateX(10px);
+        transform: translateX(6px) scale(1.02);
+        padding-left: 2.5rem;
+        margin-left: 0.5rem;
+        border-radius: 20px !important;
     }
 
     .nav-links a:hover::before {
+        left: 1.5rem;
+        opacity: 1;
+    }
+
+    .nav-links a:hover::after {
         opacity: 1;
     }
 
     /* Add menu overlay */
     .menu-overlay {
         position: fixed;
-        top: 70px;
+        top: 0;
         left: 0;
         width: 100%;
-        height: calc(100vh - 70px);
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(2px);
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(5px);
         opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
     }
 
     .nav-links.active~.menu-overlay {
         opacity: 1;
-        pointer-events: all;
+        visibility: visible;
     }
 
-    /* Close button */
-    .menu-close {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        background: none;
-        border: none;
-        color: var(--text-primary);
-        font-size: 1.5rem;
-        padding: 0.5rem;
-        cursor: pointer;
-        opacity: 0.8;
+    .menu-toggle[aria-expanded="true"] i {
+        transform: rotate(90deg);
+    }
+
+    .menu-toggle i {
+        transition: transform 0.3s ease;
     }
 }
 
-.menu-toggle[aria-expanded="true"] i {
-    transform: rotate(90deg);
+@media (max-width: 480px) {
+    .skill-bar {
+        height: 35px;
+        /* Increase height for mobile */
+    }
+
+    .skill-label {
+        left: 10px !important;
+        font-size: 0.8rem !important;
+        max-width: 40%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .skill-percentage {
+        right: 10px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .skill-progress {
+        min-width: 60px;
+        /* Ensure progress bar never gets too narrow */
+        padding: 0 8px;
+        /* Add internal padding */
+    }
 }
 
-.menu-toggle i {
-    transition: transform 0.3s ease;
+@media (max-width: 360px) {
+    .skill-label {
+        max-width: 35%;
+    }
+}
+
+/* Hero section text reduce in mobile view */
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2rem !important;
+        line-height: 1.2;
+    }
+
+    /* Optional: Adjust paragraph text size */
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    /* If needed for very small screens */
+    @media (max-width: 360px) {
+        .hero-content h1 {
+            font-size: 1.8rem !important;
+        }
+    }
+}
+
+/* About section text in mobile view */
+@media (max-width: 768px) {
+    .about-content p {
+        font-size: 1rem !important;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
 }
 
 /* Upadte 22-03-25 end */
@@ -277,14 +370,22 @@ html {
 
 /* Add scroll margin to all sections */
 section {
-    scroll-margin-top: 100px;
     /* Adjust based on your nav height */
+    scroll-margin-top: 100px;
+    /* padding-top + padding-bottom + font-size */
+    scroll-margin-top: calc(1rem * 2 + 1em);
+
 }
 
-/* Calculate exact nav height */
-section {
-    scroll-margin-top: calc(1rem * 2 + 1em);
-    /* padding-top + padding-bottom + font-size */
+@media (min-width: 769px) {
+    .nav-links {
+        margin-left: auto;
+        padding-right: 2rem;
+    }
+
+    .nav-links a {
+        margin-left: 3rem;
+    }
 }
 
 nav {
@@ -355,6 +456,10 @@ nav h1:hover::after {
 @media (max-width: 768px) {
     nav h1 {
         font-size: 1.5rem;
+        margin-left: 0;
+        padding-left: 0;
+        text-align: left;
+        width: auto;
     }
 }
 
@@ -620,6 +725,16 @@ nav h1:hover::after {
     left: 0;
 }
 
+.project-card h3 {
+    color: #4CAF50;
+    margin-bottom: 0.5rem;
+}
+
+.project-card p {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
 /* Achivement section */
 .achievements-grid {
     display: grid;
@@ -784,6 +899,8 @@ nav h1:hover::after {
     color: #ccc;
 }
 
+/* Contact Section */
+
 #contact {
     background: rgba(0, 0, 0, 0);
 }
@@ -818,18 +935,41 @@ textarea:focus {
 }
 
 .submit-btn {
-    background: #4CAF50;
+    background: var(--gradient);
     color: #fff;
-    padding: 1rem 2rem;
+    padding: 1.2rem 2.5rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            transparent);
+    transition: left 0.6s;
 }
 
 .submit-btn:hover {
-    background: #45a049;
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+}
+
+.submit-btn:hover::after {
+    left: 100%;
 }
 
 .statusPopup {
@@ -868,6 +1008,68 @@ textarea:focus {
     border-left: 4px solid #dc3545;
     color: #721c24;
 }
+
+/* Light mode adjustments */
+
+.light-mode input,
+.light-mode textarea {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #2f93df;
+    border-radius: 5px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.light-mode input:focus,
+.light-mode textarea:focus {
+    outline: none;
+    border-color: #2f93df;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.light-mode input::placeholder,
+.light-mode textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.light-mode .submit-btn {
+    background: var(--gradient);
+    color: #fff;
+    padding: 1.2rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Mobile optimization */
+
+@media (max-width: 768px) {
+    .contact-form {
+        padding: 1.5rem;
+    }
+
+    input,
+    textarea {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 1.2rem;
+    }
+}
+
+
+/* Social Links */
 
 .social-links {
     display: flex;
