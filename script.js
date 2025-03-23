@@ -74,41 +74,43 @@ if (scrollIndicator) {
         });
     });
 }
+
+// Hambuger
 // Mobile menu toggle
-// Correct element selectors
 const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('#mobile-nav');
+const menuOverlay = document.querySelector('.menu-overlay');
 
-// Enhanced toggle function
-// Add close menu functionality for links and overlay
+const toggleMenu = () => {
+    const isOpen = navLinks.classList.toggle('active');
+    menuToggle.setAttribute('aria-expanded', isOpen);
+    menuOverlay.style.visibility = isOpen ? 'visible' : 'hidden';
+    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+};
+
+// Toggle menu on hamburger click
+menuToggle.addEventListener('click', toggleMenu);
+
+// Close menu on these events
+menuOverlay.addEventListener('click', toggleMenu);
 document.querySelectorAll('#mobile-nav a').forEach(link => {
     link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = 'auto';
+        // Only close the menu on mobile screens
+        if (window.innerWidth <= 768) {
+            toggleMenu();
+        }
     });
 });
 
-// Add close button functionality
-document.querySelector('.menu-close').addEventListener('click', () => {
-    navLinks.classList.remove('active');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = 'auto';
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+        toggleMenu();
+    }
 });
 
-// Add overlay click functionality
-document.querySelector('.menu-overlay').addEventListener('click', () => {
-    navLinks.classList.remove('active');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = 'auto';
-});
-
-// Handle window resize
 window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-        navLinks.classList.remove('active');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = 'auto';
+    if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+        toggleMenu();
     }
 });
 
@@ -180,6 +182,8 @@ document.querySelectorAll('.nav-links a').forEach(anchor => {
         history.replaceState(null, null, targetId);
     });
 });
+
+
 // Calculate nav height dynamically
 const nav = document.querySelector('nav');
 const navHeight = nav.offsetHeight;
