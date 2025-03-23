@@ -245,20 +245,20 @@ document.querySelectorAll('.skills').forEach(section => {
 
 // Contact Form Handling with Formspree
 // Enhanced form handling
+// Contact Form Handling with Formspree
 const contactForm = document.getElementById('contactForm');
 const submitBtn = contactForm.querySelector('button[type="submit"]');
-const statusPopup = document.getElementById('statusPopup');
+const statusPopup = document.getElementById('statusPopup'); // Now correctly selected
 
 contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // This prevents the default form submission
 
-    // Disable button and show sending state
+    // Your existing code remains the same...
     submitBtn.disabled = true;
     showPopup('Sending your message...', 'sending');
 
     try {
         const formData = new FormData(contactForm);
-
         const response = await fetch('https://formspree.io/f/xzzebqrd', {
             method: 'POST',
             body: formData,
@@ -269,31 +269,50 @@ contactForm.addEventListener('submit', async (e) => {
             showPopup('Message sent successfully! 🎉', 'success');
             contactForm.reset();
         } else {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to send message');
+            throw new Error('Failed to send message');
         }
     } catch (error) {
         showPopup(`Error: ${error.message}`, 'error');
     } finally {
         submitBtn.disabled = false;
-
-        // Hide popup after 3 seconds for success, 5 seconds for errors
-        const delay = statusPopup.classList.contains('error') ? 5000 : 3000;
         setTimeout(() => {
             statusPopup.classList.remove('active', 'success', 'error', 'sending');
-        }, delay);
+        }, statusPopup.classList.contains('error') ? 5000 : 3000);
     }
 });
 
+// Update the showPopup function
 function showPopup(message, type) {
     statusPopup.textContent = message;
-    statusPopup.className = 'active'; // Reset classes
-    statusPopup.classList.add(type);
+    statusPopup.className = 'statusPopup'; // Reset classes
+    statusPopup.classList.add(type, 'active');
 
-    // Force reflow to enable CSS transition
-    void statusPopup.offsetWidth;
+    // Remove existing icons
+    while (statusPopup.firstChild) {
+        statusPopup.removeChild(statusPopup.firstChild);
+    }
 
-    statusPopup.classList.add('active');
+    // Add icon based on type
+    const icon = document.createElement('i');
+    switch (type) {
+        case 'success':
+            icon.className = 'fas fa-check';
+            break;
+        case 'error':
+            icon.className = 'fas fa-times';
+            break;
+        case 'sending':
+            icon.className = 'fas fa-spinner fa-spin';
+            break;
+    }
+
+    statusPopup.insertBefore(icon, statusPopup.firstChild);
+
+    // Auto-dismiss
+    const dismissTime = type === 'error' ? 5000 : 3000;
+    setTimeout(() => {
+        statusPopup.classList.remove('active');
+    }, dismissTime);
 }
 
 //bottom for dynamic year
