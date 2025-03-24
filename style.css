@@ -9,14 +9,41 @@
 }
 
 :root {
-    --primary: #4CAF50;
-    --secondary: #2196F3;
-    --text-primary: #ffffff;
-    --bg-primary: #121212;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --primary: #2ecc71;
+    --secondary: #3498db;
+    --dark-bg: #0a192f;
+    --light-text: #ccd6f6;
+    --transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
     --background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+}
+
+.section {
+    padding: 5rem 0;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 600;
+    letter-spacing: -0.03em;
+}
+
+h2 {
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 3rem;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--primary);
 }
 
 /* Theme Toggle */
@@ -299,8 +326,11 @@
 body {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover fixed;
-    color: #fff;
+
+
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
     line-height: 1.6;
+    color: var(--light-text);
     background: var(--background);
 }
 
@@ -683,8 +713,10 @@ nav h1:hover::after {
     }
 }
 
-.section {
-    padding: 5rem 0;
+/* Projects Section */
+
+#projects {
+    padding: 6rem 0;
 }
 
 .projects-grid {
@@ -735,7 +767,128 @@ nav h1:hover::after {
     color: #ccc;
 }
 
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 1.2rem 0;
+    justify-content: flex-mid;
+}
+
+.tech-stack span {
+    background: rgba(46, 204, 113, 0.15);
+    color: var(--primary);
+    padding: 0.4rem clamp(0.8rem, 2vw, 1rem);
+    /* Responsive padding */
+    border-radius: 2rem;
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+    /* Fluid font size */
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    line-height: 1.2;
+    backdrop-filter: blur(4px);
+    /* Prevent text overflow */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Animation 1: Subtle scale with shadow */
+.tech-stack span:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
+    background: rgba(46, 204, 113, 0.25);
+    border-color: rgba(46, 204, 113, 0.5);
+}
+
+/* Animation 3: Shine effect */
+.tech-stack span::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            transparent);
+    transform: translateX(-100%) rotate(15deg);
+    transition: all 0.4s ease;
+}
+
+.tech-stack span:hover::after {
+    transform: translateX(100%) rotate(15deg);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .tech-stack span {
+        transition: none;
+    }
+
+    .tech-stack span:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .tech-stack span::before,
+    .tech-stack span::after {
+        display: none;
+    }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .tech-stack {
+        gap: 0.4rem;
+        margin: 0.8rem 0;
+    }
+
+    .tech-stack span {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.75rem;
+        border-radius: 1.5rem;
+        backdrop-filter: none;
+        /* Remove blur for mobile performance */
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .tech-stack {
+        gap: 0.3rem;
+    }
+
+    .tech-stack span {
+        padding: 0.25rem 0.7rem;
+        font-size: 0.7rem;
+        border-radius: 1rem;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    .tech-stack {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tech-stack span {
+        flex-shrink: 0;
+    }
+}
+
 /* Achivement section */
+
 .achievements-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -784,6 +937,7 @@ nav h1:hover::after {
 }
 
 /* Updated Skills Section */
+
 .skills {
     display: grid;
     gap: 1.5rem;
@@ -800,10 +954,10 @@ nav h1:hover::after {
 
 .skill-progress {
     height: 100%;
-    background: var(--gradient);
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
     width: 0;
     border-radius: 8px;
-    transition: width 1s ease;
+    transition: width 1s ease-out;
     position: relative;
 }
 
@@ -851,7 +1005,32 @@ nav h1:hover::after {
     margin: 0 auto 1rem;
 }
 
+.skill-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
 /* Language Proficiency */
+
 .languages-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
