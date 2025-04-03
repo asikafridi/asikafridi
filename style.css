@@ -1,3 +1,75 @@
+/* Scroll progress */
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+            #4CAF50 0%,
+            #2196F3 50%,
+            #9C27B0 100%);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    border-radius: 2px;
+    z-index: 9999;
+    transition: width 0.3s ease-out;
+}
+
+.scroll-progress::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -4px;
+    width: 12px;
+    height: 12px;
+    background: #4CAF50;
+    border-radius: 50%;
+    transform: translateY(-25%);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+.light-mode .scroll-progress {
+    background: linear-gradient(90deg,
+            #2196F3 0%,
+            #4CAF50 50%,
+            #9C27B0 100%);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* Prevent double-tap zoom(mobile opt) */
+button,
+a {
+    touch-action: manipulation;
+}
+
+@media (hover: none) {
+    .project-card:hover {
+        transform: none;
+    }
+
+    .tech-stack span:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+/* Update mobile menu CSS */
+@media (max-width: 768px) {
+    .nav-links {
+        width: 70%;
+        right: -70%;
+        transition: right 0.3s ease-in-out;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .menu-overlay {
+        backdrop-filter: blur(3px);
+    }
+}
+
 /* Upadte 22-03-25 */
 /* Font loading fix in Brave */
 @font-face {
@@ -221,6 +293,7 @@ h2::after {
     .nav-links a:hover::after {
         opacity: 1;
     }
+
 
     /* Add menu overlay */
     .menu-overlay {
@@ -511,6 +584,33 @@ nav h1:hover::after {
     display: inline-block;
 }
 
+/* Update hero h1 styles */
+.hero-content h1 span {
+    background: linear-gradient(45deg,
+            #4CAF50,
+            #2196F3,
+            #9C27B0);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-text 5s ease infinite;
+}
+
+@keyframes gradient-text {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 .hero-content:hover h1 {
     transform: scale(1.05);
 }
@@ -629,10 +729,12 @@ nav h1:hover::after {
 .badge:hover {
     background: rgba(76, 175, 80, 0.2);
     transform: translateX(10px);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
 }
 
 .tech-stack i {
     position: relative;
+    gap: 5rem;
 }
 
 .tech-stack i:hover::after {
@@ -657,8 +759,8 @@ nav h1:hover::after {
 
 .tech-stack {
     display: flex;
-    gap: 1.5rem;
-    font-size: 2.5rem;
+    gap: 1.5rem !important;
+    font-size: 2.5rem !important;
     justify-content: center;
 }
 
@@ -670,17 +772,38 @@ nav h1:hover::after {
     transform: translateY(-5px);
 }
 
+@media (max-width: 768px) {
+    .tech-stack {
+        font-size: 2rem !important;
+        gap: 1rem !important;
+    }
+}
+
+/* Timeline Section */
+
+.timeline-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 .about-timeline {
     background: rgba(255, 255, 255, 0.05);
     padding: 2rem;
     border-radius: 10px;
     border: 1px solid rgba(76, 175, 80, 0.2);
+    position: relative;
 }
+
 
 .timeline-item {
     display: flex;
     gap: 1.5rem;
     padding: 1.5rem 0;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.4s ease-out;
 }
 
 .timeline-item:not(:last-child) {
@@ -690,17 +813,27 @@ nav h1:hover::after {
 .timeline-icon {
     width: 40px;
     height: 40px;
-    background: #4CAF50;
+    background: rgba(76, 175, 80, 0.2);
     border-radius: 50%;
+    border: 2px solid rgb(76, 175, 80);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.timeline-item:hover .timeline-icon {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
 }
 
 .timeline-content span {
     color: #4CAF50;
     font-size: 0.9rem;
 }
+
+/* end timeline */
 
 @media (max-width: 768px) {
     .about-grid {
@@ -738,7 +871,17 @@ nav h1:hover::after {
 
 .project-card:hover {
     transform: translateY(-10px);
-    background: rgba(76, 175, 80, 0.1);
+    background: linear-gradient(135deg,
+            rgba(76, 174, 79, 0.1) 0%,
+            rgba(33, 149, 243, 0.1) 50%,
+            rgba(155, 39, 176, 0.1) 100%);
+}
+
+.light-mode .project-card:hover {
+    background: linear-gradient(135deg,
+            rgba(33, 150, 243, 0.1) 0%,
+            rgba(76, 175, 80, 0.1) 50%,
+            rgba(155, 39, 176, 0.1) 100%);
 }
 
 .project-card::before {
@@ -825,23 +968,6 @@ nav h1:hover::after {
 
 .tech-stack span:hover::after {
     transform: translateX(100%) rotate(15deg);
-}
-
-/* Mobile optimization */
-@media (max-width: 768px) {
-    .tech-stack span {
-        transition: none;
-    }
-
-    .tech-stack span:hover {
-        transform: none;
-        box-shadow: none;
-    }
-
-    .tech-stack span::before,
-    .tech-stack span::after {
-        display: none;
-    }
 }
 
 /* Mobile optimization */
@@ -1204,7 +1330,7 @@ textarea:focus {
 .light-mode input:focus,
 .light-mode textarea:focus {
     outline: none;
-    border-color: #2f93df;
+    border-color: rgb(47, 147, 223);
     background: rgba(76, 175, 80, 0.1);
 }
 
