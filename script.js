@@ -1,3 +1,23 @@
+//timeline animation
+
+document.addEventListener("DOMContentLoaded", function () {
+    const items = document.querySelectorAll(".timeline-item");
+
+    function revealTimelineItems() {
+        items.forEach((item) => {
+            const rect = item.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) {
+                item.classList.add("visible");
+                item.style.opacity = "1";
+                item.style.transform = "translateX(0)";
+            }
+        });
+    }
+
+    window.addEventListener("scroll", revealTimelineItems);
+    revealTimelineItems(); // Run on page load
+});
+
 //upadte 22-03-2025
 
 const themeToggle = document.querySelector('.theme-toggle');
@@ -116,6 +136,14 @@ window.addEventListener('resize', () => {
 
 //upade 22-03-2025 end
 
+// scroll progress bar
+window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.querySelector('.scroll-progress').style.width = scrolled + '%';
+});
+
 //backgroung effect
 // Mouse Movement Effect
 let mouseX = 0, mouseY = 0;
@@ -206,6 +234,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 
 // Scroll animation for project cards
+
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -215,20 +244,23 @@ const observer = new IntersectionObserver((entries) => {
     });
 });
 
-document.querySelectorAll('.project-card').forEach((card) => {
-    card.style.opacity = 0;
-    card.style.transform = 'translateY(50px)';
-    observer.observe(card);
-});
 // Optimized animations
-function animateSkillBars() {
-    const skillBars = document.querySelectorAll('.skill-progress');
 
-    skillBars.forEach(bar => {
+// Update skills animation
+const animateSkillBars = () => {
+    document.querySelectorAll('.skill-progress').forEach(bar => {
         const targetWidth = bar.dataset.width;
-        bar.style.width = targetWidth;
+        let width = 0;
+        const interval = setInterval(() => {
+            if (width >= parseInt(targetWidth)) {
+                clearInterval(interval);
+                return;
+            }
+            width++;
+            bar.style.width = `${width}%`;
+        }, 10);
     });
-}
+};
 
 const skillsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
