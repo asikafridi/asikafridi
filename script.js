@@ -81,6 +81,80 @@ skillBars.forEach(bar => {
     initialSkillsObserver.observe(bar);
 });
 
+
+// Typewriter Animation
+// Typewriter effect for hero section
+function initTypewriter() {
+    const typewriterElement = document.getElementById('typewriter-text');
+    if (!typewriterElement) return;
+
+    const phrases = [
+        "Passionate Computer Science & Engineering Student...",
+        "A Research Enthusiast...",
+        "Eager to Learn and Contribute...",
+        "Interested in Competitive Programming & Software Development...",
+        "A Creative Developer..."
+    ];
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let currentPhrase = '';
+    let isDeleting = false;
+    let isEnd = false;
+
+    function type() {
+        isEnd = false;
+
+        // Set the current phrase
+        currentPhrase = phrases[phraseIndex];
+
+        // Determine typing or deleting
+        if (isDeleting) {
+            // Remove character
+            charIndex--;
+        } else {
+            // Add character
+            charIndex++;
+        }
+
+        // Update text with current characters
+        typewriterElement.textContent = currentPhrase.substring(0, charIndex);
+
+        // Determine typing speed
+        let typeSpeed = 120; // Normal typing speed
+
+        if (isDeleting) {
+            typeSpeed /= 3; // Faster when deleting
+        }
+
+        // Check if we've reached the end of the phrase
+        if (!isDeleting && charIndex === currentPhrase.length) {
+            isEnd = true;
+            typeSpeed = 2500; // Pause at the end
+        } else if (isDeleting && charIndex === 0) {
+            isEnd = true;
+            typeSpeed = 500; // Pause before typing next phrase
+            phraseIndex = (phraseIndex + 1) % phrases.length; // Move to next phrase
+        }
+
+        // If we're at the end, toggle deleting
+        if (isEnd) {
+            isDeleting = !isDeleting;
+        }
+
+        // Continue the animation
+        setTimeout(type, typeSpeed);
+    }
+
+    // Start the typewriter effect after a brief delay
+    setTimeout(type, 1000);
+}
+
+// Initialize typewriter when DOM is loaded
+document.addEventListener('DOMContentLoaded', function () {
+    initTypewriter();
+});
+
 // Scroll to next section on indicator click
 const scrollIndicator = document.querySelector('.hero-scroll-indicator');
 if (scrollIndicator) {
