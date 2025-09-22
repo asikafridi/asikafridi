@@ -1,3 +1,96 @@
+/* Typewriter animations */
+.typewriter-text {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    text-align: center;
+    color: #ccd6f6;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+/* Add a custom cursor using a pseudo-element */
+.typewriter-text::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 1em;
+    background-color: #4CAF50;
+    /* Default dark mode cursor color */
+    animation: blink-caret 0.75s step-end infinite;
+    transition: background-color 0.3s ease;
+    /* Smooth color transition */
+}
+
+/* Light mode cursor color */
+.light-mode .typewriter-text::after {
+    background-color: #2196F3;
+    /* Blue color for light mode */
+}
+
+/* The typing effect */
+@keyframes typing {
+    from {
+        width: 0
+    }
+
+    to {
+        width: 100%
+    }
+}
+
+/* The cursor blink effect */
+@keyframes blink-caret {
+
+    from,
+    to {
+        opacity: 0
+    }
+
+    50% {
+        opacity: 1
+    }
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+    .typewriter-text {
+        font-size: 1rem;
+        white-space: normal;
+    }
+
+    .typewriter-text::after {
+        display: none;
+    }
+
+    .typewriter-container {
+        min-height: auto;
+    }
+}
+
+/* Add subtle entrance animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section>.container {
+    animation: fadeInUp 0.6s ease both;
+}
+
+
 /* Scroll progress */
 
 .scroll-progress {
@@ -89,6 +182,8 @@ a {
     --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
     --background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
         url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+    --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
+    --font-secondary: 'Inter', sans-serif;
 }
 
 .section {
@@ -597,6 +692,8 @@ nav h1:hover::after {
     animation: gradient-text 5s ease infinite;
 }
 
+
+
 @keyframes gradient-text {
     0% {
         background-position: 0% 50%;
@@ -1083,7 +1180,8 @@ nav h1:hover::after {
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     width: 0;
     border-radius: 8px;
-    transition: width 1s ease-out;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(100, 255, 218, 0.1);
     position: relative;
 }
 
