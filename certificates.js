@@ -264,30 +264,46 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Touch swipe for mobile
+    // Add this to the existing certificates.js in the touch swipe section
+    // Enhanced touch swipe for mobile
     let touchStartX = 0;
     let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+    const swipeThreshold = 30;
 
     carouselContainer.addEventListener('touchstart', function (e) {
         touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
     });
 
     carouselContainer.addEventListener('touchend', function (e) {
         touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
         handleSwipe();
     });
 
     function handleSwipe() {
-        const swipeThreshold = 50;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
 
-        if (touchEndX < touchStartX - swipeThreshold) {
-            rotateCarousel('next');
-        }
-
-        if (touchEndX > touchStartX + swipeThreshold) {
-            rotateCarousel('prev');
+        // Only handle horizontal swipes (prevent conflict with vertical scroll)
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
+            if (deltaX < 0) {
+                rotateCarousel('next');
+            } else {
+                rotateCarousel('prev');
+            }
         }
     }
+
+    // Add click prevention during swipe
+    carouselContainer.addEventListener('touchmove', function (e) {
+        // Prevent default to avoid scrolling while swiping
+        if (Math.abs(e.changedTouches[0].screenX - touchStartX) > 10) {
+            e.preventDefault();
+        }
+    }, { passive: false });
 
     // Auto-rotate carousel (optional)
     let autoRotateInterval;
