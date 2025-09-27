@@ -146,24 +146,148 @@ a {
     }
 }
 
-/* Update mobile menu CSS */
+/* Hamburger Menu Styles */
+.hamburger-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.visible-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.visible-links a {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.visible-links a:hover {
+    background: rgba(76, 175, 80, 0.2);
+    transform: translateY(-2px);
+}
+
+.hamburger-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.hamburger-toggle:hover {
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.dropdown-links {
+    position: absolute;
+    top: 100%;
+    right: 2rem;
+    background: rgba(10, 25, 47, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    padding: 1rem;
+    min-width: 200px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.dropdown-links.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1rem;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    margin: 0.2rem 0;
+}
+
+.dropdown-links a:hover {
+    background: rgba(76, 175, 80, 0.2);
+    transform: translateX(5px);
+}
+
+/* Light mode adjustments */
+.light-mode .dropdown-links {
+    background: rgba(248, 249, 250, 0.95);
+    border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.light-mode .dropdown-links a {
+    color: #333;
+}
+
+.light-mode .dropdown-links a:hover {
+    background: rgba(33, 150, 243, 0.1);
+}
+
+/* Mobile responsiveness */
 @media (max-width: 768px) {
-    .nav-links {
-        width: 70%;
-        right: -70%;
-        transition: right 0.3s ease-in-out;
+    .hamburger-menu {
+        gap: 0.5rem;
     }
 
-    .nav-links.active {
-        right: 0;
+    .visible-links {
+        gap: 0.5rem;
     }
 
-    .menu-overlay {
-        backdrop-filter: blur(3px);
+    .visible-links a {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .dropdown-links {
+        right: 1rem;
+        left: 1rem;
+        min-width: auto;
     }
 }
 
-/* Upadte 22-03-25 */
+@media (max-width: 480px) {
+    .visible-links a span {
+        display: none;
+    }
+
+    .visible-links a i {
+        margin-right: 0;
+    }
+
+    .visible-links a {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+}
+
+/* Update 22-03-25 */
 /* Font loading fix in Brave */
 @font-face {
     font-family: 'Poppins';
@@ -286,200 +410,14 @@ h2::after {
     opacity: 0;
 }
 
-/* Improved mobile navigation */
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: 1.5rem;
+/* BG fade */
+.interactive-bg {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
 }
 
-/* Hamburger */
-
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block !important;
-        z-index: 1001;
-        position: relative;
-    }
-
-    /* Mobile menu styling */
-    .nav-links {
-        padding: 4rem 0.2rem 1rem;
-        /* Top | Horizontal | Bottom */
-        position: fixed;
-        top: 0;
-        right: -100%;
-        height: 100vh;
-        width: 250px;
-        background: rgba(18, 18, 18, 0.411);
-        backdrop-filter: blur(20px);
-        border-left: 1px solid rgba(51, 145, 54, 0.353);
-        display: flex !important;
-        flex-direction: column;
-        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1000;
-    }
-
-
-    .nav-links.active {
-        right: 0;
-    }
-
-    .nav-links a {
-        overflow: hidden;
-        color: var(--text-primary);
-        font-size: 1.1rem;
-        border-radius: 20px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        justify-content: flex-start;
-        padding: 0.8rem 1.5rem;
-        margin: 0.4rem 0;
-        width: 100%;
-        text-align: left;
-        transform: translateX(0);
-        position: relative;
-        z-index: 1;
-    }
-
-    .nav-links a::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        background: var(--primary);
-        border-radius: 15px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        position: absolute;
-        left: 0.5rem;
-        top: 50%;
-        transform: translateY(-45%);
-        transition: all 0.3s ease;
-    }
-
-    .nav-links a::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 20px;
-        z-index: -1;
-        background: rgba(76, 175, 80, 0.15);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .nav-links a:hover {
-        background: rgba(76, 175, 80, 0.15);
-        transform: translateX(6px) scale(1.02);
-        padding-left: 2.5rem;
-        margin-left: 0.5rem;
-        border-radius: 20px !important;
-    }
-
-    .nav-links a:hover::before {
-        left: 1.5rem;
-        opacity: 1;
-    }
-
-    .nav-links a:hover::after {
-        opacity: 1;
-    }
-
-
-    /* Add menu overlay */
-    .menu-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(5px);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        z-index: 999;
-    }
-
-    .nav-links.active~.menu-overlay {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .menu-toggle[aria-expanded="true"] i {
-        transform: rotate(90deg);
-    }
-
-    .menu-toggle i {
-        transition: transform 0.3s ease;
-    }
-}
-
-@media (max-width: 480px) {
-    .skill-bar {
-        height: 35px;
-        /* Increase height for mobile */
-    }
-
-    .skill-label {
-        left: 10px !important;
-        font-size: 0.8rem !important;
-        max-width: 40%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .skill-percentage {
-        right: 10px !important;
-        font-size: 0.8rem !important;
-    }
-
-    .skill-progress {
-        min-width: 60px;
-        /* Ensure progress bar never gets too narrow */
-        padding: 0 8px;
-        /* Add internal padding */
-    }
-}
-
-@media (max-width: 360px) {
-    .skill-label {
-        max-width: 35%;
-    }
-}
-
-/* Hero section text reduce in mobile view */
-@media (max-width: 480px) {
-    .hero-content h1 {
-        font-size: 2rem !important;
-        line-height: 1.2;
-    }
-
-    /* Optional: Adjust paragraph text size */
-    .hero-content p {
-        font-size: 1rem;
-    }
-
-    /* If needed for very small screens */
-    @media (max-width: 360px) {
-        .hero-content h1 {
-            font-size: 1.8rem !important;
-        }
-    }
-}
-
-/* About section text in mobile view */
-@media (max-width: 768px) {
-    .about-content p {
-        font-size: 1rem !important;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-    }
+.interactive-bg.faded {
+    opacity: 0;
 }
 
 /* Upadte 22-03-25 end */
@@ -575,17 +513,6 @@ section {
 
 }
 
-@media (min-width: 769px) {
-    .nav-links {
-        margin-left: auto;
-        padding-right: 2rem;
-    }
-
-    .nav-links a {
-        margin-left: 3rem;
-    }
-}
-
 nav {
     background: rgba(0, 0, 0, 0.8);
     padding: 1rem;
@@ -599,18 +526,6 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 2rem;
-    transition: all 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #4CAF50;
-    transform: translateY(-2px);
 }
 
 nav h1 {
