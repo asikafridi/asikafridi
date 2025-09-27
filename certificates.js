@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = 'auto';
     }
 
-    // Navigate to contact section
+    // Navigate to contact section - UPDATED
     function goToContact() {
         closeDownloadModal();
 
@@ -161,8 +161,22 @@ document.addEventListener('DOMContentLoaded', function () {
         sessionStorage.setItem('targetSection', 'contact');
         sessionStorage.setItem('smoothScroll', 'true');
 
-        // Navigate to index.html
-        window.location.href = 'index.html';
+        // Check if we're already on index.html
+        if (window.location.pathname.endsWith('index.html') ||
+            window.location.pathname.endsWith('/')) {
+            // We're on the home page, scroll to contact
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+                const navHeight = document.querySelector('nav').offsetHeight;
+                window.scrollTo({
+                    top: contactSection.offsetTop - navHeight,
+                    behavior: 'smooth'
+                });
+            }
+        } else {
+            // Navigate to index.html
+            window.location.href = 'index.html';
+        }
     }
 
     // Add click events for carousel items (flip functionality)
