@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-BD">
+
+<head>
+    <meta name="theme-color" content="#0a192f">
+    <meta property="og:locale" content="en_BD">
+    <meta name="twitter:creator" content="@asikafridi">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <link rel="icon" type="image/png" href="images/coding.png">
+    <title>Certificates & Resume | Asikur Rahman</title>
+    <meta name="description" content="3D showcase of certificates and resume of Asikur Rahman">
+    <meta name="keywords" content="certificates, resume, portfolio, Asikur Rahman">
+    <meta name="author" content="Asikur Rahman">
+
+    <!-- Open Graph/Facebook -->
+    <meta property="og:title" content="Certificates & Resume | Asikur Rahman">
+    <meta property="og:description" content="3D showcase of certificates and resume">
+    <meta property="og:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
+    <meta property="og:url" content="https://asikafridi.github.io/asikafridi/certificates.html">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Certificates & Resume | Asikur Rahman">
+    <meta name="twitter:description" content="3D showcase of certificates and resume">
+    <meta name="twitter:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="certificates.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Certificates & Resume",
+      "author": {
+        "@type": "Person",
+        "name": "Asikur Rahman"
+      },
+      "description": "3D showcase of certificates and resume"
+    }
+    </script>
+    <link rel="canonical" href="https://asikafridi.github.io/asikafridi/certificates.html" />
+</head>
+
+<body>
+    <button class="theme-toggle" aria-label="Toggle theme" aria-pressed="false"></button>
+    <div class="scroll-progress"></div>
+    <div class="interactive-bg"></div>
+
+    <nav aria-label="Main navigation">
+        <div role="navigation">
+            <div class="container nav-content">
+                <h1><a href="index.html" style="text-decoration: none; color: inherit;">ASIKUR RAHMAN</a></h1>
+
+                <div class="hamburger-menu">
+                    <div class="visible-links">
+                        <a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a>
+                        <a href="index.html#contact"><i class="fas fa-envelope"></i> <span>Contact</span></a>
+                    </div>
+
+                    <button class="hamburger-toggle" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div class="dropdown-links" id="dropdown-nav">
+                        <a href="index.html#about"><i class="fas fa-user"></i> About</a>
+                        <a href="index.html#achievements"><i class="fas fa-trophy"></i> Achievements</a>
+                        <a href="index.html#skills"><i class="fas fa-code"></i> Skills</a>
+                        <a href="index.html#projects"><i class="fas fa-folder-open"></i> Projects</a>
+                        <a href="certificates.html" class="active"><i class="fas fa-certificate"></i> Certificates</a>
+                        <a href="video.html"><i class="fas fa-video"></i> Videos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="certificates-hero">
+        <div class="container">
+            <h1>Certificates & Resume</h1>
+            <p>Interactive 3D showcase of my achievements and qualifications</p>
+        </div>
+    </section>
+
+    <section class="certificates-showcase">
+        <div class="container">
+            <div class="view-controls">
+                <button id="carouselView" class="view-btn active"><i class="fas fa-th-large"></i> Carousel</button>
+                <button id="gridView" class="view-btn"><i class="fas fa-grip-horizontal"></i> Grid</button>
+            </div>
+
+            <div class="carousel-container">
+                <div class="carousel">
+                    <div class="certificate-item" data-index="0">
+                        <div class="certificate-front">
+                            <img src="images/ICPC certificate(as volunteer).jpg" alt="ICPC Certificate">
+                            <h3>ICPC Appreciation</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>ICPC Volunteer</h3>
+                            <p>Certificate of Appreciation for serving as a volunteer at ICPC Asia Dhaka Regional
+                                Contest 2024</p>
+                            <button class="view-full-btn" data-certificate="icpc">View Full</button>
+                        </div>
+                    </div>
+
+                    <div class="certificate-item" data-index="1">
+                        <div class="certificate-front">
+                            <img src="images/Certificate of Takeoff Programming Contest.jpg"
+                                alt="Take-Off Programming Contest">
+                            <h3>Take-Off Contest</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>Take-Off Programming Contest</h3>
+                            <p>Certificate of Participation for qualifying and participating in the Main Round (Fall
+                                2024)</p>
+                            <button class="view-full-btn" data-certificate="takeoff">View Full</button>
+                        </div>
+                    </div>
+
+                    <div class="certificate-item" data-index="2">
+                        <div class="certificate-front">
+                            <img src="images/UTA certificate.jpg" alt="UTA Programming Contest">
+                            <h3>UTA Contest</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>UTA Programming Contest</h3>
+                            <p>Certificate of Participation for Summer 2025, organized by Daffodil International
+                                University</p>
+                            <button class="view-full-btn" data-certificate="uta">View Full</button>
+                        </div>
+                    </div>
+
+                    <div class="certificate-item" data-index="3">
+                        <div class="certificate-front">
+                            <img src="images/DIU Science Olympiad certificate of ASIKUR RAHMAN.jpg"
+                                alt="DIU Science Olympiad">
+                            <h3>Science Olympiad</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>DIU Science Olympiad</h3>
+                            <p>Certificate of Participation for Fall 2024, Faculty of Science & Information Technology
+                            </p>
+                            <button class="view-full-btn" data-certificate="olympiad">View Full</button>
+                        </div>
+                    </div>
+
+                    <div class="certificate-item resume-item" data-index="4">
+                        <div class="certificate-front">
+                            <img src="images/ASIKUR_RAHMAN_Resume.jpg" alt="Resume">
+                            <h3>My Resume</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>Asikur Rahman - Resume</h3>
+                            <p>Computer Science Student specializing in competitive programming and web development</p>
+                            <button class="view-full-btn" data-certificate="resume">Download PDF</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-nav prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-nav next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="grid-container hidden">
+                <div class="grid">
+                    <div class="grid-item" data-index="0">
+                        <div class="certificate-front">
+                            <img src="images/ICPC certificate(as volunteer).jpg" alt="ICPC Certificate">
+                            <h3>ICPC Appreciation</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>ICPC Volunteer</h3>
+                            <p>Certificate of Appreciation for serving as a volunteer at ICPC Asia Dhaka Regional
+                                Contest 2024</p>
+                            <button class="view-full-btn" data-certificate="icpc">View Full</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-item" data-index="1">
+                        <div class="certificate-front">
+                            <img src="images/Certificate of Takeoff Programming Contest.jpg"
+                                alt="Take-Off Programming Contest">
+                            <h3>Take-Off Contest</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>Take-Off Programming Contest</h3>
+                            <p>Certificate of Participation for qualifying and participating in the Main Round (Fall
+                                2024)</p>
+                            <button class="view-full-btn" data-certificate="takeoff">View Full</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-item" data-index="2">
+                        <div class="certificate-front">
+                            <img src="images/UTA certificate.jpg" alt="UTA Programming Contest">
+                            <h3>UTA Contest</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>UTA Programming Contest</h3>
+                            <p>Certificate of Participation for Summer 2025, organized by Daffodil International
+                                University</p>
+                            <button class="view-full-btn" data-certificate="uta">View Full</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-item" data-index="3">
+                        <div class="certificate-front">
+                            <img src="images/DIU Science Olympiad certificate of ASIKUR RAHMAN.jpg"
+                                alt="DIU Science Olympiad">
+                            <h3>Science Olympiad</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>DIU Science Olympiad</h3>
+                            <p>Certificate of Participation for Fall 2024, Faculty of Science & Information Technology
+                            </p>
+                            <button class="view-full-btn" data-certificate="olympiad">View Full</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-item resume-item" data-index="4">
+                        <div class="certificate-front">
+                            <img src="images/ASIKUR_RAHMAN_Resume.jpg" alt="Resume">
+                            <h3>My Resume</h3>
+                        </div>
+                        <div class="certificate-back">
+                            <h3>Asikur Rahman - Resume</h3>
+                            <p>Computer Science Student specializing in competitive programming and web development</p>
+                            <button class="view-full-btn" data-certificate="resume">Download PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full View Modal -->
+    <div id="fullViewModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="Certificate Full View">
+                <div class="modal-info">
+                    <h3 id="modalTitle"></h3>
+                    <p id="modalDescription"></p>
+                    <a id="modalDownload" href="#" target="_blank" class="download-btn">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear">2025</span> All rights reserved to <strong>ASIKUR RAHMAN</strong></p>
+        </div>
+    </footer>
+
+    <div class="particles"></div>
+    <script src="script.js"></script>
+    <script src="certificates.js"></script>
+</body>
+
+</html>
