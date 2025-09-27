@@ -13,9 +13,45 @@
     -webkit-text-fill-color: transparent;
 }
 
+.certificates-hero h1 span {
+    background: linear-gradient(45deg,
+            #4CAF50,
+            #2196F3,
+            #9C27B0);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-text 5s ease infinite;
+}
+
+@keyframes gradient-text {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.certificates-hero:hover h1 {
+    transform: scale(1.05);
+}
+
+
+
 .certificates-hero p {
     color: var(--text-color, #ccc);
     /* Added text color variable */
+    font-size: 1.4rem;
+    max-width: auto;
+    margin: 0 auto;
+    line-height: 1.6;
 }
 
 .certificates-showcase {
@@ -712,6 +748,7 @@
     .grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
+
     .grid-item:active .certificate-front,
     .grid-item:active .certificate-back {
         transform: rotateY(0deg);
