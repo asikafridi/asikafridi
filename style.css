@@ -376,6 +376,7 @@ a {
     transition: all 0.3s ease;
     z-index: 10002;
     position: relative;
+    margin: auto !important;
 }
 
 .hamburger-toggle:hover {
@@ -539,11 +540,13 @@ a {
 
 /* Light mode adjustments */
 .light-mode .mobile-nav-sidebar {
-    background: rgba(248, 249, 250, 0.95);
+    background: rgba(248, 249, 250, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .light-mode .mobile-nav-links a {
-    color: #333;
+    color: #ffffff;
 }
 
 .light-mode .mobile-nav-links a:hover {
@@ -562,6 +565,10 @@ a {
 .light-mode .mobile-nav-header {
     background: rgba(33, 150, 243, 0.1);
     border-bottom-color: rgba(33, 150, 243, 0.3);
+}
+
+.light-mode .mobile-close-btn {
+    color: #ffffff;
 }
 
 /* Hide desktop dropdown on mobile */
@@ -612,6 +619,7 @@ a {
         background: rgba(76, 175, 80, 0.2);
         transform: translateY(-2px);
         border-color: rgba(76, 175, 80, 0.3);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .dropdown-links a i {
@@ -630,13 +638,20 @@ a {
 }
 
 /* Light mode adjustments for desktop nav */
+.light-mode .dropdown-links {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
 .light-mode .dropdown-links a {
-    color: #333;
+    color: #ffffff !important;
 }
 
 .light-mode .dropdown-links a:hover {
-    background: rgba(33, 150, 243, 0.1);
+    background: rgba(33, 150, 243, 0.2);
     border-color: rgba(33, 150, 243, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Mobile navigation remains the same */
