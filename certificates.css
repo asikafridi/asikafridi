@@ -517,86 +517,206 @@
     color: #2196F3;
 }
 
-/* Mobile responsiveness */
+/* Update mobile responsiveness in certificates.css */
 @media (max-width: 768px) {
     .certificates-hero h1 {
         font-size: 2rem;
     }
 
     .carousel-container {
-        height: 400px;
-    }
-
-    .certificate-item {
-        width: 250px;
         height: 350px;
-        margin-left: -125px;
-        margin-top: -175px;
+        perspective: 500px;
+        /* Reduce perspective for mobile */
     }
 
-    .certificate-front img {
-        height: 200px;
-    }
-
-    .carousel-nav {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
-
-    .carousel-nav.prev {
-        left: 10px;
-    }
-
-    .carousel-nav.next {
-        right: 10px;
-    }
-
-    .grid {
-        grid-template-columns: 1fr;
-    }
-
-    .grid-item {
-        height: 300px;
-    }
-
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-    }
-
-    .modal-body {
-        height: 70vh;
-    }
-
-    .modal-body img {
-        height: 60%;
-    }
-
-    .modal-info {
-        padding: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
     .certificate-item {
         width: 220px;
-        height: 320px;
+        height: 300px;
         margin-left: -110px;
-        margin-top: -160px;
+        margin-top: -150px;
+        transform-style: preserve-3d;
     }
 
     .certificate-front img {
-        height: 180px;
+        height: 150px;
+        margin-bottom: 0.8rem;
+    }
+
+    .certificate-front h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     .certificate-back {
-        padding: 1.5rem;
+        padding: 1.2rem;
+    }
+
+    .certificate-back h3 {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .certificate-back p {
+        font-size: 0.8rem;
+        line-height: 1.4;
+        margin-bottom: 1rem;
+    }
+
+    .view-full-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+    }
+
+    .carousel-nav {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .carousel-nav.prev {
+        left: 5px;
+    }
+
+    .carousel-nav.next {
+        right: 5px;
+    }
+
+    /* Improve grid view for mobile */
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
     .grid-item {
         height: 280px;
+        margin: 0 auto;
+        max-width: 280px;
     }
+
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+
+    .modal-body {
+        height: auto;
+        max-height: 90vh;
+        flex-direction: column;
+    }
+
+    .modal-body img {
+        height: 50vh;
+        flex: 0 0 auto;
+    }
+
+    .modal-info {
+        padding: 1.5rem;
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container {
+        height: 300px;
+    }
+
+    .certificate-item {
+        width: 190px;
+        height: 260px;
+        margin-left: -95px;
+        margin-top: -130px;
+    }
+
+    .certificate-front img {
+        height: 120px;
+    }
+
+    .certificate-front,
+    .certificate-back {
+        padding: 1rem;
+    }
+
+    .certificate-front h3 {
+        font-size: 0.9rem;
+    }
+
+    .certificate-back h3 {
+        font-size: 0.9rem;
+    }
+
+    .certificate-back p {
+        font-size: 0.75rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .view-full-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+    }
+
+    .grid-item {
+        height: 250px;
+        max-width: 250px;
+    }
+
+    /* Improve touch interactions */
+    .certificate-item {
+        touch-action: pan-y;
+    }
+
+    /* Reduce hover effects on touch devices */
+    @media (hover: none) {
+        .certificate-item:hover {
+            transform: none;
+        }
+
+        .certificate-item:active {
+            transform: translateZ(20px) scale(1.02);
+        }
+    }
+}
+
+/* Very small devices */
+@media (max-width: 360px) {
+    .carousel-container {
+        height: 280px;
+    }
+
+    .certificate-item {
+        width: 170px;
+        height: 240px;
+        margin-left: -85px;
+        margin-top: -120px;
+    }
+
+    .certificate-front img {
+        height: 100px;
+    }
+
+    .view-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .view-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Add smooth transitions for carousel */
+.carousel {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Improve touch scrolling */
+.carousel-container {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent zoom on double-tap */
+.certificate-item {
+    touch-action: pan-y;
 }
 
 /* Light mode adjustments for download modal */
