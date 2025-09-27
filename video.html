@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-BD">
+
+<head>
+    <meta name="theme-color" content="#0a192f">
+    <meta property="og:locale" content="en_BD">
+    <meta name="twitter:creator" content="@asikafridi">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <link rel="icon" type="image/png" href="images/coding.png">
+    <title>Video Portfolio | Asikur Rahman</title>
+    <meta name="description"
+        content="Video portfolio of Asikur Rahman - showcasing video editing skills and video resume">
+    <meta name="keywords" content="video editing, video resume, portfolio, Asikur Rahman">
+    <meta name="author" content="Asikur Rahman">
+
+    <!-- Open Graph/Facebook -->
+    <meta property="og:title" content="Video Portfolio | Asikur Rahman">
+    <meta property="og:description" content="Showcasing video editing skills and video resume">
+    <meta property="og:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
+    <meta property="og:url" content="https://asikafridi.github.io/asikafridi/video.html">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Video Portfolio | Asikur Rahman">
+    <meta name="twitter:description" content="Showcasing video editing skills and video resume">
+    <meta name="twitter:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="video.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoGallery",
+      "name": "Video Portfolio",
+      "author": {
+        "@type": "Person",
+        "name": "Asikur Rahman"
+      },
+      "description": "Showcasing video editing skills and video resume"
+    }
+    </script>
+    <link rel="canonical" href="https://asikafridi.github.io/asikafridi/video.html" />
+</head>
+
+<body>
+    <button class="theme-toggle" aria-label="Toggle theme" aria-pressed="false"></button>
+    <div class="scroll-progress"></div>
+    <div class="interactive-bg"></div>
+
+    <nav aria-label="Main navigation">
+        <div role="navigation">
+            <div class="container nav-content">
+                <h1><a href="index.html" style="text-decoration: none; color: inherit;">ASIKUR RAHMAN</a></h1>
+
+                <div class="hamburger-menu">
+                    <div class="visible-links">
+                        <a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a>
+                        <a href="index.html#contact"><i class="fas fa-envelope"></i> <span>Contact</span></a>
+                    </div>
+
+                    <button class="hamburger-toggle" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <div class="dropdown-links" id="dropdown-nav">
+                        <a href="index.html#about"><i class="fas fa-user"></i> About</a>
+                        <a href="index.html#achievements"><i class="fas fa-trophy"></i> Achievements</a>
+                        <a href="index.html#skills"><i class="fas fa-code"></i> Skills</a>
+                        <a href="index.html#projects"><i class="fas fa-folder-open"></i> Projects</a>
+                        <a href="certificates.html"><i class="fas fa-certificate"></i> Certificates</a>
+                        <a href="video.html" class="active"><i class="fas fa-video"></i> Videos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="video-hero">
+        <div class="container">
+            <h1>Video Portfolio</h1>
+            <p>Showcasing my video editing skills and video resume</p>
+        </div>
+    </section>
+
+    <section class="video-showcase">
+        <div class="container">
+            <div class="video-player-container">
+                <div class="video-player">
+                    <video id="mainVideo" poster="images/(242-15-164)_ASIKUR_RAHMAN's_4k_Video_Resume-Cover.jpg">
+                        <source src="videos/(242-15-164)_ASIKUR_RAHMAN's_4k_Video_Resume.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-controls">
+                        <button class="control-btn play-pause">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                        </div>
+                        <div class="time-display">
+                            <span class="current-time">0:00</span> / <span class="duration">0:00</span>
+                        </div>
+                        <button class="control-btn volume-btn">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <div class="volume-container">
+                            <div class="volume-bar">
+                                <div class="volume-level"></div>
+                            </div>
+                        </div>
+                        <button class="control-btn speed-btn">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="speed-display">1.0x</span>
+                        </button>
+                        <div class="speed-menu">
+                            <div class="speed-option" data-speed="0.25">0.25x</div>
+                            <div class="speed-option" data-speed="0.5">0.5x</div>
+                            <div class="speed-option" data-speed="0.75">0.75x</div>
+                            <div class="speed-option active" data-speed="1.0">1.0x</div>
+                            <div class="speed-option" data-speed="1.25">1.25x</div>
+                            <div class="speed-option" data-speed="1.5">1.5x</div>
+                            <div class="speed-option" data-speed="1.75">1.75x</div>
+                            <div class="speed-option" data-speed="2.0">2.0x</div>
+                        </div>
+                        <button class="control-btn fullscreen-btn">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h2 id="video-title">Video Resume</h2>
+                    <p id="video-description">
+                        A creative showcase of my skills, experiences, and personality, this
+                        resume has been thoughtfully crafted to highlight my strengths and aspirations as I apply for
+                        the Student Associate position at Daffodil International University.
+                    </p>
+                    <div class="video-details">
+                        <span><i class="fas fa-clock"></i> Duration: <span id="video-duration">Loading...</span></span>
+                        <span><i class="fas fa-calendar"></i> Created: <span id="video-date">September
+                                2025</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-gallery">
+                <h2>Other Video Projects</h2>
+                <div class="gallery-grid">
+                    <div class="video-thumbnail" data-video="videos/(242-15-164)_ASIKUR_RAHMAN's_4k_Video_Resume.mp4"
+                        data-poster="images/(242-15-164)_ASIKUR_RAHMAN's_4k_Video_Resume-Cover.jpg"
+                        data-title="Video Resume" data-description="A creative showcase of my skills, experiences, and personality, this
+                        resume has been thoughtfully crafted to highlight my strengths and aspirations as I apply for
+                        the Student Associate position at Daffodil International University."
+                        data-date="September 2025">
+                        <div class="thumbnail-overlay">
+                            <i class="fas fa-play"></i>
+                            <h3>Video Resume</Video></h3>
+                            <p class="thumbnail-duration">Loading duration...</p>
+                        </div>
+                        <img src="images/(242-15-164)_ASIKUR_RAHMAN's_4k_Video_Resume-Cover.jpg" alt="Video Resume">
+                    </div>
+                    <div class="video-thumbnail" data-video="videos/Metro_Life.mp4" data-poster="images/Metro_Life.jpg"
+                        data-title="Editing Sample"
+                        data-description="Demonstration of video editing skills and techniques.."
+                        data-date="February 2025">
+                        <div class="thumbnail-overlay">
+                            <i class="fas fa-play"></i>
+                            <h3>Editing Sample</h3>
+                            <p class="thumbnail-duration">Loading duration...</p>
+                        </div>
+                        <img src="images/Metro_Life.jpg" alt="Editing Sample">
+                    </div>
+                    <div class="video-thumbnail" data-video="videos/Creative_Work.mp4"
+                        data-poster="images/Creative_Work.jpg" data-title="Creative Work"
+                        data-description="Creative video projects showcasing storytelling abilities.."
+                        data-date="March 2025">
+                        <div class="thumbnail-overlay">
+                            <i class="fas fa-play"></i>
+                            <h3>Creative Work</h3>
+                            <p class="thumbnail-duration">Loading duration...</p>
+                        </div>
+                        <img src="images/Creative_Work.jpg" alt="Creative Work">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear">2025</span> All rights reserved to <strong>ASIKUR RAHMAN</strong></p>
+        </div>
+    </footer>
+
+    <div class="particles"></div>
+    <script src="script.js"></script>
+    <script src="video.js"></script>
+</body>
+
+</html>
