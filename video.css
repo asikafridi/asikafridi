@@ -1,8 +1,6 @@
-/* Video Page Styles */
 .video-hero {
     padding: 8rem 0 4rem;
     text-align: center;
-    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%);
 }
 
 .video-hero h1 {
@@ -14,10 +12,8 @@
     -webkit-text-fill-color: transparent;
 }
 
-.video-showcase {
-    padding: 4rem 0;
-}
 
+/* Remove all custom control styles and keep only these */
 .video-player-container {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
@@ -29,229 +25,16 @@
 .video-player {
     position: relative;
     width: 100%;
-    background: #000;
-    /* Default aspect ratio for landscape videos */
+    /* 16:9 aspect ratio for landscape videos */
     aspect-ratio: 16/9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: #000;
 }
 
-/* Vertical video aspect ratio */
-.video-player.vertical {
-    aspect-ratio: 9/16;
-    max-width: 560px;
-    /* Limit width for vertical videos */
-    margin: 0 auto;
-}
-
-.video-player video {
+.video-player iframe {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    display: block;
-    /* Remove native controls */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    /* Add smooth transition for poster changes */
-    transition: opacity 0.3s ease;
-}
-
-/* Loading effect when changing videos */
-.video-player video.loading {
-    opacity: 0.7;
-}
-
-/* Hide native controls for all browsers */
-.video-player video::-webkit-media-controls {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-enclosure {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-panel {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-play-button {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-timeline {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-current-time-display {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-time-remaining-display {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-timeline-container {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-volume-slider {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-mute-button {
-    display: none !important;
-}
-
-.video-player video::-webkit-media-controls-fullscreen-button {
-    display: none !important;
-}
-
-/* Custom controls */
-.video-controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 10;
-}
-
-.video-player:hover .video-controls,
-.video-controls.visible {
-    opacity: 1;
-}
-
-.control-btn {
-    background: rgba(255, 255, 255, 0.2);
     border: none;
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.control-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-}
-
-.speed-btn {
-    width: auto;
-    padding: 0 12px;
-    gap: 5px;
-}
-
-.speed-display {
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.speed-menu {
-    position: absolute;
-    bottom: 60px;
-    right: 0;
-    background: rgba(0, 0, 0, 0.9);
-    border-radius: 8px;
-    padding: 8px 0;
-    min-width: 100px;
-    display: none;
-    flex-direction: column;
-    z-index: 20;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.speed-menu.active {
-    display: flex;
-}
-
-.speed-option {
-    padding: 8px 16px;
-    color: white;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    font-size: 0.9rem;
-}
-
-.speed-option:hover {
-    background: rgba(76, 175, 80, 0.3);
-}
-
-.speed-option.active {
-    background: rgba(76, 175, 80, 0.5);
-    color: #4CAF50;
-    font-weight: 500;
-}
-
-.progress-container {
-    flex: 1;
-    position: relative;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
-    cursor: pointer;
-    position: relative;
-}
-
-.progress {
-    height: 100%;
-    background: #4CAF50;
-    border-radius: 3px;
-    width: 0%;
-    transition: width 0.1s ease;
-}
-
-.time-display {
-    color: white;
-    font-size: 0.9rem;
-    min-width: 80px;
-    text-align: center;
-}
-
-.volume-container {
-    position: relative;
-    width: 80px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.volume-btn:hover+.volume-container,
-.volume-container:hover {
-    opacity: 1;
-}
-
-.volume-bar {
-    width: 80px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
-    cursor: pointer;
-    position: relative;
-}
-
-.volume-level {
-    height: 100%;
-    background: #4CAF50;
-    border-radius: 3px;
-    width: 20%;
-    /* Default 20% volume */
+    display: block;
 }
 
 .video-info {
@@ -276,16 +59,15 @@
     color: #ccc;
 }
 
-.video-gallery h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #4CAF50;
-}
+/* Remove all .video-controls, .control-btn, progress bar, etc. styles */
+/* They are no longer needed since we're using Google Drive's built-in controls */
 
+/* Keep the gallery styles the same */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
+    margin-bottom: 3rem;
 }
 
 .video-thumbnail {
@@ -295,15 +77,6 @@
     cursor: pointer;
     transition: transform 0.3s ease;
     aspect-ratio: 16/9;
-    /* Default thumbnail aspect ratio */
-}
-
-.video-thumbnail.vertical {
-    aspect-ratio: 9/16;
-    /* Vertical thumbnail aspect ratio */
-    max-width: 300px;
-    /* Limit width for vertical thumbnails */
-    margin: 0 auto;
 }
 
 .video-thumbnail:hover {
@@ -355,19 +128,6 @@
     margin: 0;
 }
 
-/* Orientation indicator */
-.orientation-indicator {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    z-index: 5;
-}
-
 /* Light mode adjustments */
 .light-mode .video-player-container {
     background: rgba(0, 0, 0, 0.05);
@@ -377,39 +137,8 @@
     color: #2196F3;
 }
 
-.light-mode .video-gallery h2 {
-    color: #2196F3;
-}
-
 .light-mode .thumbnail-overlay i {
     color: #2196F3;
-}
-
-.light-mode .speed-menu {
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.light-mode .speed-option {
-    color: #333;
-}
-
-.light-mode .speed-option:hover {
-    background: rgba(33, 150, 243, 0.2);
-}
-
-.light-mode .speed-option.active {
-    background: rgba(33, 150, 243, 0.3);
-    color: #2196F3;
-}
-
-/* Ensure smooth scrolling in light mode */
-html {
-    scroll-behavior: smooth;
-}
-
-.light-mode {
-    scroll-behavior: smooth;
 }
 
 /* Mobile responsiveness */
@@ -420,34 +149,6 @@ html {
 
     .video-player {
         aspect-ratio: 16/9;
-        /* Force landscape on mobile by default */
-    }
-
-    .video-player.vertical {
-        aspect-ratio: 9/16;
-        max-width: 100%;
-        /* Full width on mobile */
-    }
-
-    .video-controls {
-        flex-wrap: wrap;
-        padding: 0.5rem;
-    }
-
-    .control-btn {
-        width: 35px;
-        height: 35px;
-    }
-
-    .speed-btn {
-        width: auto;
-        padding: 0 10px;
-    }
-
-    .progress-container {
-        order: 1;
-        flex: 0 0 100%;
-        margin-top: 0.5rem;
     }
 
     .video-details {
@@ -458,105 +159,13 @@ html {
     .gallery-grid {
         grid-template-columns: 1fr;
     }
-
-    .video-thumbnail {
-        aspect-ratio: 16/9;
-        /* Force landscape thumbnails on mobile */
-    }
-
-    .video-thumbnail.vertical {
-        aspect-ratio: 9/16;
-        max-width: 100%;
-    }
-
-    .volume-container {
-        display: none;
-    }
-
-    .speed-menu {
-        bottom: 50px;
-        min-width: 90px;
-    }
 }
-
 @media (max-width: 480px) {
-    .video-controls {
-        gap: 0.5rem;
+    .video-hero {
+        padding: 6rem 1rem 2rem;
     }
 
-    .time-display {
-        min-width: 60px;
-        font-size: 0.8rem;
-    }
-
-    .speed-btn {
-        display: none;
-        /* Hide on very small screens */
-    }
-
-    .thumbnail-overlay {
-        padding: 0.5rem;
-    }
-
-    .thumbnail-overlay i {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .thumbnail-overlay h3 {
-        font-size: 1rem;
-    }
-
-    .thumbnail-duration {
-        font-size: 0.8rem;
-    }
-
-    .video-player {
-        aspect-ratio: 16/9;
-    }
-
-    .video-player.vertical {
-        aspect-ratio: 9/16;
-    }
-}
-
-/* Fallback for browsers that don't support aspect-ratio */
-@supports not (aspect-ratio: 16/9) {
-    .video-player::before {
-        content: '';
-        display: block;
-        padding-top: 56.25%;
-        /* 16:9 aspect ratio */
-    }
-
-    .video-player.vertical::before {
-        padding-top: 177.78%;
-        /* 9:16 aspect ratio */
-    }
-
-    .video-player video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    .video-thumbnail::before {
-        content: '';
-        display: block;
-        padding-top: 56.25%;
-    }
-
-    .video-thumbnail.vertical::before {
-        padding-top: 177.78%;
-    }
-
-    .video-thumbnail img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+    .video-hero h1 {
+        font-size: 1.5rem;
     }
 }
