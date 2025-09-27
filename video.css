@@ -12,6 +12,44 @@
     -webkit-text-fill-color: transparent;
 }
 
+.video-hero h1 span {
+    background: linear-gradient(45deg,
+            #4CAF50,
+            #2196F3,
+            #9C27B0);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-text 5s ease infinite;
+}
+
+@keyframes gradient-text {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.video-hero:hover h1 {
+    transform: scale(1.05);
+}
+
+.video-hero p {
+    color: #ccc;
+    font-size: 1.4rem;
+    max-width: auto;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
 
 /* Remove all custom control styles and keep only these */
 .video-player-container {
