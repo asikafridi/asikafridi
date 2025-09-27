@@ -1171,8 +1171,6 @@ nav h1:hover::after {
     animation: gradient-text 5s ease infinite;
 }
 
-
-
 @keyframes gradient-text {
     0% {
         background-position: 0% 50%;
@@ -1245,8 +1243,8 @@ nav h1:hover::after {
 }
 
 .profile-img {
-    width: 200px;
-    height: 200px;
+    width: 210px;
+    height: 210px;
     border-radius: 50%;
     margin: 2rem auto;
     border: 3px solid #fff;
@@ -1255,7 +1253,44 @@ nav h1:hover::after {
 
 .profile-img:hover {
     transform: rotate(5deg) scale(1.1);
-    box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+    box-shadow: 0 0 30px rgba(89, 207, 93, 0.5);
+}
+
+.light-mode .profile-img:hover {
+    box-shadow: 0 0 30px rgba(33, 150, 243, 0.5);
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .profile-img {
+        width: 170px;
+        height: 170px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .profile-img {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .profile-img {
+        width: 120px;
+        height: 120px;
+    }
 }
 
 /* About */
@@ -1647,7 +1682,7 @@ nav h1:hover::after {
 }
 
 .skill-bar {
-    height: 25px;
+    height: 30px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     overflow: hidden;
@@ -2068,10 +2103,6 @@ textarea:focus {
 @media (max-width: 768px) {
     .nav-links {
         display: none;
-    }
-
-    .hero-content h1 {
-        font-size: 2.5rem;
     }
 
     .contact-container {
