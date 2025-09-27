@@ -169,43 +169,96 @@ if (scrollIndicator) {
     });
 }
 
-// Hambuger
-// Mobile menu toggle
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('#mobile-nav');
-const menuOverlay = document.querySelector('.menu-overlay');
+// Hamburger Menu Functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const hamburgerToggle = document.querySelector('.hamburger-toggle');
+    const dropdownLinks = document.getElementById('dropdown-nav');
 
-const toggleMenu = () => {
-    const isOpen = navLinks.classList.toggle('active');
-    menuToggle.setAttribute('aria-expanded', isOpen);
-    menuOverlay.style.visibility = isOpen ? 'visible' : 'hidden';
-    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
-};
+    if (hamburgerToggle && dropdownLinks) {
+        // Toggle dropdown menu
+        hamburgerToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dropdownLinks.classList.toggle('active');
+            this.setAttribute('aria-expanded', dropdownLinks.classList.contains('active'));
+        });
 
-// Toggle menu on hamburger click
-menuToggle.addEventListener('click', toggleMenu);
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!dropdownLinks.contains(e.target) && !hamburgerToggle.contains(e.target)) {
+                dropdownLinks.classList.remove('active');
+                hamburgerToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
 
-// Close menu on these events
-menuOverlay.addEventListener('click', toggleMenu);
-document.querySelectorAll('#mobile-nav a').forEach(link => {
-    link.addEventListener('click', () => {
-        // Only close the menu on mobile screens
-        if (window.innerWidth <= 768) {
-            toggleMenu();
-        }
-    });
-});
+        // Close dropdown when a link is clicked (for mobile)
+        dropdownLinks.addEventListener('click', function (e) {
+            if (e.target.tagName === 'A') {
+                dropdownLinks.classList.remove('active');
+                hamburgerToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && navLinks.classList.contains('active')) {
-        toggleMenu();
+        // Handle keyboard navigation
+        hamburgerToggle.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
     }
-});
 
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-        toggleMenu();
+    // Enhanced navigation system for cross-page linking
+    function setupNavigation() {
+        // Handle internal page navigation with smooth scrolling
+        document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+
+                // Check if it's an internal link on the same page
+                if (href.includes('#') && !href.startsWith('#')) {
+                    const [page, section] = href.split('#');
+
+                    // If linking to a different page
+                    if (page && !page.includes(window.location.pathname)) {
+                        e.preventDefault();
+
+                        // Store the target section for the next page
+                        sessionStorage.setItem('targetSection', section);
+                        sessionStorage.setItem('smoothScroll', 'true');
+
+                        // Navigate to the page
+                        window.location.href = page;
+                    }
+                }
+            });
+        });
+
+        // Handle smooth scrolling to target section after page load
+        window.addEventListener('load', function () {
+            const targetSection = sessionStorage.getItem('targetSection');
+            const smoothScroll = sessionStorage.getItem('smoothScroll');
+
+            if (targetSection && smoothScroll) {
+                const targetElement = document.getElementById(targetSection);
+
+                if (targetElement) {
+                    setTimeout(() => {
+                        const navHeight = document.querySelector('nav').offsetHeight;
+                        window.scrollTo({
+                            top: targetElement.offsetTop - navHeight,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                }
+
+                // Clear the stored values
+                sessionStorage.removeItem('targetSection');
+                sessionStorage.removeItem('smoothScroll');
+            }
+        });
     }
+
+    setupNavigation();
 });
 
 //upade 22-03-2025 end
@@ -268,21 +321,20 @@ createParticles();
 
 
 // Smooth scrolling for navigation links
-document.querySelectorAll('.nav-links a').forEach(anchor => {
+document.querySelectorAll('.dropdown-links a, .visible-links a').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
+        // For internal page links, let the navigation system handle it
+        const href = this.getAttribute('href');
 
-        const targetId = this.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
-        const navHeight = document.querySelector('nav').offsetHeight;
+        if (href && href.includes('index.html#')) {
+            e.preventDefault();
 
-        window.scrollTo({
-            top: targetSection.offsetTop - navHeight,
-            behavior: 'smooth'
-        });
+            const section = href.split('#')[1];
+            sessionStorage.setItem('targetSection', section);
+            sessionStorage.setItem('smoothScroll', 'true');
 
-        // Update URL without default jump
-        history.replaceState(null, null, targetId);
+            window.location.href = 'index.html';
+        }
     });
 });
 
