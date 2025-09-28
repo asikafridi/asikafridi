@@ -51,7 +51,38 @@
 }
 
 
-/* Remove all custom control styles and keep only these */
+@media (max-width: 768px) {
+    .video-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .video-hero p {
+        font-size: 1.2rem;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-hero {
+        padding: 6rem 1rem 2rem;
+    }
+
+    .video-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .video-hero p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .video-hero h1 {
+        font-size: 1.5rem;
+    }
+}
+
+
 .video-player-container {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
@@ -84,6 +115,24 @@
     margin-bottom: 1rem;
 }
 
+@media (max-width: 768px) {
+    .video-info h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-info h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .video-info h2 {
+        font-size: 1.2rem;
+    }
+}
+
 .video-details {
     display: flex;
     gap: 2rem;
@@ -97,8 +146,9 @@
     color: #ccc;
 }
 
-/* Remove all .video-controls, .control-btn, progress bar, etc. styles */
-/* They are no longer needed since we're using Google Drive's built-in controls */
+.video-details i {
+    color: #4CAF50;
+}
 
 /* Keep the gallery styles the same */
 .gallery-grid {
@@ -106,6 +156,32 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .video-gallery h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-grid {
+        gap: 1rem;
+    }
+
+    .video-gallery h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .video-gallery h2 {
+        font-size: 1.2rem;
+    }
 }
 
 .video-thumbnail {
@@ -179,11 +255,20 @@
     color: #2196F3;
 }
 
+.light-mode .video-info h2 {
+    color: #2196F3;
+}
+
+.light-mode .thumbnail-overlay i {
+    color: #2196F3;
+}
+
+.light-mode .video-details i {
+    color: #2196F3;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-    .video-hero h1 {
-        font-size: 2rem;
-    }
 
     .video-player {
         aspect-ratio: 16/9;
@@ -198,12 +283,9 @@
         grid-template-columns: 1fr;
     }
 }
+
 @media (max-width: 480px) {
     .video-hero {
         padding: 6rem 1rem 2rem;
-    }
-
-    .video-hero h1 {
-        font-size: 1.5rem;
     }
 }
