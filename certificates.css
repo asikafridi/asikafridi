@@ -54,6 +54,33 @@
     line-height: 1.6;
 }
 
+@media (max-width: 768px) {
+    .certificates-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .certificates-hero p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .certificates-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .certificates-hero p {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .certificates-hero h1 {
+        font-size: 1.5rem;
+    }
+}
+
 .certificates-showcase {
     padding: 4rem 0;
 }
@@ -250,11 +277,11 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .grid-item {
-    height: 350px;
+    height: 250px;
     perspective: 1000px;
     cursor: pointer;
     position: relative;
@@ -398,11 +425,13 @@
     display: flex;
     flex-direction: column;
     height: 80vh;
+    overflow: hidden;
+    margin-bottom: 1rem;
 }
 
 .modal-body img {
     width: 100%;
-    height: 70%;
+    height: 68%;
     object-fit: contain;
     background: #000;
 }
@@ -417,14 +446,16 @@
 
 .modal-info h3 {
     color: #4CAF50;
-    margin-bottom: 1rem;
     font-size: 1.5rem;
+
 }
 
 .modal-info p {
     color: #ccc;
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
+    margin-top: 0.1rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+    justify-content: center !important;
 }
 
 .download-btn {
@@ -439,6 +470,8 @@
     text-decoration: none;
     transition: all 0.3s ease;
     align-self: flex-start;
+    justify-content: center !important;
+    align-items: center !important;
 }
 
 .download-btn:hover {
@@ -794,5 +827,46 @@
 
     .download-modal .modal-info {
         padding: 2rem 1.5rem;
+    }
+
+    .download-modal .modal-info h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem !important;
+    }
+
+    .download-modal .modal-info p {
+        font-size: 1rem;
+    }
+
+    .download-modal .download-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 1rem;
+        margin-bottom: 150px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .download-modal .modal-content {
+        width: 95%;
+        margin: 30% auto;
+    }
+
+    .download-modal .modal-info {
+        padding: 1.5rem 1rem;
+    }
+
+    .download-modal .modal-info h3 {
+        font-size: 1.2rem;
+        margin-bottom: auto !important;
+    }
+
+    .download-modal .modal-info p {
+        font-size: 0.5rem !important;
+    }
+
+    .download-modal .download-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem !important;
+        margin-bottom: 200px !important;
     }
 }
