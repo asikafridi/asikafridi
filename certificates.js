@@ -179,23 +179,55 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Add click events for carousel items (flip functionality)
+    // flipping functionality
+
+    // Enhanced touch interactions for mobile
     function initCarouselItems() {
         items.forEach(item => {
+            // Click for desktop
             item.addEventListener('click', function (e) {
                 if (!e.target.closest('.view-full-btn')) {
+                    this.classList.toggle('flipped');
+                }
+            });
+
+            // Touch events for mobile
+            item.addEventListener('touchstart', function (e) {
+                // Prevent default to avoid scrolling while trying to flip
+                if (!e.target.closest('.view-full-btn')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            item.addEventListener('touchend', function (e) {
+                if (!e.target.closest('.view-full-btn')) {
+                    e.preventDefault();
                     this.classList.toggle('flipped');
                 }
             });
         });
     }
 
-    // Add click events for grid items (flip functionality)
     function initGridItems() {
         const gridItems = document.querySelectorAll('.grid-item');
         gridItems.forEach(item => {
+            // Click for desktop
             item.addEventListener('click', function (e) {
                 if (!e.target.closest('.view-full-btn')) {
+                    this.classList.toggle('flipped');
+                }
+            });
+
+            // Touch events for mobile
+            item.addEventListener('touchstart', function (e) {
+                if (!e.target.closest('.view-full-btn')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            item.addEventListener('touchend', function (e) {
+                if (!e.target.closest('.view-full-btn')) {
+                    e.preventDefault();
                     this.classList.toggle('flipped');
                 }
             });
