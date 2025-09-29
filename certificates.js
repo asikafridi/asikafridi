@@ -153,18 +153,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = 'auto';
     }
 
-    // Navigate to contact section - UPDATED
+    // Navigate to contact section - FIXED
     function goToContact() {
         closeDownloadModal();
 
-        // Store the target for smooth scrolling
-        sessionStorage.setItem('targetSection', 'contact');
-        sessionStorage.setItem('smoothScroll', 'true');
-
-        // Check if we're already on index.html
+        // If we're already on index.html, scroll to contact
         if (window.location.pathname.endsWith('index.html') ||
             window.location.pathname.endsWith('/')) {
-            // We're on the home page, scroll to contact
             const contactSection = document.getElementById('contact');
             if (contactSection) {
                 const navHeight = document.querySelector('nav').offsetHeight;
@@ -174,7 +169,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
         } else {
-            // Navigate to index.html
+            // Navigate to index.html and scroll to contact
+            sessionStorage.setItem('targetSection', 'contact');
+            sessionStorage.setItem('smoothScroll', 'true');
             window.location.href = 'index.html';
         }
     }
