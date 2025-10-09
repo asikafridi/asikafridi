@@ -59,6 +59,7 @@
                 <h1>
                     <a href="index.html" style="text-decoration: none; color: inherit;">ASIKUR RAHMAN</a>
                 </h1>
+
                 <div class="hamburger-menu">
                     <div class="visible-links">
                         <a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a>
@@ -94,169 +95,615 @@
 
     <section class="certificates-showcase">
         <div class="container">
-            <div class="view-controls">
-                <button id="carouselView" class="view-btn active"><i class="fas fa-th-large"></i> Carousel</button>
-                <button id="gridView" class="view-btn"><i class="fas fa-grip-horizontal"></i> Grid</button>
-            </div>
+            <!-- Section 1: Achievements & Resume -->
+            <div class="certificate-section" id="achievements-section">
+                <h2 class="section-title">Achievements & Resume</h2>
+                <div class="view-controls">
+                    <button class="view-btn active" data-section="achievements" data-view="carousel">
+                        <i class="fas fa-th-large"></i> Carousel
+                    </button>
+                    <button class="view-btn" data-section="achievements" data-view="grid">
+                        <i class="fas fa-grip-horizontal"></i> Grid
+                    </button>
+                </div>
 
-            <div class="carousel-container">
-                <div class="carousel">
-                    <div class="certificate-item" data-index="0">
-                        <div class="certificate-front">
-                            <img src="images/ICPC certificate(as volunteer).jpg" alt="ICPC Certificate">
-                            <h3>ICPC Appreciation</h3>
+                <div class="carousel-container" id="achievements-carousel">
+                    <div class="carousel">
+                        <div class="certificate-item" data-index="0">
+                            <div class="certificate-front">
+                                <img src="images/ICPC certificate(as volunteer).jpg" alt="ICPC Certificate">
+                                <h3>ICPC Appreciation</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>ICPC Volunteer</h3>
+                                <p>Certificate of Appreciation for serving as a volunteer at ICPC Asia Dhaka Regional
+                                    Contest 2024.</p>
+                                <button class="view-full-btn" data-certificate="icpc">View Full</button>
+                            </div>
                         </div>
-                        <div class="certificate-back">
-                            <h3>ICPC Volunteer</h3>
-                            <p>Certificate of Appreciation for serving as a volunteer at ICPC Asia Dhaka Regional
-                                Contest 2024.</p>
-                            <button class="view-full-btn" data-certificate="icpc">View Full</button>
+
+                        <div class="certificate-item" data-index="1">
+                            <div class="certificate-front">
+                                <img src="images/Certificate of Takeoff Programming Contest.jpg"
+                                    alt="Take-Off Programming Contest">
+                                <h3>Take-Off Contest</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Take-Off Programming Contest</h3>
+                                <p>Certificate of Participation for qualifying and participating in the Main Round (Fall
+                                    2024).</p>
+                                <button class="view-full-btn" data-certificate="takeoff">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="2">
+                            <div class="certificate-front">
+                                <img src="images/UTA certificate.jpg" alt="UTA Programming Contest">
+                                <h3>UTA Contest</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>UTA Programming Contest</h3>
+                                <p>Certificate of Participation for qualifying and participating in the Main Round
+                                    (Summer 2025).</p>
+                                <button class="view-full-btn" data-certificate="uta">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="3">
+                            <div class="certificate-front">
+                                <img src="images/DIU Science Olympiad certificate of ASIKUR RAHMAN.jpg"
+                                    alt="DIU Science Olympiad">
+                                <h3>Science Olympiad</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>DIU Science Olympiad</h3>
+                                <p>Certificate of Participation for qualifying and participating in the Main Round (Fall
+                                    2024).</p>
+                                <button class="view-full-btn" data-certificate="olympiad">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item resume-item" data-index="4">
+                            <div class="certificate-front">
+                                <img src="images/ASIKUR_RAHMAN_Resume.jpg" alt="Resume">
+                                <h3>My Resume</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Asikur Rahman - Resume</h3>
+                                <p>A passionate Computer Science Student specializing in competitive programming, web
+                                    development, and software engineering.</p>
+                                <button class="view-full-btn" data-certificate="resume">Download PDF</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="certificate-item" data-index="1">
-                        <div class="certificate-front">
-                            <img src="images/Certificate of Takeoff Programming Contest.jpg"
-                                alt="Take-Off Programming Contest">
-                            <h3>Take-Off Contest</h3>
-                        </div>
-                        <div class="certificate-back">
-                            <h3>Take-Off Programming Contest</h3>
-                            <p>
-                                Certificate of Participation for qualifying and participating in the Main Round (Fall
-                                2024).
-                            </p>
-                            <button class="view-full-btn" data-certificate="takeoff">View Full</button>
-                        </div>
-                    </div>
+                    <button class="carousel-nav prev" data-section="achievements">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-nav next" data-section="achievements">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
 
-                    <div class="certificate-item" data-index="2">
-                        <div class="certificate-front">
-                            <img src="images/UTA certificate.jpg" alt="UTA Programming Contest">
-                            <h3>UTA Contest</h3>
+                <div class="grid-container hidden" id="achievements-grid">
+                    <div class="grid">
+                        <div class="grid-item" data-index="0">
+                            <div class="certificate-front">
+                                <img src="images/ICPC certificate(as volunteer).jpg" alt="ICPC Certificate">
+                                <h3>ICPC Appreciation</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>ICPC Volunteer</h3>
+                                <p>Certificate of Appreciation for serving as a volunteer at ICPC Asia Dhaka Regional
+                                    Contest 2024.</p>
+                                <button class="view-full-btn" data-certificate="icpc">View Full</button>
+                            </div>
                         </div>
-                        <div class="certificate-back">
-                            <h3>UTA Programming Contest</h3>
-                            <p>
-                                Certificate of Participation for qualifying and participating in the Main Round (Summer
-                                2025), organized by Daffodil International University.
-                            </p>
-                            <button class="view-full-btn" data-certificate="uta">View Full</button>
-                        </div>
-                    </div>
 
-                    <div class="certificate-item" data-index="3">
-                        <div class="certificate-front">
-                            <img src="images/DIU Science Olympiad certificate of ASIKUR RAHMAN.jpg"
-                                alt="DIU Science Olympiad">
-                            <h3>Science Olympiad</h3>
+                        <div class="grid-item" data-index="1">
+                            <div class="certificate-front">
+                                <img src="images/Certificate of Takeoff Programming Contest.jpg"
+                                    alt="Take-Off Programming Contest">
+                                <h3>Take-Off Contest</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Take-Off Programming Contest</h3>
+                                <p>Certificate of Participation for qualifying and participating in the Main Round (Fall
+                                    2024).</p>
+                                <button class="view-full-btn" data-certificate="takeoff">View Full</button>
+                            </div>
                         </div>
-                        <div class="certificate-back">
-                            <h3>DIU Science Olympiad</h3>
-                            <p>
-                                Certificate of Participation for qualifying and participating in the Main Round (Fall
-                                2024), Faculty of Science & Information Technology.
-                            </p>
-                            <button class="view-full-btn" data-certificate="olympiad">View Full</button>
-                        </div>
-                    </div>
 
-                    <div class="certificate-item resume-item" data-index="4">
-                        <div class="certificate-front">
-                            <img src="images/ASIKUR_RAHMAN_Resume.jpg" alt="Resume">
-                            <h3>My Resume</h3>
+                        <div class="grid-item" data-index="2">
+                            <div class="certificate-front">
+                                <img src="images/UTA certificate.jpg" alt="UTA Programming Contest">
+                                <h3>UTA Contest</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>UTA Programming Contest</h3>
+                                <p>Certificate of Participation for qualifying and participating in the Main Round
+                                    (Summer 2025).</p>
+                                <button class="view-full-btn" data-certificate="uta">View Full</button>
+                            </div>
                         </div>
-                        <div class="certificate-back">
-                            <h3>Asikur Rahman - Resume</h3>
-                            <p>
-                                A passionate Computer Science Student specializing in competitive programming, web
-                                development, and software engineering.
-                            </p>
-                            <button class="view-full-btn" data-certificate="resume">Download PDF</button>
+
+                        <div class="grid-item" data-index="3">
+                            <div class="certificate-front">
+                                <img src="images/DIU Science Olympiad certificate of ASIKUR RAHMAN.jpg"
+                                    alt="DIU Science Olympiad">
+                                <h3>Science Olympiad</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>DIU Science Olympiad</h3>
+                                <p>Certificate of Participation for qualifying and participating in the Main Round (Fall
+                                    2024).</p>
+                                <button class="view-full-btn" data-certificate="olympiad">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item resume-item" data-index="4">
+                            <div class="certificate-front">
+                                <img src="images/ASIKUR_RAHMAN_Resume.jpg" alt="Resume">
+                                <h3>My Resume</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Asikur Rahman - Resume</h3>
+                                <p>A passionate Computer Science Student specializing in competitive programming, web
+                                    development, and software engineering.</p>
+                                <button class="view-full-btn" data-certificate="resume">Download PDF</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <button class="carousel-nav prev">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="carousel-nav next">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
             </div>
 
-            <div class="grid-container hidden">
-                <div class="grid">
-                    <div class="grid-item" data-index="0">
-                        <div class="certificate-front">
-                            <img src="images/ICPC certificate(as volunteer).jpg" alt="ICPC Certificate">
-                            <h3>ICPC Appreciation</h3>
+            <!-- Section 2: Microsoft Certificates -->
+            <div class="certificate-section microsoft-section" id="microsoft-section">
+                <h2 class="section-title">Microsoft Certificates</h2>
+                <div class="view-controls">
+                    <button class="view-btn active" data-section="microsoft" data-view="carousel">
+                        <i class="fas fa-th-large"></i> Carousel
+                    </button>
+                    <button class="view-btn" data-section="microsoft" data-view="grid">
+                        <i class="fas fa-grip-horizontal"></i> Grid
+                    </button>
+                </div>
+
+                <div class="carousel-container" id="microsoft-carousel">
+                    <div class="carousel">
+                        <div class="certificate-item" data-index="0">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-1.jpg" alt="Introduction to Microsoft 365 Copilot">
+                                <h3>Microsoft 365 Copilot Intro</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Introduction to Microsoft 365 Copilot</h3>
+                                <p>Fundamental understanding of Microsoft 365 Copilot capabilities and basic
+                                    implementation strategies.</p>
+                                <button class="view-full-btn" data-certificate="microsoft1">View Full</button>
+                            </div>
                         </div>
-                        <div class="certificate-back">
-                            <h3>ICPC Volunteer</h3>
-                            <p>Certificate of Appreciation for serving as a volunteer at ICPC Asia Dhaka Regional
-                                Contest 2024.</p>
-                            <button class="view-full-btn" data-certificate="icpc">View Full</button>
+
+                        <div class="certificate-item" data-index="1">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-2.jpg"
+                                    alt="Optimize and extend Microsoft 365 Copilot">
+                                <h3>Optimize Microsoft Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Optimize and extend Microsoft 365 Copilot</h3>
+                                <p>Advanced techniques for optimizing and extending Microsoft 365 Copilot functionality.
+                                </p>
+                                <button class="view-full-btn" data-certificate="microsoft2">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="2">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-3.jpg"
+                                    alt="Explore possibilities with Microsoft 365 Copilot">
+                                <h3>Explore Copilot Possibilities</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Explore possibilities with Microsoft 365 Copilot</h3>
+                                <p>Discovering innovative applications and creative uses of Microsoft 365 Copilot.</p>
+                                <button class="view-full-btn" data-certificate="microsoft3">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="3">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-4.jpg"
+                                    alt="Create and draft with Microsoft 365 Copilot">
+                                <h3>Create & Draft with Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Create and draft with Microsoft 365 Copilot</h3>
+                                <p>Mastering content creation and drafting capabilities using Microsoft 365 Copilot.</p>
+                                <button class="view-full-btn" data-certificate="microsoft4">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="4">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-5.jpg"
+                                    alt="Ask questions and analyze content with Microsoft 365 Copilot">
+                                <h3>Analyze Content with Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Ask questions and analyze content with Microsoft 365 Copilot</h3>
+                                <p>Advanced content analysis and question-answering techniques using Copilot.</p>
+                                <button class="view-full-btn" data-certificate="microsoft5">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="5">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-6.jpg"
+                                    alt="Edit and transform content with Microsoft 365 Copilot">
+                                <h3>Edit & Transform with Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Edit and transform content with Microsoft 365 Copilot</h3>
+                                <p>Content editing and transformation capabilities using Microsoft 365 Copilot tools.
+                                </p>
+                                <button class="view-full-btn" data-certificate="microsoft6">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="6">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-7.jpg"
+                                    alt="Summarize and simplify information with Microsoft 365 Copilot">
+                                <h3>Summarize with Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Summarize and simplify information with Microsoft 365 Copilot</h3>
+                                <p>Information summarization and simplification techniques using Microsoft 365 Copilot.
+                                </p>
+                                <button class="view-full-btn" data-certificate="microsoft7">View Full</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="grid-item" data-index="1">
-                        <div class="certificate-front">
-                            <img src="images/Certificate of Takeoff Programming Contest.jpg"
-                                alt="Take-Off Programming Contest">
-                            <h3>Take-Off Contest</h3>
+                    <button class="carousel-nav prev" data-section="microsoft">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-nav next" data-section="microsoft">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="grid-container hidden" id="microsoft-grid">
+                    <div class="grid">
+                        <div class="grid-item" data-index="0">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-1.jpg" alt="Introduction to Microsoft 365 Copilot">
+                                <h3>Microsoft 365 Copilot Intro</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Introduction to Microsoft 365 Copilot</h3>
+                                <p>Fundamental understanding of Microsoft 365 Copilot capabilities and basic
+                                    implementation strategies.</p>
+                                <button class="view-full-btn" data-certificate="microsoft1">View Full</button>
+                            </div>
                         </div>
-                        <div class="certificate-back">
-                            <h3>Take-Off Programming Contest</h3>
-                            <p>Certificate of Participation for qualifying and participating in the Main Round (Fall
-                                2024).</p>
-                            <button class="view-full-btn" data-certificate="takeoff">View Full</button>
+
+                        <div class="grid-item" data-index="1">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-2.jpg"
+                                    alt="Optimize and extend Microsoft 365 Copilot">
+                                <h3>Optimize Microsoft Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Optimize and extend Microsoft 365 Copilot</h3>
+                                <p>Advanced techniques for optimizing and extending Microsoft 365 Copilot functionality.
+                                </p>
+                                <button class="view-full-btn" data-certificate="microsoft2">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="2">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-3.jpg"
+                                    alt="Explore possibilities with Microsoft 365 Copilot">
+                                <h3>Explore Copilot Possibilities</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Explore possibilities with Microsoft 365 Copilot</h3>
+                                <p>Discovering innovative applications and creative uses of Microsoft 365 Copilot.</p>
+                                <button class="view-full-btn" data-certificate="microsoft3">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="3">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-4.jpg"
+                                    alt="Create and draft with Microsoft 365 Copilot">
+                                <h3>Create & Draft with Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Create and draft with Microsoft 365 Copilot</h3>
+                                <p>Mastering content creation and drafting capabilities using Microsoft 365 Copilot.</p>
+                                <button class="view-full-btn" data-certificate="microsoft4">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="4">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-5.jpg"
+                                    alt="Ask questions and analyze content with Microsoft 365 Copilot">
+                                <h3>Analyze Content with Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Ask questions and analyze content with Microsoft 365 Copilot</h3>
+                                <p>Advanced content analysis and question-answering techniques using Copilot.</p>
+                                <button class="view-full-btn" data-certificate="microsoft5">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="5">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-6.jpg"
+                                    alt="Edit and transform content with Microsoft 365 Copilot">
+                                <h3>Edit & Transform with Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Edit and transform content with Microsoft 365 Copilot</h3>
+                                <p>Content editing and transformation capabilities using Microsoft 365 Copilot tools.
+                                </p>
+                                <button class="view-full-btn" data-certificate="microsoft6">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="6">
+                            <div class="certificate-front">
+                                <img src="images/microsoft/microsoft-7.jpg"
+                                    alt="Summarize and simplify information with Microsoft 365 Copilot">
+                                <h3>Summarize with Copilot</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Summarize and simplify information with Microsoft 365 Copilot</h3>
+                                <p>Information summarization and simplification techniques using Microsoft 365 Copilot.
+                                </p>
+                                <button class="view-full-btn" data-certificate="microsoft7">View Full</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Training Certifications -->
+            <div class="certificate-section training-section" id="training-section">
+                <h2 class="section-title">Training Certifications</h2>
+                <div class="view-controls">
+                    <button class="view-btn active" data-section="training" data-view="carousel">
+                        <i class="fas fa-th-large"></i> Carousel
+                    </button>
+                    <button class="view-btn" data-section="training" data-view="grid">
+                        <i class="fas fa-grip-horizontal"></i> Grid
+                    </button>
+                </div>
+
+                <div class="carousel-container" id="training-carousel">
+                    <div class="carousel">
+                        <div class="certificate-item" data-index="0">
+                            <div class="certificate-front">
+                                <img src="images/training/training-1.jpg"
+                                    alt="Setting and Achieving Focus, Goals and Targets">
+                                <h3>Goals & Targets Setting</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Setting and Achieving Focus, Goals and Targets</h3>
+                                <p>Strategic goal setting and achievement methodologies for professional success.</p>
+                                <button class="view-full-btn" data-certificate="training1">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="1">
+                            <div class="certificate-front">
+                                <img src="images/training/training-2.jpg" alt="Leadership Qualities – Boss VS Leader">
+                                <h3>Leadership Qualities</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Leadership Qualities – Boss VS Leader</h3>
+                                <p>Understanding the fundamental differences between being a boss and being a true
+                                    leader.</p>
+                                <button class="view-full-btn" data-certificate="training2">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="2">
+                            <div class="certificate-front">
+                                <img src="images/training/training-3.jpg"
+                                    alt="Positivity – How To Build Positive Mentality">
+                                <h3>Positive Mentality Building</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Positivity – How To Build Positive Mentality</h3>
+                                <p>Techniques and strategies for developing and maintaining a positive mindset.</p>
+                                <button class="view-full-btn" data-certificate="training3">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="3">
+                            <div class="certificate-front">
+                                <img src="images/training/training-4.jpg" alt="Soft Skill and Hard Skill">
+                                <h3>Soft & Hard Skills</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Soft Skill and Hard Skill Development</h3>
+                                <p>Comprehensive understanding of both soft and hard skills for professional growth.</p>
+                                <button class="view-full-btn" data-certificate="training4">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="4">
+                            <div class="certificate-front">
+                                <img src="images/training/training-5.jpg" alt="Become & Make A Leader: With Examples">
+                                <h3>Leadership Development</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Become & Make A Leader: With Examples</h3>
+                                <p>Practical leadership development with real-world examples and case studies.</p>
+                                <button class="view-full-btn" data-certificate="training5">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="5">
+                            <div class="certificate-front">
+                                <img src="images/training/training-6.jpg"
+                                    alt="Employability skills [Part 1]: Improve Job Opportunities">
+                                <h3>Employability Skills Part 1</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Employability skills [Part 1]: Improve Job Opportunities</h3>
+                                <p>Essential employability skills to enhance job market competitiveness and
+                                    opportunities.</p>
+                                <button class="view-full-btn" data-certificate="training6">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="6">
+                            <div class="certificate-front">
+                                <img src="images/training/training-7.jpg"
+                                    alt="Career Planning from News Media: Advanced Technique">
+                                <h3>Career Planning Techniques</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Career Planning from News Media: Advanced Technique</h3>
+                                <p>Advanced career planning strategies using insights from news media and current
+                                    trends.</p>
+                                <button class="view-full-btn" data-certificate="training7">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-item" data-index="7">
+                            <div class="certificate-front">
+                                <img src="images/training/training-8.jpg"
+                                    alt="Start-up Entrepreneurship: Complete Guideline">
+                                <h3>Start-up Entrepreneurship</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Start-up Entrepreneurship: Complete Guideline</h3>
+                                <p>Comprehensive guide to start-up entrepreneurship from ideation to execution.</p>
+                                <button class="view-full-btn" data-certificate="training8">View Full</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="grid-item" data-index="2">
-                        <div class="certificate-front">
-                            <img src="images/UTA certificate.jpg" alt="UTA Programming Contest">
-                            <h3>UTA Contest</h3>
-                        </div>
-                        <div class="certificate-back">
-                            <h3>UTA Programming Contest</h3>
-                            <p>
-                                Certificate of Participation for qualifying and participating in the Main Round (Summer
-                                2025), organized by Daffodil International University.
-                            </p>
-                            <button class="view-full-btn" data-certificate="uta">View Full</button>
-                        </div>
-                    </div>
+                    <button class="carousel-nav prev" data-section="training">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-nav next" data-section="training">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
 
-                    <div class="grid-item" data-index="3">
-                        <div class="certificate-front">
-                            <img src="images/DIU Science Olympiad certificate of ASIKUR RAHMAN.jpg"
-                                alt="DIU Science Olympiad">
-                            <h3>Science Olympiad</h3>
+                <div class="grid-container hidden" id="training-grid">
+                    <div class="grid">
+                        <div class="grid-item" data-index="0">
+                            <div class="certificate-front">
+                                <img src="images/training/training-1.jpg"
+                                    alt="Setting and Achieving Focus, Goals and Targets">
+                                <h3>Goals & Targets Setting</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Setting and Achieving Focus, Goals and Targets</h3>
+                                <p>Strategic goal setting and achievement methodologies for professional success.</p>
+                                <button class="view-full-btn" data-certificate="training1">View Full</button>
+                            </div>
                         </div>
-                        <div class="certificate-back">
-                            <h3>DIU Science Olympiad</h3>
-                            <p>
-                                Certificate of Participation for qualifying and participating in the Main Round (Fall
-                                2024), Faculty of Science & Information Technology.
-                            </p>
-                            <button class="view-full-btn" data-certificate="olympiad">View Full</button>
-                        </div>
-                    </div>
 
-                    <div class="grid-item resume-item" data-index="4">
-                        <div class="certificate-front">
-                            <img src="images/ASIKUR_RAHMAN_Resume.jpg" alt="Resume">
-                            <h3>My Resume</h3>
+                        <div class="grid-item" data-index="1">
+                            <div class="certificate-front">
+                                <img src="images/training/training-2.jpg" alt="Leadership Qualities – Boss VS Leader">
+                                <h3>Leadership Qualities</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Leadership Qualities – Boss VS Leader</h3>
+                                <p>Understanding the fundamental differences between being a boss and being a true
+                                    leader.</p>
+                                <button class="view-full-btn" data-certificate="training2">View Full</button>
+                            </div>
                         </div>
-                        <div class="certificate-back">
-                            <h3>Asikur Rahman - Resume</h3>
-                            <p>
-                                A passionate Computer Science Student specializing in competitive programming, web
-                                development, and software engineering.
-                            </p>
-                            <button class="view-full-btn" data-certificate="resume">Download PDF</button>
+
+                        <div class="grid-item" data-index="2">
+                            <div class="certificate-front">
+                                <img src="images/training/training-3.jpg"
+                                    alt="Positivity – How To Build Positive Mentality">
+                                <h3>Positive Mentality Building</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Positivity – How To Build Positive Mentality</h3>
+                                <p>Techniques and strategies for developing and maintaining a positive mindset.</p>
+                                <button class="view-full-btn" data-certificate="training3">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="3">
+                            <div class="certificate-front">
+                                <img src="images/training/training-4.jpg" alt="Soft Skill and Hard Skill">
+                                <h3>Soft & Hard Skills</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Soft Skill and Hard Skill Development</h3>
+                                <p>Comprehensive understanding of both soft and hard skills for professional growth.</p>
+                                <button class="view-full-btn" data-certificate="training4">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="4">
+                            <div class="certificate-front">
+                                <img src="images/training/training-5.jpg" alt="Become & Make A Leader: With Examples">
+                                <h3>Leadership Development</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Become & Make A Leader: With Examples</h3>
+                                <p>Practical leadership development with real-world examples and case studies.</p>
+                                <button class="view-full-btn" data-certificate="training5">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="5">
+                            <div class="certificate-front">
+                                <img src="images/training/training-6.jpg"
+                                    alt="Employability skills [Part 1]: Improve Job Opportunities">
+                                <h3>Employability Skills Part 1</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Employability skills [Part 1]: Improve Job Opportunities</h3>
+                                <p>Essential employability skills to enhance job market competitiveness and
+                                    opportunities.</p>
+                                <button class="view-full-btn" data-certificate="training6">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="6">
+                            <div class="certificate-front">
+                                <img src="images/training/training-7.jpg"
+                                    alt="Career Planning from News Media: Advanced Technique">
+                                <h3>Career Planning Techniques</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Career Planning from News Media: Advanced Technique</h3>
+                                <p>Advanced career planning strategies using insights from news media and current
+                                    trends.</p>
+                                <button class="view-full-btn" data-certificate="training7">View Full</button>
+                            </div>
+                        </div>
+
+                        <div class="grid-item" data-index="7">
+                            <div class="certificate-front">
+                                <img src="images/training/training-8.jpg"
+                                    alt="Start-up Entrepreneurship: Complete Guideline">
+                                <h3>Start-up Entrepreneurship</h3>
+                            </div>
+                            <div class="certificate-back">
+                                <h3>Start-up Entrepreneurship: Complete Guideline</h3>
+                                <p>Comprehensive guide to start-up entrepreneurship from ideation to execution.</p>
+                                <button class="view-full-btn" data-certificate="training8">View Full</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -293,4 +740,3 @@
 </body>
 
 </html>
-
