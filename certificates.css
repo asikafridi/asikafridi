@@ -1,4 +1,14 @@
 /* Certificates Page Styles */
+
+/* Smooth scrolling for all modes */
+html {
+    scroll-behavior: smooth !important;
+}
+
+body {
+    scroll-behavior: smooth !important;
+}
+
 .certificates-hero {
     padding: 8rem 0 4rem;
     text-align: center;
@@ -43,11 +53,8 @@
     transform: scale(1.05);
 }
 
-
-
 .certificates-hero p {
     color: var(--text-color, #ccc);
-    /* Added text color variable */
     font-size: 1.4rem;
     max-width: auto;
     margin: 0 auto;
@@ -85,6 +92,65 @@
     padding: 4rem 0;
 }
 
+/* Certificate Section Styles */
+.certificate-section {
+    margin-bottom: 6rem;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #4CAF50;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #4CAF50;
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.8rem !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .section-title {
+        font-size: 1.2rem !important;
+    }
+}
+
+.microsoft-section .section-title {
+    color: #0078D7;
+}
+
+.microsoft-section .section-title::after {
+    background: #0078D7;
+}
+
+.training-section .section-title {
+    color: #FF5722;
+}
+
+.training-section .section-title::after {
+    background: #FF5722;
+}
+
 .view-controls {
     display: flex;
     justify-content: center;
@@ -112,12 +178,27 @@
     border-color: #4CAF50;
 }
 
+.microsoft-section .view-btn.active,
+.microsoft-section .view-btn:hover {
+    background: rgba(0, 120, 215, 0.2);
+    color: #0078D7;
+    border-color: #0078D7;
+}
+
+.training-section .view-btn.active,
+.training-section .view-btn:hover {
+    background: rgba(255, 87, 34, 0.2);
+    color: #FF5722;
+    border-color: #FF5722;
+}
+
 .carousel-container {
     position: relative;
-    perspective: 1000px;
+    perspective: 1500px;
     height: 500px;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin-top: 150px;
+    margin-bottom: 150px;
+    border-radius: 15px;
 }
 
 .carousel {
@@ -158,7 +239,7 @@
 }
 
 .certificate-front {
-    background: rgba(255, 255, 255, 0.05);
+    background: linear-gradient(135deg, rgba(58, 190, 54, 0.1) 0%, rgba(10, 192, 19, 0.3) 100%) !important;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -181,7 +262,7 @@
     color: #4CAF50;
     font-size: 1.2rem;
     margin: 0;
-    /* Added to fix spacing */
+    line-height: 1.3;
 }
 
 .certificate-back {
@@ -199,29 +280,30 @@
     color: #4CAF50;
     margin-bottom: 1rem;
     margin-top: 0;
-    /* Added to fix spacing */
+    font-size: 1.1rem;
+    line-height: 1.3;
 }
 
 .certificate-back p {
     color: #ccc;
     margin-bottom: 1.5rem;
-    line-height: 1.5;
+    line-height: 1.4;
     margin-top: 0;
-    /* Added to fix spacing */
+    font-size: 0.9rem;
 }
 
 .view-full-btn {
     background: rgba(76, 175, 80, 0.2);
     border: 1px solid #4CAF50;
     color: #4CAF50;
-    padding: 0.8rem 1.5rem;
+    padding: 0.6rem 1.2rem;
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
     align-self: center;
     font-weight: 500;
     margin-top: auto;
-    /* Added to push button to bottom */
+    font-size: 0.85rem;
 }
 
 .view-full-btn:hover {
@@ -263,11 +345,11 @@
     right: 20px;
 }
 
-/* Grid View Styles - FIXED */
+/* Grid View Styles */
 .grid-container {
     display: none;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .grid-container:not(.hidden) {
@@ -281,11 +363,12 @@
 }
 
 .grid-item {
-    height: 250px;
+    height: 380px;
     perspective: 1000px;
     cursor: pointer;
     position: relative;
     transform-style: preserve-3d;
+    transition: transform 0.6s ease;
 }
 
 .grid-item .certificate-front,
@@ -314,7 +397,7 @@
 
 .grid-item .certificate-front img {
     width: 100%;
-    height: 180px;
+    height: 200px;
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 1rem;
@@ -322,7 +405,7 @@
 
 .grid-item .certificate-back {
     background: rgba(10, 25, 47, 0.9);
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -331,20 +414,16 @@
     z-index: 1;
 }
 
-.grid-item.flipped .certificate-front {
+/* Grid item flip - using transform on the item itself */
+.grid-item.flipped {
     transform: rotateY(180deg);
 }
 
-.grid-item.flipped .certificate-back {
-    transform: rotateY(0deg);
-}
-
-.grid-item:hover .certificate-front {
-    transform: rotateY(180deg);
-}
-
-.grid-item:hover .certificate-back {
-    transform: rotateY(0deg);
+/* Desktop hover effect - only on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+    .grid-item:hover {
+        transform: rotateY(180deg);
+    }
 }
 
 /* Carousel flip effect */
@@ -356,13 +435,73 @@
     transform: rotateY(0deg);
 }
 
-.resume-item .certificate-front {
-    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%);
+/* Section-specific styles */
+
+
+/* Microsoft Section Styles */
+.microsoft-section .certificate-front {
+    background: linear-gradient(135deg, rgba(55, 116, 167, 0.1) 0%, rgba(16, 107, 182, 0.3) 100%) !important;
 }
 
-.resume-item .certificate-front h3 {
-    color: #4CAF50 !important;
-    /* Fixed resume text color with important */
+.microsoft-section .certificate-front h3 {
+    color: #0078D7 !important;
+}
+
+.microsoft-section .certificate-back {
+    background: rgba(0, 120, 215, 0.) !important;
+}
+
+.microsoft-section .certificate-back h3 {
+    color: #0078D7 !important;
+}
+
+.microsoft-section .view-full-btn {
+    background: rgba(0, 120, 215, 0.2);
+    border: 1px solid #0078D7;
+    color: #0078D7;
+}
+
+.microsoft-section .view-full-btn:hover {
+    background: #0078D7;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 120, 215, 0.3);
+}
+
+.microsoft-section .carousel-nav:hover {
+    background: rgba(0, 120, 215, 0.3);
+}
+
+/* Training Section Styles */
+.training-section .certificate-front {
+    background: linear-gradient(135deg, rgba(243, 85, 37, 0.1) 0%, rgba(219, 73, 29, 0.3) 100%) !important;
+}
+
+.training-section .certificate-front h3 {
+    color: #FF5722 !important;
+}
+
+.training-section .certificate-back {
+    background: rgba(255, 87, 34, 0.);
+}
+
+.training-section .certificate-back h3 {
+    color: #FF5722 !important;
+}
+
+.training-section .view-full-btn {
+    background: rgba(255, 87, 34, 0.2);
+    border: 1px solid #FF5722;
+    color: #FF5722;
+}
+
+.training-section .view-full-btn:hover {
+    background: #FF5722;
+    color: white;
+    box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+}
+
+.training-section .carousel-nav:hover {
+    background: rgba(255, 87, 34, 0.3);
 }
 
 .hidden {
@@ -455,7 +594,6 @@
 .modal-info h3 {
     color: #4CAF50;
     font-size: 1.5rem;
-
 }
 
 .modal-info p {
@@ -489,50 +627,23 @@
     box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
 }
 
-/* Light mode adjustments - ENHANCED */
-.light-mode .certificates-hero {
-    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(33, 150, 243, 0.05) 100%);
+/* Light mode adjustments */
+
+.light-mode body {
+    scroll-behavior: smooth !important;
 }
 
-.light-mode .certificates-hero p {
-    color: #555;
+.light-mode html {
+    scroll-behavior: smooth !important;
+}
+
+.light-mode * {
+    scroll-behavior: smooth !important;
 }
 
 .light-mode .certificate-front {
     background: rgba(0, 0, 0, 0.03);
     border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.light-mode .certificate-front h3 {
-    color: #2196F3 !important;
-    /* Blue in light mode */
-}
-
-.light-mode .certificate-back {
-    background: rgba(248, 249, 250, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.light-mode .certificate-back h3 {
-    color: #2196F3 !important;
-    /* Blue in light mode */
-}
-
-.light-mode .certificate-back p {
-    color: #555;
-}
-
-.light-mode .view-btn {
-    background: rgba(0, 0, 0, 0.05);
-    color: #555;
-    border: 1px solid rgba(33, 150, 243, 0.3);
-}
-
-.light-mode .view-btn.active,
-.light-mode .view-btn:hover {
-    background: rgba(33, 150, 243, 0.1);
-    color: #2196F3;
-    border-color: #2196F3;
 }
 
 .light-mode .carousel-nav {
@@ -544,24 +655,36 @@
     background: rgba(33, 150, 243, 0.2);
 }
 
-.light-mode .view-full-btn {
-    background: rgba(33, 150, 243, 0.1);
-    border-color: #2196F3;
-    color: #2196F3;
+
+.light-mode .microsoft-section .view-full-btn {
+    background: rgba(0, 120, 215, 0.1);
+    border-color: #0078D7;
+    color: #0078D7;
 }
 
-.light-mode .view-full-btn:hover {
-    background: #2196F3;
+.light-mode .microsoft-section .view-full-btn:hover {
+    background: #0078D7;
     color: white;
 }
 
-.light-mode .resume-item .certificate-front {
-    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(33, 150, 243, 0.05) 100%);
+/* Training section light mode */
+.light-mode .training-section .certificate-front h3 {
+    color: #FF5722 !important;
 }
 
-.light-mode .resume-item .certificate-front h3 {
-    color: #2196F3 !important;
-    /* Consistent blue in light mode */
+.light-mode .training-section .certificate-back h3 {
+    color: #FF5722 !important;
+}
+
+.light-mode .training-section .view-full-btn {
+    background: rgba(255, 87, 34, 0.1);
+    border-color: #FF5722;
+    color: #FF5722;
+}
+
+.light-mode .training-section .view-full-btn:hover {
+    background: #FF5722;
+    color: white;
 }
 
 .light-mode .modal-content {
@@ -596,15 +719,17 @@
     color: #2196F3;
 }
 
-/* UPDATED MOBILE RESPONSIVENESS - Better Carousel Fit */
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
     .carousel-container {
-        height: 600px !important;
+        height: 500px !important;
         perspective: auto;
-        margin-top: 50px auto;
-        margin-bottom: 50px auto;
+        margin-top: 50px;
+        margin-bottom: 50px;
         max-width: 100%;
         overflow: hidden;
+        transform-style: preserve-3d !important;
+        border-radius: 15px !important;
     }
 
     .certificate-item {
@@ -658,12 +783,7 @@
         right: 5px !important;
     }
 
-    /* Better touch interaction */
-    .certificate-item {
-        touch-action: pan-y pinch-zoom;
-    }
-
-    .certificates-hero h1 {
+    .section-title {
         font-size: 2rem;
     }
 
@@ -676,16 +796,29 @@
         width: 200px;
         justify-content: center;
     }
+
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .grid-item {
+        height: 320px;
+    }
+
+    .grid-item .certificate-front img {
+        height: 140px;
+    }
 }
 
 @media (max-width: 480px) {
     .carousel-container {
         height: 500px !important;
         perspective: auto;
-        margin-top: 50px auto;
-        margin-bottom: 50px auto;
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
         max-width: 100%;
         overflow: hidden;
+        border-radius: 15px !important;
     }
 
     .certificate-item {
@@ -693,6 +826,7 @@
         height: 250px !important;
         margin-left: -90px !important;
         margin-top: -125px !important;
+        transform-style: preserve-3d;
     }
 
     .certificate-front img {
@@ -717,15 +851,35 @@
         margin-bottom: 0.8rem;
     }
 
-    .view-full-btn {
-        padding: 0.5rem 1rem !important;
-        font-size: 0.75rem !important;
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .grid-item {
+        height: 260px;
+    }
+
+    .grid-item .certificate-front img {
+        height: 110px;
+    }
+
+
+
+    .view-controls {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .view-btn {
+        width: 100px;
+        justify-content: center;
     }
 }
 
 @media (max-width: 360px) {
     .carousel-container {
-        height: 280px !important;
+        height: 300px !important;
+        border-radius: 15px !important;
     }
 
     .certificate-item {
@@ -736,30 +890,29 @@
     }
 
     .certificate-front img {
-        height: 100px !important;
+        height: 90px !important;
     }
 
-    .certificate-front h3 {
-        font-size: 0.8rem !important;
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     }
 
-    .certificate-back h3 {
-        font-size: 0.8rem !important;
+    .grid-item {
+        height: 220px;
     }
 
-    .certificate-back p {
-        font-size: 0.7rem !important;
-    }
-}
-
-/* Improved carousel rotation for mobile */
-@media (max-width: 768px) {
-    .carousel {
-        transform-style: preserve-3d;
+    .grid-item .certificate-front img {
+        height: 90px;
     }
 
-    .certificate-item {
-        transform-origin: center center;
+    .view-controls {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .view-btn {
+        width: 100px;
+        justify-content: center;
     }
 }
 
@@ -771,110 +924,5 @@
 
     .certificate-item:active {
         transform: translateZ(20px) scale(1.02);
-    }
-}
-
-/* Add smooth transitions for carousel */
-.carousel {
-    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-@media (max-width: 768px) {
-    .grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    }
-}
-
-@media (max-width: 480px) {
-    .grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    }
-
-    .grid-item:active .certificate-front,
-    .grid-item:active .certificate-back {
-        transform: rotateY(0deg);
-    }
-
-    .certificate-item:active .certificate-front,
-    .certificate-item:active .certificate-back {
-        transform: rotateY(0deg);
-    }
-}
-
-@media (max-width: 360px) {
-    .grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    }
-}
-
-/* Improve touch scrolling */
-.carousel-container {
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Prevent zoom on double-tap */
-.certificate-item {
-    touch-action: pan-y;
-}
-
-/* Light mode adjustments for download modal */
-.light-mode .download-modal .modal-info h3 {
-    color: #2196F3 !important;
-}
-
-.light-mode .download-modal .modal-info p {
-    color: #555 !important;
-}
-
-/* Mobile responsiveness for download modal */
-@media (max-width: 768px) {
-    .download-modal .modal-content {
-        width: 90%;
-        margin: 20% auto;
-    }
-
-    .download-modal .modal-info {
-        padding: 2rem 1.5rem;
-    }
-
-    .download-modal .modal-info h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem !important;
-    }
-
-    .download-modal .modal-info p {
-        font-size: 1rem;
-    }
-
-    .download-modal .download-btn {
-        padding: 0.7rem 1.5rem;
-        font-size: 1rem;
-        margin-bottom: 150px !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .download-modal .modal-content {
-        width: 95%;
-        margin: 30% auto;
-    }
-
-    .download-modal .modal-info {
-        padding: 1.5rem 1rem;
-    }
-
-    .download-modal .modal-info h3 {
-        font-size: 1.2rem;
-        margin-bottom: auto !important;
-    }
-
-    .download-modal .modal-info p {
-        font-size: 0.5rem !important;
-    }
-
-    .download-modal .download-btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem !important;
-        margin-bottom: 200px !important;
     }
 }
