@@ -1390,6 +1390,23 @@ nav h1:hover::after {
     }
 }
 
+@media (max-width: 480px) {
+    .about-content p {
+        font-size: 0.9rem;
+    }
+
+    .tech-stack {
+        font-size: 1.8rem !important;
+        gap: 0.8rem !important;
+    }
+
+    .about-badges .badge {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        justify-content: center;
+    }
+}
+
 /* Timeline Section */
 
 .timeline-item.visible {
