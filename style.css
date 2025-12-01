@@ -1157,6 +1157,26 @@ nav h1:hover::after {
     text-align: center;
 }
 
+.profile-img {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    margin: 2rem auto;
+    border: 3px solid #fff;
+    transition: all 0.3s ease;
+}
+
+.profile-img:hover {
+    transform: rotate(5deg) scale(1.1);
+    border: 3px solid #28a745;
+    box-shadow: 0 0 30px rgba(89, 207, 93, 0.5);
+}
+
+.light-mode .profile-img:hover {
+    box-shadow: 0 0 30px rgba(33, 150, 243, 0.5);
+    border: 3px solid #2196F3;
+}
+
 .hero-content h1 {
     font-size: 3.1rem;
     margin-bottom: 1rem;
@@ -1172,11 +1192,13 @@ nav h1:hover::after {
 @media (max-width: 768px) {
     .hero-content h1 span {
         font-size: 1.8rem;
+        margin-top: 0%;
     }
 
     .profile-img {
-        width: 170px;
-        height: 170px;
+        width: 180px;
+        height: 180px;
+        margin-bottom: 0%;
     }
 
     .hero-content h1 span.hello {
@@ -1193,8 +1215,8 @@ nav h1:hover::after {
 
     .profile-img {
         margin-bottom: 0%;
-        width: 150px;
-        height: 150px;
+        width: 160px;
+        height: 160px;
     }
 
     .hero-content h1 span.hello {
@@ -1244,6 +1266,8 @@ nav h1:hover::after {
         background-position: 0% 50%;
     }
 }
+
+
 
 .hero-content:hover h1 {
     transform: scale(1.05);
@@ -1300,26 +1324,6 @@ nav h1:hover::after {
     60% {
         transform: translateY(-10px) translateX(-50%);
     }
-}
-
-.profile-img {
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    margin: 2rem auto;
-    border: 3px solid #fff;
-    transition: all 0.3s ease;
-}
-
-.profile-img:hover {
-    transform: rotate(5deg) scale(1.1);
-    border: 3px solid #28a745;
-    box-shadow: 0 0 30px rgba(89, 207, 93, 0.5);
-}
-
-.light-mode .profile-img:hover {
-    box-shadow: 0 0 30px rgba(33, 150, 243, 0.5);
-    border: 3px solid #2196F3;
 }
 
 
