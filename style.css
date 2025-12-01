@@ -1083,8 +1083,8 @@ section {
 }
 
 nav {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 1rem;
+    background: rgba(0, 0, 0, 0.705);
+    padding: 0.3rem;
     position: fixed;
     width: 100%;
     top: 0;
@@ -1104,7 +1104,7 @@ nav h1 {
     font-size: 2.2rem !important;
     letter-spacing: 1px;
     background: linear-gradient(45deg,
-            #4CAF50,
+            #7a398a,
             #2196F3,
             #9C27B0);
     -webkit-background-clip: text;
@@ -1126,10 +1126,6 @@ nav h1::after {
     left: 0;
     width: 0;
     height: 2px;
-    background: linear-gradient(90deg,
-        #4CAF50,
-        #2196F3,
-        #9C27B0);
     transition: width 0.3s ease;
 }
 
