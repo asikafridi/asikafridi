@@ -1,10 +1,14 @@
-// Simplified Video Player Functionality - Google Drive Only
+// Enhanced Video Player Functionality - Google Drive Only
 document.addEventListener('DOMContentLoaded', function () {
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoThumbnail = document.getElementById('videoThumbnail');
+    const mainVideoThumb = document.getElementById('mainVideoThumb');
     const videoIframe = document.getElementById('mainVideo');
     const videoTitle = document.getElementById('video-title');
     const videoDescription = document.getElementById('video-description');
     const videoDuration = document.getElementById('video-duration');
     const videoDate = document.getElementById('video-date');
+    const galleryGrid = document.getElementById('gallery-grid');
 
     // Video data with Google Drive IDs
     const videoData = {
@@ -12,29 +16,44 @@ document.addEventListener('DOMContentLoaded', function () {
             title: 'Video Resume',
             description: 'A creative showcase of my skills, experiences, and personality, this resume has been thoughtfully crafted to highlight my strengths and aspirations as I apply for the Student Associate position at Daffodil International University.',
             date: 'September 2025',
-            duration: '2:53'
+            duration: '2:53',
+            thumbnail: 'images/(242-15-164)_ASIKUR_RAHMAN\'s_4k_Video_Resume-Cover.jpg'
+        },
+        '19yeXo2GBwot6ybTTARJLGGRylH5qFUZf': {
+            title: 'Environment & Sustainability in Bangladesh',
+            description: 'A documentary exploring environmental challenges and sustainability efforts in Bangladesh. This project showcases my skills in video editing, voice over/narration, resource collection, script writing, and video shooting.',
+            date: '28th November, 2025',
+            duration: '7:26',
+            thumbnail: 'images/Documentary Cover.jpg'
         },
         '10G859vHzEXYcJXwu88ENCUKyrAz1Wrom': {
             title: 'Editing Sample',
-            description: 'Demonstration of my simple video editing skills and techniques..',
+            description: 'Demonstration of my video editing skills and techniques, showcasing attention to detail and creative approach.',
             date: 'February 2024',
-            duration: '1:50'
+            duration: '1:50',
+            thumbnail: 'images/Metro_Life.jpg'
         },
         '11FndmQwFpI9WNnrXZQPipBHBsOZC3GgZ': {
             title: 'Creative Work',
-            description: 'Creative video projects showcasing storytelling abilities..',
+            description: 'Creative video projects showcasing storytelling abilities and innovative approaches to visual content.',
             date: 'July 2024',
-            duration: '0:18'
+            duration: '0:18',
+            thumbnail: 'images/Creative_Work.jpg'
         }
     };
 
+    // Track currently playing video
+    let currentVideoId = '1hjmDxuhcieJCkULx1iQcXwnnj7bMT9Rd';
+    let isVideoPlaying = false;
+
     // Load Google Drive video
-    function loadVideo(videoId) {
+    function loadVideo(videoId, autoPlay = false) {
         const videoInfo = videoData[videoId];
         if (!videoInfo || !videoIframe) return;
 
-        // Update iframe source
-        videoIframe.src = `https://drive.google.com/file/d/${videoId}/preview`;
+        // Store the previous video ID to move it to gallery
+        const previousVideoId = currentVideoId;
+        currentVideoId = videoId;
 
         // Update video info
         videoTitle.textContent = videoInfo.title;
@@ -42,12 +61,123 @@ document.addEventListener('DOMContentLoaded', function () {
         videoDate.textContent = videoInfo.date;
         videoDuration.textContent = videoInfo.duration;
 
+        // Update thumbnail
+        mainVideoThumb.src = videoInfo.thumbnail;
+        mainVideoThumb.alt = videoInfo.title;
+
+        // Update iframe source (store in data-src, don't load yet)
+        videoIframe.dataset.src = `https://drive.google.com/file/d/${videoId}/preview`;
+
+        // Reset to thumbnail view
+        resetToThumbnail();
+
+        // Update gallery to reflect current state
+        updateGallery();
+
         // Show success message
-        showPopup(`Now playing: ${videoInfo.title}`, 'success');
+        if (autoPlay) {
+            showPopup(`Now playing: ${videoInfo.title}`, 'success');
+        } else {
+            showPopup(`Loaded: ${videoInfo.title} - Click to play`, 'info');
+        }
     }
 
-    // Simple popup function
+    // Play video when thumbnail is clicked
+    videoThumbnail.addEventListener('click', function () {
+        playCurrentVideo();
+    });
+
+    // Play the current video
+    function playCurrentVideo() {
+        if (isVideoPlaying) return;
+
+        const videoSrc = videoIframe.dataset.src;
+        if (!videoSrc) return;
+
+        // Hide thumbnail and show iframe
+        videoThumbnail.style.display = 'none';
+        videoIframe.style.display = 'block';
+
+        // Set iframe source to trigger loading
+        videoIframe.src = videoSrc;
+
+        isVideoPlaying = true;
+
+        // Update badge
+        const badge = document.querySelector('.video-badge');
+        if (badge) {
+            badge.textContent = 'Now Playing';
+            badge.style.background = 'linear-gradient(45deg, #FF5722, #FF9800)';
+        }
+
+        showPopup('Video is now playing', 'success');
+    }
+
+    // Reset to thumbnail view
+    function resetToThumbnail() {
+        videoThumbnail.style.display = 'flex';
+        videoIframe.style.display = 'none';
+        videoIframe.src = '';
+        isVideoPlaying = false;
+
+        // Update badge
+        const badge = document.querySelector('.video-badge');
+        if (badge) {
+            badge.textContent = 'Ready to Play';
+            badge.style.background = 'linear-gradient(45deg, #4CAF50, #2196F3)';
+        }
+    }
+
+    // Update gallery based on current video
+    function updateGallery() {
+        if (!galleryGrid) return;
+
+        galleryGrid.innerHTML = '';
+
+        // Add all videos except the current one to the gallery
+        for (const [videoId, videoInfo] of Object.entries(videoData)) {
+            if (videoId === currentVideoId) continue;
+
+            const thumbnailElement = createThumbnail(videoId, videoInfo);
+            galleryGrid.appendChild(thumbnailElement);
+        }
+    }
+
+    // Create thumbnail element
+    function createThumbnail(videoId, videoInfo) {
+        const thumbnail = document.createElement('div');
+        thumbnail.className = 'video-thumbnail';
+        thumbnail.setAttribute('data-video-id', videoId);
+
+        thumbnail.innerHTML = `
+            <div class="thumbnail-overlay">
+                <i class="fas fa-play"></i>
+                <h3>${videoInfo.title}</h3>
+                <p class="thumbnail-duration">${videoInfo.duration}</p>
+            </div>
+            <img src="${videoInfo.thumbnail}" alt="${videoInfo.title}" loading="lazy">
+        `;
+
+        // Add click event
+        thumbnail.addEventListener('click', function () {
+            loadVideo(videoId, true);
+
+            // Add click animation
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'translateY(-8px)';
+            }, 150);
+        });
+
+        return thumbnail;
+    }
+
+    // Enhanced popup function
     function showPopup(message, type) {
+        // Remove existing popups
+        const existingPopups = document.querySelectorAll('.video-popup');
+        existingPopups.forEach(popup => popup.remove());
+
         const popup = document.createElement('div');
         popup.className = `video-popup ${type}`;
         popup.innerHTML = `
@@ -59,19 +189,22 @@ document.addEventListener('DOMContentLoaded', function () {
             position: fixed;
             top: 100px;
             right: 20px;
-            padding: 12px 16px;
-            border-radius: 6px;
-            background: ${type === 'success' ? 'rgba(76, 175, 80, 0.9)' : 'rgba(33, 150, 243, 0.9)'};
+            padding: 14px 18px;
+            border-radius: 10px;
+            background: ${type === 'success' ? 'rgba(76, 175, 80, 0.95)' : 'rgba(33, 150, 243, 0.95)'};
             color: white;
             z-index: 10000;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 10px;
+            font-size: 1rem;
             animation: slideIn 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid ${type === 'success' ? '#45a049' : '#1e88e5'};
+            font-weight: 500;
         `;
 
-        // Add CSS for animation
+        // Add CSS for animation if not already present
         if (!document.querySelector('#popup-styles')) {
             const style = document.createElement('style');
             style.id = 'popup-styles';
@@ -79,6 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 @keyframes slideIn {
                     from { transform: translateX(100%); opacity: 0; }
                     to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
                 }
                 .video-popup { animation: slideIn 0.3s ease; }
             `;
@@ -92,32 +229,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 popup.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => popup.remove(), 300);
             }
-        }, 3000);
+        }, 4000);
     }
 
-    // Thumbnail click events
-    const thumbnails = document.querySelectorAll('.video-thumbnail');
-    thumbnails.forEach(thumbnail => {
-        thumbnail.addEventListener('click', function () {
-            const videoId = this.getAttribute('data-video-id');
-            loadVideo(videoId);
-        });
-    });
-
-    // Load first video by default
-    const firstThumbnail = document.querySelector('.video-thumbnail');
-    if (firstThumbnail) {
-        const firstVideoId = firstThumbnail.getAttribute('data-video-id');
-        loadVideo(firstVideoId);
-    }
-
-    // Add click animation to thumbnails
-    thumbnails.forEach(thumbnail => {
-        thumbnail.addEventListener('click', function () {
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = 'translateY(-5px)';
-            }, 150);
-        });
-    });
+    // Initialize
+    loadVideo(currentVideoId);
+    updateGallery();
 });
