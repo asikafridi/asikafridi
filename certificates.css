@@ -1,6 +1,6 @@
 /* Certificates Page Styles */
 
-/* Smooth scrolling for all modes */
+/* FIXED: Smooth scrolling for all modes */
 html {
     scroll-behavior: smooth !important;
 }
