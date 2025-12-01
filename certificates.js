@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function () {
             description: 'Certificate of Appreciation for serving as a volunteer at the prestigious International Collegiate Programming Contest (ICPC) Asia Dhaka Regional Contest 2024.',
             download: 'documents/ICPC certificate(as volunteer).pdf'
         },
+        cybercon: {
+            image: 'images/CyberCon2025.png',
+            title: 'DIU_CyberCon_2025 Certificate',
+            description: 'This is to certify that I participated in DIU_CyberCon 2025. This certificate acknowledges that I have gained a foundational understanding of Cyber Security and AI through this event.',
+            download: 'documents/CyberCon2025.pdf'
+        },
         takeoff: {
             image: 'images/Certificate of Takeoff Programming Contest.jpg',
             title: 'Take-Off Programming Contest',
@@ -132,8 +138,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Section configurations
     const sections = {
         achievements: {
-            totalItems: 5,
-            angle: 360 / 5,
+            totalItems: 6,
+            angle: 360 / 6,
             autoRotateInterval: null
         },
         microsoft: {
