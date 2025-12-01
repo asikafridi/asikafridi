@@ -358,11 +358,11 @@ function initializeTypewriter() {
     if (!typewriterElement) return;
 
     const phrases = [
-        "Passionate Computer Science & Engineering Student...",
-        "A Research Enthusiast...",
-        "Eager to Learn and Contribute...",
-        "Interested in Competitive Programming & Software Development...",
-        "A Creative Developer..."
+        "Passionate Computer Science & Engineering Student..",
+        "A Research Enthusiast..",
+        "Interested in Competitive Programming & Software Development..",
+        "A Creative Developer..",
+        "Eager to Learn and Contribute.."
     ];
 
     let phraseIndex = 0;
