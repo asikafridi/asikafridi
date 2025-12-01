@@ -1158,12 +1158,65 @@ nav h1:hover::after {
 }
 
 .hero-content h1 {
-    font-size: 3.5rem;
+    font-size: 3.1rem;
     margin-bottom: 1rem;
     transition: all 0.3s ease;
     position: relative;
     display: inline-block;
 }
+
+.hero-content h1 span.hello {
+    font-size: 1.6rem;
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 span {
+        font-size: 1.8rem;
+    }
+
+    .profile-img {
+        width: 170px;
+        height: 170px;
+    }
+
+    .hero-content h1 span.hello {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .hero-content h1 span {
+        font-size: 1.6rem;
+        margin-top: 0%;
+    }
+
+    .profile-img {
+        margin-bottom: 0%;
+        width: 150px;
+        height: 150px;
+    }
+
+    .hero-content h1 span.hello {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-content h1 span {
+        font-size: 1.2rem;
+    }
+
+    .profile-img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .hero-content h1 span.hello {
+        font-size: 0.7rem;
+    }
+}
+
 
 /* Update hero h1 styles */
 .hero-content h1 span {
@@ -1269,38 +1322,7 @@ nav h1:hover::after {
     border: 3px solid #2196F3;
 }
 
-@media (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.5rem;
-    }
 
-    .profile-img {
-        width: 170px;
-        height: 170px;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-content h1 {
-        font-size: 2rem;
-    }
-
-    .profile-img {
-        width: 150px;
-        height: 150px;
-    }
-}
-
-@media (max-width: 360px) {
-    .hero-content h1 {
-        font-size: 1.5rem;
-    }
-
-    .profile-img {
-        width: 120px;
-        height: 120px;
-    }
-}
 
 /* About */
 .about-grid {
