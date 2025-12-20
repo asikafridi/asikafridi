@@ -10,14 +10,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const videoDate = document.getElementById('video-date');
     const galleryGrid = document.getElementById('gallery-grid');
 
+
     // Video data with Google Drive IDs
     const videoData = {
-        '1hjmDxuhcieJCkULx1iQcXwnnj7bMT9Rd': {
-            title: 'Video Resume',
-            description: 'A creative showcase of my skills, experiences, and personality, this resume has been thoughtfully crafted to highlight my strengths and aspirations as I apply for the Student Associate position at Daffodil International University.',
-            date: 'September 2025',
-            duration: '2:53',
-            thumbnail: 'images/(242-15-164)_ASIKUR_RAHMAN\'s_4k_Video_Resume-Cover.jpg'
+        '17DyGcv52ayyl1Zq5X-TG4W1kR9fnXx16': {
+            title: 'My Idol: Hazrat Umar Ibn al-Khattab(RA)',
+            description: 'A heartfelt tribute to my idol, Hazrat Umar Ibn al-Khattab (RA), this video reflects the values that inspire me—justice, integrity, courage, and unwavering leadership. Through this showcase, I share how his life and principles continue to shape my character, mindset, and aspirations both personally and professionally.',
+            date: 'December 2025',
+            duration: '3:34',
+            thumbnail: 'images/Idol_Cover.jpg'
         },
         '19yeXo2GBwot6ybTTARJLGGRylH5qFUZf': {
             title: 'Environment & Sustainability in Bangladesh',
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Track currently playing video
-    let currentVideoId = '1hjmDxuhcieJCkULx1iQcXwnnj7bMT9Rd';
+    let currentVideoId = '17DyGcv52ayyl1Zq5X-TG4W1kR9fnXx16';
     let isVideoPlaying = false;
 
     // Load Google Drive video
