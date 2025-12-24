@@ -19,13 +19,6 @@ This portfolio serves as a collection of my work, including projects I've built,
 ├── 📄 README.md
 ```
 
-## 🚀 Getting Started
-To run this portfolio locally:
-```sh
-git clone https://github.com/yourusername/portfolio.git
-cd portfolio
-```
-Simply open `index.html` in your browser.
 
 ## 📌 Features
 - Interactive UI with modern design
@@ -33,7 +26,7 @@ Simply open `index.html` in your browser.
 - Contact form for inquiries
 
 ## 🌍 Live Demo
-Check out my portfolio live: https://asikafridi.github.io/asikafridi/
+Check out my portfolio live: https://asikafridi.vercel.app/
 
 ## 📬 Contact
 Feel free to reach out:
