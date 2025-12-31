@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', function () {
             download: 'documents/DIU Science Olympiad certificate of ASIKUR RAHMAN.pdf'
         },
         resume: {
-            image: 'images/ASIKUR_RAHMAN_Resume.jpg',
-            title: 'Asikur Rahman - Resume',
-            description: 'Computer Science Student specializing in competitive programming and web development. Passionate about technology and constantly exploring new challenges.',
+            image: 'images/ASIKUR_RAHMAN_Resume1.jpg',
+            title: 'ASIKUR RAHMAN - Resume',
+            description: 'My resume is currently being updated. Thank you for your patience.!',
             download: 'documents/ASIKUR_RAHMAN_CV.pdf'
         },
 
@@ -566,3 +566,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
