@@ -24,15 +24,34 @@
 
 ## 🌌 About Me
 
-```
-const asikur = {
-    role: ["CSE Student", "Project & Dev Lead", "Research Enthusiast"],
-    passion: "solving hard problems & shipping clean code",
-    nextMission: "building something big in aviation ✈️",
-    currentFocus: "leveling up in C/C++, Java & the web stack",
-    funFact: "probably debugging something right now 🐛"
-};
-```
+I'm a Computer Science & Engineering student who genuinely enjoys the process of turning a hard problem into a working solution — whether that's leading a dev team, grinding competitive programming, or chasing down a research question. Long-term, I'm building toward something bigger: a future in the aviation industry, where I want to bring the same builder's mindset to a completely different sky.
+
+<table>
+  <tr>
+    <td width="33%" align="center">
+      <h3>🎯</h3>
+      <b>Project & Dev Lead</b>
+      <br />
+      <sub>Leading teams from idea to shipped product</sub>
+    </td>
+    <td width="33%" align="center">
+      <h3>🔬</h3>
+      <b>Research Enthusiast</b>
+      <br />
+      <sub>Curious about the "why" behind the "how"</sub>
+    </td>
+    <td width="33%" align="center">
+      <h3>✈️</h3>
+      <b>Future Aviation Entrepreneur</b>
+      <br />
+      <sub>Building the skills to build an airline one day</sub>
+    </td>
+  </tr>
+</table>
+
+- 🏆 Competitive programmer — sharpening problem-solving on **Codeforces**
+- 🧩 Comfortable across **C/C++, Java, and the JS/HTML/CSS web stack**
+- 📬 Always open to interesting projects, research, or a good conversation — **asikurrahman.contact@gmail.com**
 
 <img src="https://raw.githubusercontent.com/mayhemantt/mayhemantt/Update/svg/Bottom.svg" width="100%" />
 
@@ -105,13 +124,14 @@ const asikur = {
 ## 🐍 Contribution Snake
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/asikafridi/asikafridi/output/github-contribution-grid-snake.svg" width="100%" alt="snake animation" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/asikafridi/asikafridi/output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/asikafridi/asikafridi/output/github-snake.svg" />
+    <img src="https://raw.githubusercontent.com/asikafridi/asikafridi/output/github-snake.svg" width="100%" alt="snake animation" />
+  </picture>
 </p>
 
-> This animated snake "eats" your contribution graph and updates daily. It needs a **one-time setup** using a free GitHub Action:
-> 1. In this repo, go to **Settings → Actions → General** and enable "Read and write permissions".
-> 2. Add a workflow file `.github/workflows/snake.yml` using the official [Platane/snk](https://github.com/Platane/snk) action (just copy the example from that repo's README).
-> 3. Run the workflow once — it generates the SVG above automatically going forward.
+> This animated snake "eats" your contribution graph and updates daily. Setup: use the corrected `snake.yml` workflow (with `permissions: contents: write` and a push-to-branch step), enable write permissions under **Settings → Actions → General**, then run it once from the **Actions** tab.
 
 <div align="center">
 
