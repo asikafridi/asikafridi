@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=220&section=header&text=Asikur%20Rahman&fontSize=55&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=CSE%20Student%20%7C%20Dev%20Lead%20%7C%20Research%20Enthusiast%20%7C%20Future%20Aviation%20Entrepreneur&descAlignY=55&descSize=18" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=220&section=header&text=ASIKUR%20RAHMAN&fontSize=55&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=CSE%20Student%20%7C%20Dev%20Lead%20%7C%20Research%20Enthusiast%20%7C%20Future%20Aviation%20Entrepreneur&descAlignY=55&descSize=18" width="100%" />
 
 </div>
 
@@ -130,8 +130,6 @@ I'm a Computer Science & Engineering student who genuinely enjoys the process of
     <img src="https://raw.githubusercontent.com/asikafridi/asikafridi/output/github-snake.svg" width="100%" alt="snake animation" />
   </picture>
 </p>
-
-> This animated snake "eats" your contribution graph and updates daily. Setup: use the corrected `snake.yml` workflow (with `permissions: contents: write` and a push-to-branch step), enable write permissions under **Settings → Actions → General**, then run it once from the **Actions** tab.
 
 <div align="center">
 
