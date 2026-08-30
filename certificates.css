@@ -10,6 +10,8 @@ body {
 }
 
 .certificates-hero {
+    position: relative;
+    overflow: hidden;
     padding: 8rem 0 4rem;
     text-align: center;
 }
@@ -17,7 +19,7 @@ body {
 .certificates-hero h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
-    background: linear-gradient(45deg, #4CAF50, #2196F3);
+    background: linear-gradient(45deg, #dd9a3b, #5fb3a3);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -25,9 +27,9 @@ body {
 
 .certificates-hero h1 span {
     background: linear-gradient(45deg,
-            #4CAF50,
-            #2196F3,
-            #9C27B0);
+            #dd9a3b,
+            #5fb3a3,
+            #c97b84);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -54,7 +56,7 @@ body {
 }
 
 .certificates-hero p {
-    color: var(--text-color, #ccc);
+    color: var(--paper-dim);
     font-size: 1.4rem;
     max-width: auto;
     margin: 0 auto;
@@ -101,7 +103,7 @@ body {
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 2rem;
-    color: #4CAF50;
+    color: #dd9a3b;
     position: relative;
     padding-bottom: 1rem;
 }
@@ -114,7 +116,7 @@ body {
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
-    background: #4CAF50;
+    background: #dd9a3b;
 }
 
 @media (max-width: 768px) {
@@ -136,19 +138,19 @@ body {
 }
 
 .microsoft-section .section-title {
-    color: #0078D7;
+    color: #5fb3a3;
 }
 
 .microsoft-section .section-title::after {
-    background: #0078D7;
+    background: #5fb3a3;
 }
 
 .training-section .section-title {
-    color: #FF5722;
+    color: #dd9a3b;
 }
 
 .training-section .section-title::after {
-    background: #FF5722;
+    background: #dd9a3b;
 }
 
 .view-controls {
@@ -160,7 +162,7 @@ body {
 
 .view-btn {
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(76, 175, 80, 0.3);
+    border: 1px solid rgba(221, 154, 59, 0.3);
     color: #ccc;
     padding: 0.8rem 1.5rem;
     border-radius: 30px;
@@ -173,23 +175,23 @@ body {
 
 .view-btn.active,
 .view-btn:hover {
-    background: rgba(76, 175, 80, 0.2);
-    color: #4CAF50;
-    border-color: #4CAF50;
+    background: rgba(221, 154, 59, 0.2);
+    color: #dd9a3b;
+    border-color: #dd9a3b;
 }
 
 .microsoft-section .view-btn.active,
 .microsoft-section .view-btn:hover {
-    background: rgba(0, 120, 215, 0.2);
-    color: #0078D7;
-    border-color: #0078D7;
+    background: rgba(95, 179, 163, 0.2);
+    color: #5fb3a3;
+    border-color: #5fb3a3;
 }
 
 .training-section .view-btn.active,
 .training-section .view-btn:hover {
-    background: rgba(255, 87, 34, 0.2);
-    color: #FF5722;
-    border-color: #FF5722;
+    background: rgba(221, 154, 59, 0.2);
+    color: #dd9a3b;
+    border-color: #dd9a3b;
 }
 
 .carousel-container {
@@ -234,12 +236,15 @@ body {
     backface-visibility: hidden;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
     transition: transform 0.6s ease;
 }
 
 .certificate-front {
-    background: linear-gradient(135deg, rgba(58, 190, 54, 0.1) 0%, rgba(10, 192, 19, 0.3) 100%) !important;
+    background: linear-gradient(135deg, rgba(221, 154, 59, 0.1) 0%, rgba(240, 178, 90, 0.3) 100%) !important;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -259,14 +264,14 @@ body {
 }
 
 .certificate-front h3 {
-    color: #4CAF50;
+    color: #dd9a3b;
     font-size: 1.2rem;
     margin: 0;
     line-height: 1.3;
 }
 
 .certificate-back {
-    background: rgba(10, 25, 47, 0.9);
+    background: var(--glass-2);
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -277,7 +282,7 @@ body {
 }
 
 .certificate-back h3 {
-    color: #4CAF50;
+    color: #dd9a3b;
     margin-bottom: 1rem;
     margin-top: 0;
     font-size: 1.1rem;
@@ -285,7 +290,7 @@ body {
 }
 
 .certificate-back p {
-    color: #ccc;
+    color: var(--paper-dim);
     margin-bottom: 1.5rem;
     line-height: 1.4;
     margin-top: 0;
@@ -293,9 +298,9 @@ body {
 }
 
 .view-full-btn {
-    background: rgba(76, 175, 80, 0.2);
-    border: 1px solid #4CAF50;
-    color: #4CAF50;
+    background: rgba(221, 154, 59, 0.2);
+    border: 1px solid #dd9a3b;
+    color: #dd9a3b;
     padding: 0.6rem 1.2rem;
     border-radius: 30px;
     cursor: pointer;
@@ -307,19 +312,21 @@ body {
 }
 
 .view-full-btn:hover {
-    background: #4CAF50;
+    background: #dd9a3b;
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    box-shadow: 0 5px 15px rgba(221, 154, 59, 0.3);
 }
 
 .carousel-nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: white;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+    color: var(--paper);
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -333,7 +340,7 @@ body {
 }
 
 .carousel-nav:hover {
-    background: rgba(76, 175, 80, 0.3);
+    background: rgba(221, 154, 59, 0.3);
     transform: translateY(-50%) scale(1.1);
 }
 
@@ -404,7 +411,7 @@ body {
 }
 
 .grid-item .certificate-back {
-    background: rgba(10, 25, 47, 0.9);
+    background: rgba(11, 11, 13, 0.9);
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -440,35 +447,35 @@ body {
 
 /* Microsoft Section Styles */
 .microsoft-section .certificate-front {
-    background: linear-gradient(135deg, rgba(55, 116, 167, 0.1) 0%, rgba(16, 107, 182, 0.3) 100%) !important;
+    background: linear-gradient(135deg, rgba(95, 179, 163, 0.1) 0%, rgba(60, 140, 128, 0.3) 100%) !important;
 }
 
 .microsoft-section .certificate-front h3 {
-    color: #0078D7 !important;
+    color: #5fb3a3 !important;
 }
 
 .microsoft-section .certificate-back {
-    background: rgba(0, 120, 215, 0.) !important;
+    background: rgba(95, 179, 163, 0.12) !important;
 }
 
 .microsoft-section .certificate-back h3 {
-    color: #0078D7 !important;
+    color: #5fb3a3 !important;
 }
 
 .microsoft-section .view-full-btn {
-    background: rgba(0, 120, 215, 0.2);
-    border: 1px solid #0078D7;
-    color: #0078D7;
+    background: rgba(95, 179, 163, 0.2);
+    border: 1px solid #5fb3a3;
+    color: #5fb3a3;
 }
 
 .microsoft-section .view-full-btn:hover {
-    background: #0078D7;
+    background: #5fb3a3;
     color: white;
-    box-shadow: 0 5px 15px rgba(0, 120, 215, 0.3);
+    box-shadow: 0 5px 15px rgba(95, 179, 163, 0.3);
 }
 
 .microsoft-section .carousel-nav:hover {
-    background: rgba(0, 120, 215, 0.3);
+    background: rgba(95, 179, 163, 0.3);
 }
 
 /* Training Section Styles */
@@ -477,31 +484,31 @@ body {
 }
 
 .training-section .certificate-front h3 {
-    color: #FF5722 !important;
+    color: #dd9a3b !important;
 }
 
 .training-section .certificate-back {
-    background: rgba(255, 87, 34, 0.);
+    background: rgba(221, 154, 59, 0.12);
 }
 
 .training-section .certificate-back h3 {
-    color: #FF5722 !important;
+    color: #dd9a3b !important;
 }
 
 .training-section .view-full-btn {
-    background: rgba(255, 87, 34, 0.2);
-    border: 1px solid #FF5722;
-    color: #FF5722;
+    background: rgba(221, 154, 59, 0.2);
+    border: 1px solid #dd9a3b;
+    color: #dd9a3b;
 }
 
 .training-section .view-full-btn:hover {
-    background: #FF5722;
+    background: #dd9a3b;
     color: white;
-    box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+    box-shadow: 0 5px 15px rgba(221, 154, 59, 0.3);
 }
 
 .training-section .carousel-nav:hover {
-    background: rgba(255, 87, 34, 0.3);
+    background: rgba(221, 154, 59, 0.3);
 }
 
 .hidden {
@@ -529,7 +536,7 @@ body {
 
 .modal-content {
     position: relative;
-    background-color: rgba(10, 25, 47, 0.95);
+    background-color: rgba(11, 11, 13, 0.95);
     margin: 5% auto;
     padding: 0;
     width: 90%;
@@ -565,7 +572,7 @@ body {
 }
 
 .close-modal:hover {
-    color: #4CAF50;
+    color: #dd9a3b;
 }
 
 .modal-body {
@@ -592,7 +599,7 @@ body {
 }
 
 .modal-info h3 {
-    color: #4CAF50;
+    color: #dd9a3b;
     font-size: 1.5rem;
 }
 
@@ -608,9 +615,9 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(76, 175, 80, 0.2);
-    border: 1px solid #4CAF50;
-    color: #4CAF50;
+    background: rgba(221, 154, 59, 0.2);
+    border: 1px solid #dd9a3b;
+    color: #dd9a3b;
     padding: 0.8rem 1.5rem;
     border-radius: 30px;
     text-decoration: none;
@@ -621,10 +628,10 @@ body {
 }
 
 .download-btn:hover {
-    background: #4CAF50;
+    background: #dd9a3b;
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    box-shadow: 0 5px 15px rgba(221, 154, 59, 0.3);
 }
 
 /* Light mode adjustments */
@@ -646,54 +653,59 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.light-mode .view-btn {
+    background: rgba(20, 18, 14, 0.05);
+    color: var(--paper-dim, #4a4458);
+}
+
 .light-mode .carousel-nav {
     background: rgba(0, 0, 0, 0.1);
-    color: #2d3436;
+    color: #edeadf;
 }
 
 .light-mode .carousel-nav:hover {
-    background: rgba(33, 150, 243, 0.2);
+    background: rgba(95, 179, 163, 0.2);
 }
 
 
 .light-mode .microsoft-section .view-full-btn {
-    background: rgba(0, 120, 215, 0.1);
-    border-color: #0078D7;
-    color: #0078D7;
+    background: rgba(95, 179, 163, 0.1);
+    border-color: #5fb3a3;
+    color: #5fb3a3;
 }
 
 .light-mode .microsoft-section .view-full-btn:hover {
-    background: #0078D7;
+    background: #5fb3a3;
     color: white;
 }
 
 /* Training section light mode */
 .light-mode .training-section .certificate-front h3 {
-    color: #FF5722 !important;
+    color: #dd9a3b !important;
 }
 
 .light-mode .training-section .certificate-back h3 {
-    color: #FF5722 !important;
+    color: #dd9a3b !important;
 }
 
 .light-mode .training-section .view-full-btn {
-    background: rgba(255, 87, 34, 0.1);
-    border-color: #FF5722;
-    color: #FF5722;
+    background: rgba(221, 154, 59, 0.1);
+    border-color: #dd9a3b;
+    color: #dd9a3b;
 }
 
 .light-mode .training-section .view-full-btn:hover {
-    background: #FF5722;
+    background: #dd9a3b;
     color: white;
 }
 
 .light-mode .modal-content {
-    background-color: rgba(248, 249, 250, 0.95);
+    background-color: rgba(245, 241, 232, 0.95);
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .light-mode .modal-info h3 {
-    color: #2196F3;
+    color: #5fb3a3;
 }
 
 .light-mode .modal-info p {
@@ -701,13 +713,13 @@ body {
 }
 
 .light-mode .download-btn {
-    background: rgba(33, 150, 243, 0.1);
-    border-color: #2196F3;
-    color: #2196F3;
+    background: rgba(95, 179, 163, 0.1);
+    border-color: #5fb3a3;
+    color: #5fb3a3;
 }
 
 .light-mode .download-btn:hover {
-    background: #2196F3;
+    background: #5fb3a3;
     color: white;
 }
 
@@ -716,7 +728,7 @@ body {
 }
 
 .light-mode .close-modal:hover {
-    color: #2196F3;
+    color: #5fb3a3;
 }
 
 /* Mobile Responsiveness */
