@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', function () {
             download: 'documents/DIU Science Olympiad certificate of ASIKUR RAHMAN.pdf'
         },
         resume: {
-            image: 'images/ASIKUR_RAHMAN_Resume1.jpg',
-            title: 'ASIKUR RAHMAN - Resume',
-            description: 'My resume is currently being updated. Thank you for your patience.!',
+            image: 'images/ASIKUR_RAHMAN_Resume.jpg',
+            title: 'Asikur Rahman - Resume',
+            description: 'Computer Science Student specializing in competitive programming and web development. Passionate about technology and constantly exploring new challenges.',
             download: 'documents/ASIKUR_RAHMAN_CV.pdf'
         },
 
@@ -452,8 +452,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="close-modal download-close">&times;</span>
             <div class="modal-body">
                 <div class="modal-info" style="text-align: center; padding: 3rem 2rem;">
-                    <i class="fas fa-envelope" style="font-size: 3rem; color: #4CAF50; margin-bottom: 1rem;"></i>
-                    <h3 style="color: #4CAF50; margin-bottom: 1rem;">Contact for Documents</h3>
+                    <i class="fas fa-envelope" style="font-size: 3rem; color: #dd9a3b; margin-bottom: 1rem;"></i>
+                    <h3 style="color: #dd9a3b; margin-bottom: 1rem;">Contact for Documents</h3>
                     <p style="color: #ccc; margin-bottom: 2rem; line-height: 1.6;">
                         Please contact me for documents with details. Thank you!
                     </p>
@@ -566,4 +566,3 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
