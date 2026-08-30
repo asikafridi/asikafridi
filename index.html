@@ -2,45 +2,40 @@
 <html lang="en-BD">
 
 <head>
-    <meta name="theme-color" content="#0a192f">
+    <meta name="theme-color" content="#0b0b0d">
     <meta property="og:locale" content="en_BD">
     <meta name="twitter:creator" content="@asikafridi">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <!-- Update existing title and add these -->
-    <!-- Next two line for Brave opt -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <link rel="icon" type="image/png" href="images\coding.png">
-    <title>ASIKUR RAHMAN | Computer Science Student & Developer Portfolio</title>
+    <link rel="icon" type="image/png" href="images/coding.png">
+    <title>Asikur Rahman — Developer & Project Lead</title>
     <meta name="description"
-        content="Portfolio of Asikur Rahman - Computer Science student specializing in competitive programming and web development. Explore projects, achievements, and technical skills.">
+        content="Portfolio of Asikur Rahman — Computer Science engineer, Project & Development Lead at StratifyX, competitive programmer and web developer. Explore experience, projects, and achievements.">
     <meta name="keywords"
-        content="computer science portfolio, competitive programming, web development, student developer, Bangladeshi developer">
+        content="Asikur Rahman, StratifyX, developer portfolio, computer science, competitive programming, web development, Bangladeshi developer">
     <meta name="author" content="Asikur Rahman">
 
-    <!-- Open Graph/Facebook -->
-    <meta property="og:title" content="Asikur Rahman | Developer Portfolio">
+    <meta property="og:title" content="Asikur Rahman — Developer & Project Lead">
     <meta property="og:description"
-        content="Computer Science student specializing in programming and software development">
+        content="Computer Science engineer specializing in software development, currently leading projects at StratifyX.">
     <meta property="og:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
     <meta property="og:url" content="https://asikafridi.github.io/asikafridi/">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Asikur Rahman | Developer Portfolio">
-    <meta name="twitter:description" content="Computer Science student & competitive programmer from Bangladesh">
+    <meta name="twitter:title" content="Asikur Rahman — Developer & Project Lead">
+    <meta name="twitter:description"
+        content="Computer Science engineer, competitive programmer, and Project & Development Lead at StratifyX.">
     <meta name="twitter:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Ensure all external resources use HTTPS -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet"
-        integrity="sha384-..." crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Bengali:wght@500;700&family=Noto+Sans+Devanagari:wght@500;600&family=Noto+Nastaliq+Urdu:wght@500;700&display=swap"
+        rel="stylesheet">
 
     <script type="application/ld+json">
         {
@@ -49,9 +44,10 @@
           "name": "Asikur Rahman",
           "url": "https://asikafridi.github.io/asikafridi/",
           "image": "https://asikafridi.github.io/asikafridi/images/profile.jpg",
-          "jobTitle": "Computer Science Student & Developer",
+          "jobTitle": "Project & Development Lead",
+          "worksFor": { "@type": "Organization", "name": "StratifyX" },
           "alumniOf": "Daffodil International University",
-          "description": "Passionate Computer Science student specializing in competitive programming and web development",
+          "description": "Computer Science engineer, Project & Development Lead at StratifyX, competitive programmer and web developer.",
           "sameAs": [
             "https://github.com/asikafridi",
             "https://linkedin.com/in/asikafridi",
@@ -63,19 +59,42 @@
 </head>
 
 <body>
-    <button class="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
-    </button>
-    <!-- scroll progress -->
+    <!-- Cinema opening — a projector countdown leader that plays once per
+         session, then iris-wipes away to reveal the site. Hidden by
+         default in CSS so a JS failure never leaves visitors stuck behind
+         a black screen; script.js opts it in only when it can also run the
+         reveal. -->
+    <div class="cinema-intro" id="cinemaIntro" aria-hidden="true">
+        <span class="cinema-intro-grain"></span>
+        <div class="cinema-leader" id="cinemaLeader">
+            <svg class="cinema-leader-ring" viewBox="0 0 200 200" aria-hidden="true">
+                <circle class="ring-track" cx="100" cy="100" r="88"></circle>
+                <circle class="ring-sweep" cx="100" cy="100" r="88"></circle>
+                <line class="leader-cross" x1="100" y1="6" x2="100" y2="194"></line>
+                <line class="leader-cross" x1="6" y1="100" x2="194" y2="100"></line>
+            </svg>
+            <span class="cinema-leader-count" id="cinemaCount">3</span>
+        </div>
+        <div class="cinema-intro-title" id="cinemaTitle">
+            <span class="cinema-intro-kicker">dhushor.dev presents</span>
+            <span class="cinema-intro-name">Asikur Rahman</span>
+        </div>
+        <span class="cinema-flash" id="cinemaFlash"></span>
+    </div>
+
+    <button class="theme-toggle" aria-label="Toggle theme" aria-pressed="false"></button>
     <div class="scroll-progress"></div>
     <div class="interactive-bg"></div>
+
     <nav aria-label="Main navigation">
         <div role="navigation">
             <div class="container nav-content">
-                <h1><a href="index.html" style="text-decoration: none; color: inherit;">Asikur Rahman</a></h1>
+                <h1><a href="index.html" style="text-decoration: none; color: inherit;">dhushor.dev</a></h1>
 
                 <div class="hamburger-menu">
                     <div class="visible-links">
-                        <a href="video.html"><i class="fas fa-video"></i> Videos</a>
+                        <a href="index.html#experience"><i class="fas fa-briefcase"></i> <span>Experience</span></a>
+                        <a href="index.html#projects"><i class="fas fa-folder-open"></i> <span>Projects</span></a>
                         <a href="index.html#contact"><i class="fas fa-envelope"></i> <span>Contact</span></a>
                     </div>
 
@@ -85,6 +104,7 @@
 
                     <div class="dropdown-links" id="dropdown-nav">
                         <a href="index.html#about"><i class="fas fa-user"></i> About</a>
+                        <a href="index.html#experience"><i class="fas fa-briefcase"></i> Experience</a>
                         <a href="index.html#achievements"><i class="fas fa-trophy"></i> Achievements</a>
                         <a href="index.html#skills"><i class="fas fa-code"></i> Skills</a>
                         <a href="index.html#projects"><i class="fas fa-folder-open"></i> Projects</a>
@@ -99,266 +119,757 @@
 
     <section class="hero">
         <div class="container hero-content">
+            <div>
+                <div class="hero-eyebrow"><span class="dot"></span> Available for internships & collaborations</div>
+                <h1>
+                    <span class="line-1">Hello, world! I'm</span>
+                    <span>ASIKUR <span class="name-em">RAHMAN</span></span>
+                </h1>
+                <div class="typewriter-container">
+                    <div id="typewriter-text" class="typewriter-text"></div>
+                </div>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary"><i class="fas fa-folder-open"></i> View Projects</a>
+                    <a href="#contact" class="btn btn-ghost"><i class="fas fa-paper-plane"></i> Get in Touch</a>
+                </div>
+                <div class="hero-stats">
+                    <div><strong><span class="scrolly-stat-num"><span
+                                    data-count="2">0</span>+</span></strong><span>Roles Held</span></div>
+                    <div><strong><span class="scrolly-stat-num"><span
+                                    data-count="200">0</span>+</span></strong><span>Problems Solved</span></div>
+                    <div><strong><span class="scrolly-stat-num"><span
+                                    data-count="4">0</span>+</span></strong><span>Projects Building</span></div>
+                </div>
+            </div>
+
+            <div class="photo-stage">
+                <div class="editor-frame" id="editorFrame">
+                    <div class="frame-bar">
+                        <span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span>
+                        <span class="frame-name">asikur.jpg</span>
+                    </div>
+                    <div class="frame-body">
+                        <img src="images/profilemain.jpg" data-src="images/profilemain.jpg" alt="Asikur Rahman"
+                            loading="lazy">
+                        <div class="frame-scan"></div>
+                    </div>
+                    <div class="frame-caption">
+                        <span>status: <span class="ok">online</span></span>
+                        <span>Dhaka, BD</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="hero-scroll-indicator">
+                <span>SCROLL</span>
                 <i class="fas fa-chevron-down"></i>
             </div>
-            <!-- profile image seo-->
-            <img src="images/profilemain.jpg" data-src="images/profilemain.jpg" alt="Profile" loading="lazy"
-                class="profile-img">
-            <div>
-                <h1 data-text="I'm ASIKUR RAHMAN">
-                    <span class="hello">Hello World!</span>
-                    <span>I'm ASIKUR RAHMAN.</span>
-                </h1>
-            </div>
-            <!-- Updated paragraph with typewriter effect -->
-            <div class="typewriter-container">
-                <div id="typewriter-text" class="typewriter-text"></div>
-            </div>
         </div>
     </section>
 
-    <!-- Update About Section HTML -->
+    <div class="marquee-strip" aria-hidden="true">
+        <div class="marquee-track">
+            <span>AVAILABLE FOR WORK</span><span class="marquee-dot">✦</span>
+            <span>BUILDING PRODUCTS</span><span class="marquee-dot">✦</span>
+            <span>SOLVING PROBLEMS</span><span class="marquee-dot">✦</span>
+            <span>LEADING TEAMS</span><span class="marquee-dot">✦</span>
+            <span>SHIPPING FAST</span><span class="marquee-dot">✦</span>
+            <span>AVAILABLE FOR WORK</span><span class="marquee-dot">✦</span>
+            <span>BUILDING PRODUCTS</span><span class="marquee-dot">✦</span>
+            <span>SOLVING PROBLEMS</span><span class="marquee-dot">✦</span>
+            <span>LEADING TEAMS</span><span class="marquee-dot">✦</span>
+            <span>SHIPPING FAST</span><span class="marquee-dot">✦</span>
+        </div>
+    </div>
+
+    <!-- ABOUT -->
     <section id="about" class="section">
         <div class="container">
-            <h2>About Me</h2>
-            <div class="about-grid">
-                <div class="about-content">
-                    <div class="about-header">
-                        <img data-src="images/profile2.jpg" alt="Asikur Rahman" class="about-img">
-                        <div class="about-badges">
-                            <span class="badge">
-                                <i class="fas fa-code"></i>
-                                Developer
-                            </span>
-                            <span class="badge">
-                                <i class="fas fa-brain"></i>
-                                Problem Solver
-                            </span>
+            <div class="section-kicker"><span class="eyebrow">whoami</span><span class="rule"></span></div>
+            <h2 class="reveal split-text" style="margin-bottom:2.75rem;">About Me</h2>
+            <div class="scrolly">
+                <!-- Sticky narrator: portrait, chapter caption, progress rail -->
+                <div class="scrolly-visual reveal">
+                    <figure class="scrolly-portrait">
+                        <div class="scrolly-rail"><span class="scrolly-rail-fill" id="scrollyRail"></span></div>
+                        <div class="scrolly-portrait-frame">
+                            <img src="images/profile2.jpg" onerror="this.onerror=null;this.src='images/profilemain.jpg'"
+                                alt="Asikur Rahman" loading="lazy">
+                            <span class="scrolly-scan" aria-hidden="true"></span>
                         </div>
-                    </div>
-                    <p style="text-align: justify; text-justify: inter-word; hyphens: auto; line-height: 1.6;">
-                        As a second-year Computer Science & Engineering student, I am passionate about technology and
-                        constantly exploring competitive programming, software development, web development, and
-                        research. I enjoy solving complex problems, optimizing algorithms, and building innovative
-                        solutions.
-                        <br><br>
-
-                        Beyond academics, I actively participate in coding competitions, hackathons, and academic
-                        projects to sharpen my skills, explore research ideas, and collaborate with like-minded peers. I
-                        believe teamwork and diverse perspectives drive impactful outcomes.
-                        <br><br>
-
-                        My goal is to grow as a developer and researcher while leveraging technology for meaningful
-                        change. Whether through open-source contributions, research work, or real-world solutions, I am
-                        eager to learn, innovate, and make a difference. Let's connect and grow together!
-                    </p>
-
-                    <div class="about-tech">
-                        <div class="tech-stack">
-                            <i class="fab fa-cuttlefish" style="color: #A8B9CC" title="C Language"></i>
-                            <i class="fab fa-cuttlefish" style="color: #00599C" title="C++"></i>
-                            <i class="fab fa-java" style="color: #ED8B00" title="Java"></i>
-                            <i class="fab fa-html5" style="color: #e34f26" title="HTML5"></i>
-                            <i class="fab fa-css3-alt" style="color: #264de4" title="CSS3"></i>
-                            <i class="fab fa-js" style="color: #F0DB4F;" title="JavaScript"></i>
-                            <i class="fab fa-github" style="color: #f14e32" title="GitHub"></i>
-                        </div>
+                        <figcaption class="scrolly-caption">
+                            <span class="scrolly-chapter"><span id="scrollyIndex">01</span> / 04</span>
+                            <span class="scrolly-caption-text" id="scrollyCaption">Where it compiles from</span>
+                        </figcaption>
+                    </figure>
+                    <div class="scrolly-badges">
+                        <span class="badge"><i class="fas fa-location-dot"></i> Dhaka, BD</span>
+                        <span class="badge"><i class="fas fa-code"></i> Developer</span>
+                        <span class="badge"><i class="fas fa-brain"></i> Problem Solver</span>
+                        <span class="badge"><i class="fas fa-users"></i> Project Lead</span>
                     </div>
                 </div>
 
-                <div class="about-timeline">
-                    <div class="timeline-connector"></div>
-                    <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h3>Daffodil International University</h3>
-                            <p>BSc in Computer Science & Engineering</p>
-                            <span>2024 - Present</span>
-                        </div>
+                <!-- Narrative beats — one holds the reader at a time -->
+                <div class="scrolly-steps" id="scrollySteps">
+                    <div class="scrolly-spine" aria-hidden="true">
+                        <span class="scrolly-spine-fill" id="scrollySpineFill"></span>
+                        <span class="scrolly-node" data-node="01"></span>
+                        <span class="scrolly-node" data-node="02"></span>
+                        <span class="scrolly-node" data-node="03"></span>
+                        <span class="scrolly-node" data-node="04"></span>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fas fa-code"></i>
+
+                    <article class="scrolly-step is-active" data-index="01" data-caption="Where it compiles from">
+                        <span class="scrolly-step-tag">the origin</span>
+                        <h3 class="scrolly-mask"><span>It starts with a question, not a keyboard.</span></h3>
+                        <p class="scrolly-mask"><span>I'm a <span class="hl-role">Computer Science &amp;
+                                    Engineering</span>
+                                student at
+                                <span class="hl-org">Daffodil International University</span> (<span
+                                    class="hl-date">2024 — present</span>). Long before the
+                                syntax, I liked pulling things apart to see why they worked — that instinct is still the
+                                engine.</span></p>
+                    </article>
+
+                    <article class="scrolly-step" data-index="02" data-caption="Sharpening the thinking">
+                        <span class="scrolly-step-tag">the problem-solver</span>
+                        <h3 class="scrolly-mask"><span>Competitive programming taught me how to think.</span></h3>
+                        <p class="scrolly-mask"><span>On Codeforces and in contest practice I've worked through
+                                <span class="hl">200+ problems</span> — each one a small exercise in staying calm,
+                                finding
+                                structure, and turning a messy prompt into a clean, provable solution.</span></p>
+                    </article>
+
+                    <article class="scrolly-step" data-index="03" data-caption="Shipping real products">
+                        <span class="scrolly-step-tag">the builder</span>
+                        <h3 class="scrolly-mask"><span>But ratings don't ship. Products do.</span></h3>
+                        <p class="scrolly-mask"><span>As <span class="hl-role">Project &amp; Development
+                                    Lead</span> at
+                                <span class="hl-org">StratifyX</span> I turn plans into
+                                working software — owning technical decisions and shipping features end to end,
+                                including
+                                <span class="hl">Expensio</span>. I don't just write code; I ship things people actually
+                                use.</span></p>
+                    </article>
+
+                    <article class="scrolly-step" data-index="04" data-caption="Working across borders">
+                        <span class="scrolly-step-tag">the collaborator</span>
+                        <h3 class="scrolly-mask"><span>The best problems get solved with people.</span></h3>
+                        <p class="scrolly-mask"><span>I volunteered with the <span class="hl-org">Office of
+                                    International
+                                    Affairs</span> at <span class="hl-org">DIU</span> on
+                                international conferences and delegate affairs — and I'm now learning
+                                <span class="hl">Russian</span> through their collaboration with the <span
+                                    class="hl-org">Russian House</span> in
+                                Dhaka.</span></p>
+                        <div class="scrolly-stats">
+                            <div class="scrolly-stat">
+                                <span class="scrolly-stat-num"><span data-count="200">0</span>+</span>
+                                <span class="scrolly-stat-label">Problems solved</span>
+                            </div>
+                            <div class="scrolly-stat">
+                                <span class="scrolly-stat-num"><span data-count="2">0</span>+</span>
+                                <span class="scrolly-stat-label">Roles held</span>
+                            </div>
                         </div>
-                        <div class="timeline-content">
-                            <h3>Competitive Programming</h3>
-                            <p>Active on Codeforces & ICPC</p>
-                            <span>200+ Problems Solved</span>
+                        <div class="tech-stack scrolly-tech">
+                            <i class="fab fa-cuttlefish" title="C / C++"></i>
+                            <i class="fab fa-java" title="Java"></i>
+                            <i class="fab fa-html5" title="HTML5"></i>
+                            <i class="fab fa-css3-alt" title="CSS3"></i>
+                            <i class="fab fa-js" title="JavaScript"></i>
+                            <i class="fab fa-github" title="GitHub"></i>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Achivement section -->
+    <!-- EXPERIENCE (new) -->
+    <section id="experience" class="section">
+        <div class="container">
+            <div class="section-kicker">
+                <span class="eyebrow">career.log</span>
+                <span class="rule"></span>
+                <span class="count">02 roles</span>
+            </div>
+            <h2 class="reveal" style="margin-bottom:2.75rem;">Work Experience</h2>
+
+            <div class="experience-list reveal-stagger reveal">
+                <div class="experience-item stagger-item">
+                    <div class="experience-period">
+                        June 2026 — Present
+                        <div class="status"><span class="dot"></span> Current</div>
+                    </div>
+                    <div class="experience-body">
+                        <div class="experience-role-row">
+                            <span class="experience-role">Project & Development Lead</span>
+                        </div>
+                        <a class="experience-org" href="https://stratifyxglobal.com/" target="_blank" rel="noopener">
+                            <i class="fas fa-arrow-up-right-from-square"></i> StratifyX
+                        </a>
+                        <p>Leading project planning and hands-on development for client-facing products — coordinating
+                            timelines, owning technical decisions, and shipping features from concept through delivery.
+                        </p>
+                        <div class="experience-tags">
+                            <span>Project Management</span>
+                            <span>Web Development</span>
+                            <span>Team Leadership</span>
+                        </div>
+                    </div>
+                    <figure class="experience-media">
+                        <img src="images/experience/stratifyx.jpg" alt="Asikur at StratifyX" loading="lazy"
+                            onerror="this.style.display='none'">
+                        <figcaption>StratifyX</figcaption>
+                    </figure>
+                </div>
+
+                <div class="experience-item stagger-item">
+                    <div class="experience-period">Jan 2026 — July 2026</div>
+                    <div class="experience-body">
+                        <div class="experience-role-row">
+                            <span class="experience-role">Internship</span>
+                        </div>
+                        <a class="experience-org" href="https://daffodilvarsity.edu.bd/conferences/vip" target="_blank"
+                            rel="noopener">
+                            <i class="fas fa-arrow-up-right-from-square"></i> International Affairs, DIU
+                        </a>
+                        <p>Supported coordination for international conferences and VIP delegate affairs at Daffodil
+                            International University, assisting with logistics, communication, and on-ground event
+                            operations.</p>
+                        <div class="experience-tags">
+                            <span>Event Coordination</span>
+                            <span>Communication</span>
+                            <span>Operations</span>
+                        </div>
+                    </div>
+                    <figure class="experience-media">
+                        <img src="images/experience/international-affairs.jpg"
+                            alt="Office of International Affairs, DIU" loading="lazy"
+                            onerror="this.style.display='none'">
+                        <figcaption>Int'l Affairs, DIU</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACHIEVEMENTS -->
     <section id="achievements" class="section">
         <div class="container">
-            <h2>Achievements</h2>
-            <div class="achievements-grid">
-                <div class="achievement-card">
+            <div class="section-kicker"><span class="eyebrow">badges.json</span><span class="rule"></span></div>
+            <h2 class="reveal" style="margin-bottom:2.75rem;">Achievements</h2>
+            <div class="achievements-grid reveal-stagger reveal">
+                <div class="achievement-card tilt-card stagger-item">
                     <h3>Certificate of Appreciation</h3>
-                    <p>"I received a Certificate of Appreciation for serving as a volunteer at the prestigious
-                        International Collegiate Programming Contest (ICPC) Asia Dhaka Regional Contest 2024. This
-                        recognition highlights my enthusiasm for competitive programming and my dedication to
-                        contributing to the programming community."</p>
+                    <p>Received for serving as a volunteer at the prestigious International Collegiate Programming
+                        Contest (ICPC) Asia Dhaka Regional Contest 2024 — recognizing enthusiasm for competitive
+                        programming and dedication to the community.</p>
                 </div>
-                <div class="achievement-card">
+                <div class="achievement-card tilt-card stagger-item">
                     <h3>Certificate of Participation</h3>
-                    <p>"I have received Certificates of Participation for successfully qualifying for and participating
-                        in the Main Round of The Take-Off Programming Contest (Fall 2024) and the UTA Programming
-                        Contest (Summer 2025), organized by Daffodil International University."</p>
+                    <p>Qualified for and participated in the Main Round of The Take-Off Programming Contest (Fall
+                        2024) and the UTA Programming Contest (Summer 2025), organized by Daffodil International
+                        University.</p>
                 </div>
-                <div class="achievement-card">
+                <div class="achievement-card tilt-card stagger-item">
                     <h3>Certificate of Participation</h3>
-                    <p>"I received a Certificate of Participation for successfully qualifying and competing in the Main
-                        Round of the DIU Science Olympiad – Fall 2024, held on November 28, 2024, and organized by the
-                        Faculty of Science & Information Technology, Daffodil International University."</p>
+                    <p>Qualified and competed in the Main Round of the DIU Science Olympiad — Fall 2024, held
+                        November 28, 2024, organized by the Faculty of Science & Information Technology, DIU.</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- SKILLS -->
     <section id="skills" class="section">
         <div class="container">
-            <h2>Technical Skills</h2>
-            <div class="skills">
-                <div class="skill-bar">
-                    <div class="skill-progress" style="width: 85%">
-                        <span class="skill-label">C</span>
-                        <span class="skill-percentage">85%</span>
-                    </div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-progress" style="width: 75%">
-                        <span class="skill-label">C++</span>
-                        <span class="skill-percentage">75%</span>
-                    </div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-progress" style="width: 60%">
-                        <span class="skill-label">Problem Solving</span>
-                        <span class="skill-percentage">60%</span>
-                    </div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-progress" style="width: 40%">
-                        <span class="skill-label">Web Development</span>
-                        <span class="skill-percentage">40%</span>
-                    </div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-progress" style="width: 50%">
-                        <span class="skill-label">Video Editing</span>
-                        <span class="skill-percentage">50%</span>
-                    </div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-progress" style="width: 20%">
-                        <span class="skill-label">Java</span>
-                        <span class="skill-percentage">20%</span>
+            <div class="section-kicker"><span class="eyebrow">stack.config</span><span class="rule"></span></div>
+            <h2 class="reveal split-text" style="margin-bottom:1.6rem;">Technical Skills</h2>
+
+            <p class="projects-hint" style="margin-bottom:1.8rem;"><i class="fas fa-arrow-left"></i> a continuous loop —
+                hover to pause</p>
+
+            <div class="skills-marquee reveal" aria-label="Technical skills">
+                <div class="skills-marquee-row">
+                    <div class="skills-marquee-track">
+                        <div class="skill-tile"><i class="skill-tile-icon fab fa-cuttlefish"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">C / C++</span><span
+                                    class="skill-tile-meter"><span style="width:85%"></span></span></div>
+                        </div>
+                        <div class="skill-tile"><i class="skill-tile-icon fas fa-brain"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Problem Solving</span><span
+                                    class="skill-tile-meter"><span style="width:75%"></span></span></div>
+                        </div>
+                        <div class="skill-tile"><i class="skill-tile-icon fab fa-html5"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">HTML5 &amp; CSS3</span><span
+                                    class="skill-tile-meter"><span style="width:70%"></span></span></div>
+                        </div>
+                        <div class="skill-tile"><i class="skill-tile-icon fab fa-js"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">JavaScript</span><span
+                                    class="skill-tile-meter"><span style="width:65%"></span></span></div>
+                        </div>
+                        <div class="skill-tile"><i class="skill-tile-icon fab fa-github"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Git &amp; GitHub</span><span
+                                    class="skill-tile-meter"><span style="width:60%"></span></span></div>
+                        </div>
+                        <div class="skill-tile"><i class="skill-tile-icon fas fa-diagram-project"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Project Management</span><span
+                                    class="skill-tile-meter"><span style="width:55%"></span></span></div>
+                        </div>
+                        <div class="skill-tile"><i class="skill-tile-icon fas fa-users"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Team Leadership</span><span
+                                    class="skill-tile-meter"><span style="width:55%"></span></span></div>
+                        </div>
+                        <div class="skill-tile"><i class="skill-tile-icon fas fa-clapperboard"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Video Editing</span><span
+                                    class="skill-tile-meter"><span style="width:50%"></span></span></div>
+                        </div>
+                        <div class="skill-tile"><i class="skill-tile-icon fab fa-java"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Java</span><span
+                                    class="skill-tile-meter"><span style="width:35%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i class="skill-tile-icon fab fa-cuttlefish"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">C / C++</span><span
+                                    class="skill-tile-meter"><span style="width:85%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i class="skill-tile-icon fas fa-brain"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Problem Solving</span><span
+                                    class="skill-tile-meter"><span style="width:75%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i class="skill-tile-icon fab fa-html5"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">HTML5 &amp; CSS3</span><span
+                                    class="skill-tile-meter"><span style="width:70%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i class="skill-tile-icon fab fa-js"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">JavaScript</span><span
+                                    class="skill-tile-meter"><span style="width:65%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i class="skill-tile-icon fab fa-github"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Git &amp; GitHub</span><span
+                                    class="skill-tile-meter"><span style="width:60%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i
+                                class="skill-tile-icon fas fa-diagram-project"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Project Management</span><span
+                                    class="skill-tile-meter"><span style="width:55%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i class="skill-tile-icon fas fa-users"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Team Leadership</span><span
+                                    class="skill-tile-meter"><span style="width:55%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i class="skill-tile-icon fas fa-clapperboard"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Video Editing</span><span
+                                    class="skill-tile-meter"><span style="width:50%"></span></span></div>
+                        </div>
+                        <div class="skill-tile" aria-hidden="true"><i class="skill-tile-icon fab fa-java"></i>
+                            <div class="skill-tile-body"><span class="skill-tile-name">Java</span><span
+                                    class="skill-tile-meter"><span style="width:35%"></span></span></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <p class="skill-disclaimer">*Skill levels represent approximate proficiency estimates based on
-                self-assessment.</p>
+            <p class="skill-disclaimer">*Skill levels are approximate, self-assessed proficiency estimates.</p>
         </div>
     </section>
 
+    <!-- LANGUAGES -->
     <section id="languages" class="section">
         <div class="container">
-            <h2>Language Proficiency</h2>
-            <div class="languages-grid">
-                <div class="language-card">
-                    <h3>Bengali</h3>
-                    <p>Native Proficiency.</p>
-                </div>
-                <div class="language-card">
-                    <h3>English</h3>
-                    <p>
-                        Professional working proficiency in English with an IELTS UKVI Academic band score of
-                        <strong>6.5</strong>.
-                    </p>
-                </div>
-                <div class="language-card">
-                    <h3>Hindi & Urdu</h3>
-                    <p>Limited Working Proficiency – verbal communication only.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="section-kicker"><span class="eyebrow">i18n.locales</span><span class="rule"></span></div>
+            <h2 class="reveal split-text" style="margin-bottom:1.6rem;">Language Proficiency</h2>
+            <p class="projects-hint reveal" style="margin-bottom:2.6rem;"><i class="fas fa-language"></i> five tongues,
+                five hellos — scroll to collect them</p>
 
-    <section id="projects" class="section">
-        <div class="container">
-            <h2>Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>Own Portfolio</h3>
-                    <div class="tech-stack">
-                        <span>HTML5</span>
-                        <span>CSS3</span>
-                        <span>JavaScript</span>
+            <div class="languages-layout">
+                <aside class="languages-aside">
+                    <figure class="lang-photo reveal" data-flag="bn">
+                        <span class="lang-photo-corner tl" aria-hidden="true"></span>
+                        <span class="lang-photo-corner tr" aria-hidden="true"></span>
+                        <span class="lang-photo-corner bl" aria-hidden="true"></span>
+                        <span class="lang-photo-corner br" aria-hidden="true"></span>
+                        <span class="lang-photo-flag" id="langFlag" aria-hidden="true">
+                            <span class="lang-photo-flag-emoji">🇧🇩</span>
+                        </span>
+                        <div class="lang-photo-ph" aria-hidden="true">
+                            <i class="fas fa-earth-asia globe"></i>
+                            <span class="scripts"><span lang="bn">অ</span><span lang="hi">अ</span><span
+                                    lang="ur">ع</span><span>Я</span><span>A</span></span>
+                            <code>images/languages/languages.jpg</code>
+                        </div>
+                        <img src="images/languages/languages.jpg"
+                            alt="Asikur Rahman — a life lived across several languages" loading="lazy"
+                            onerror="this.style.display='none'">
+                        <span class="lang-photo-vignette" aria-hidden="true"></span>
+                        <span class="lang-photo-scan" aria-hidden="true"></span>
+
+                        <!-- Progress rail across the top, mirroring the about section's chapter rail -->
+                        <div class="lang-photo-rail" aria-hidden="true"><span class="lang-photo-rail-fill"
+                                id="langRailFill"></span></div>
+
+                        <!-- Signature: a rotating "postmark" that stamps the active language's greeting -->
+                        <div class="lang-stamp" id="langStamp">
+                            <svg class="lang-stamp-ring" viewBox="0 0 140 140" aria-hidden="true">
+                                <circle class="stamp-track" cx="70" cy="70" r="62"></circle>
+                                <text class="stamp-text">
+                                    <textPath href="#stampArc"> • GREETINGS FROM MY HEART • GREETINGS FROM MY HEART •
+                                        DHUSHOR
+                                    </textPath>
+                                </text>
+                                <path id="stampArc" d="M 70,70 m -62,0 a 62,62 0 1,1 124,0 a 62,62 0 1,1 -124,0"
+                                    fill="none"></path>
+                            </svg>
+                            <span class="lang-stamp-greeting" id="langGreeting" lang="bn">আসসালামু আলাইকুম</span>
+                        </div>
+
+                        <figcaption class="lang-photo-caption">
+                            <span class="lang-photo-chapter"><span id="langIndex">01</span> / 05</span>
+                            <span class="lang-photo-caption-text" id="langCaptionText">Bengali — how the story
+                                begins</span>
+                        </figcaption>
+                    </figure>
+                    <div class="lang-tale reveal">
+                        <span class="lang-tale-label">a small confession</span>
+                        <p>Home runs on <span class="hl">Bengali</span>, code runs on English, and Hindi + Urdu snuck in
+                            through movies and cricket commentary. Now I'm arm-wrestling <span
+                                class="hl">Russian's</span> six cases, one street sign at a time. My brain just really
+                            likes plot twists.</p>
                     </div>
-                    <p style="text-align: justify; text-justify: inter-word; hyphens: auto; line-height: 1.6;">"This
-                        project is built using HTML, CSS, and JavaScript. The website features a contact form that
-                        allows users to send me an email. It also includes a dark and light mode toggle for better
-                        accessibility. Users can enjoy a smooth scrolling experience, and the site is fully responsive,
-                        ensuring a seamless experience on both mobile and desktop devices."</p>
+                </aside>
+
+                <div class="languages-track">
+
+                    <article class="lang-card reveal" data-percent="100" data-greeting="আসসালামু আলাইকুম"
+                        data-greeting-lang="bn" data-caption="Bengali — how the story begins"
+                        style="--lang-accent: var(--signal);">
+                        <div class="lang-card-top">
+                            <div class="lang-ring-wrap">
+                                <svg class="lang-ring" viewBox="0 0 120 120">
+                                    <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+                                    <circle class="ring-fill" cx="60" cy="60" r="52"></circle>
+                                </svg>
+                                <div class="lang-ring-label"><span class="lang-ring-pct">0</span><span
+                                        class="lang-ring-unit">%</span></div>
+                            </div>
+                            <div class="lang-headline">
+                                <h3 class="lang-mask"><span>Bengali</span></h3>
+                                <span class="lang-level">Native</span>
+                                <span class="lang-greet" lang="bn">আসসালামু আলাইকুম</span>
+                            </div>
+                        </div>
+                        <p class="lang-desc lang-mask"><span>Mother tongue — complete fluency across speaking,
+                                reading &amp; writing.</span>
+                        </p>
+                        <div class="lang-fav">
+                            <span class="lang-fav-label"><i class="fas fa-heart"></i> favourite word</span>
+                            <span class="lang-fav-native lang-mask" lang="bn"><span>এণাক্ষী</span></span>
+                            <span class="lang-fav-latin lang-mask"><span>Enakshi — “eyes dark and lovely as a
+                                    doe’s”</span></span>
+                        </div>
+                    </article>
+
+                    <article class="lang-card reveal" data-percent="85" data-greeting="Hello" data-greeting-lang="en"
+                        data-caption="English — the working language" style="--lang-accent: var(--circuit);">
+                        <div class="lang-card-top">
+                            <div class="lang-ring-wrap">
+                                <svg class="lang-ring" viewBox="0 0 120 120">
+                                    <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+                                    <circle class="ring-fill" cx="60" cy="60" r="52"></circle>
+                                </svg>
+                                <div class="lang-ring-label"><span class="lang-ring-pct">0</span><span
+                                        class="lang-ring-unit">%</span></div>
+                            </div>
+                            <div class="lang-headline">
+                                <h3 class="lang-mask"><span>English</span></h3>
+                                <span class="lang-level">Professional</span>
+                                <span class="lang-greet">Hello</span>
+                            </div>
+                        </div>
+                        <p class="lang-desc lang-mask"><span>Working proficiency — IELTS UKVI Academic band
+                                <strong>6.5</strong>.</span></p>
+                        <div class="lang-fav">
+                            <span class="lang-fav-label"><i class="fas fa-heart"></i> favourite word</span>
+                            <span class="lang-fav-native lang-mask"><span>Serendipity</span></span>
+                            <span class="lang-fav-latin lang-mask"><span>stumbling into something wonderful you
+                                    weren’t looking for</span></span>
+                        </div>
+                    </article>
+
+                    <article class="lang-card reveal" data-percent="45" data-greeting="हार्दिक शुभकामनाएँ"
+                        data-greeting-lang="hi" data-caption="Hindi — picked up by ear, not by class"
+                        style="--lang-accent: var(--iris);">
+                        <div class="lang-card-top">
+                            <div class="lang-ring-wrap">
+                                <svg class="lang-ring" viewBox="0 0 120 120">
+                                    <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+                                    <circle class="ring-fill" cx="60" cy="60" r="52"></circle>
+                                </svg>
+                                <div class="lang-ring-label"><span class="lang-ring-pct">0</span><span
+                                        class="lang-ring-unit">%</span></div>
+                            </div>
+                            <div class="lang-headline">
+                                <h3 class="lang-mask"><span>Hindi</span></h3>
+                                <span class="lang-level">Conversational</span>
+                                <span class="lang-greet" lang="hi">हार्दिक शुभकामनाएँ</span>
+                            </div>
+                        </div>
+                        <p class="lang-desc lang-mask"><span>Picked up by ear — comfortable speaking &amp;
+                                understanding.</span></p>
+                        <div class="lang-fav">
+                            <span class="lang-fav-label"><i class="fas fa-heart"></i> favourite word</span>
+                            <span class="lang-fav-native lang-mask" lang="hi"><span>जुगाड़</span></span>
+                            <span class="lang-fav-latin lang-mask"><span>Jugaad — an ingenious fix improvised from
+                                    whatever’s at hand</span></span>
+                        </div>
+                    </article>
+
+                    <article class="lang-card reveal" data-percent="40" data-greeting="السلام علیکم"
+                        data-greeting-lang="ur" data-caption="Urdu — shares Hindi's heart"
+                        style="--lang-accent: var(--rose);">
+                        <div class="lang-card-top">
+                            <div class="lang-ring-wrap">
+                                <svg class="lang-ring" viewBox="0 0 120 120">
+                                    <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+                                    <circle class="ring-fill" cx="60" cy="60" r="52"></circle>
+                                </svg>
+                                <div class="lang-ring-label"><span class="lang-ring-pct">0</span><span
+                                        class="lang-ring-unit">%</span></div>
+                            </div>
+                            <div class="lang-headline">
+                                <h3 class="lang-mask"><span>Urdu</span></h3>
+                                <span class="lang-level">Conversational</span>
+                                <span class="lang-greet" lang="ur">السلام علیکم</span>
+                            </div>
+                        </div>
+                        <p class="lang-desc lang-mask"><span>Shares its heart with Hindi — spoken
+                                understanding.</span></p>
+                        <div class="lang-fav">
+                            <span class="lang-fav-label"><i class="fas fa-heart"></i> favourite word</span>
+                            <span class="lang-fav-native lang-mask" lang="ur"><span>حسرت</span></span>
+                            <span class="lang-fav-latin lang-mask"><span>Hasrat — a tender, aching longing for
+                                    what’s out of reach</span></span>
+                        </div>
+                    </article>
+
+                    <article class="lang-card reveal" data-percent="15" data-greeting="Здравствуйте"
+                        data-greeting-lang="ru" data-caption="Russian — the current puzzle"
+                        style="--lang-accent: #6f8cf0;">
+                        <div class="lang-card-top">
+                            <div class="lang-ring-wrap">
+                                <svg class="lang-ring" viewBox="0 0 120 120">
+                                    <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+                                    <circle class="ring-fill" cx="60" cy="60" r="52"></circle>
+                                </svg>
+                                <div class="lang-ring-label"><span class="lang-ring-pct">0</span><span
+                                        class="lang-ring-unit">%</span></div>
+                            </div>
+                            <div class="lang-headline">
+                                <h3 class="lang-mask"><span>Russian</span></h3>
+                                <span class="lang-level lang-level-learning"><i class="fas fa-seedling"></i>
+                                    Learning</span>
+                                <span class="lang-greet" lang="ru">Здравствуйте</span>
+                            </div>
+                        </div>
+                        <p class="lang-desc lang-mask"><span>Currently learning — with the Office of International
+                                Affairs, DIU &amp; the Russian House in Dhaka.</span></p>
+                        <div class="lang-fav">
+                            <span class="lang-fav-label"><i class="fas fa-heart"></i> favourite word</span>
+                            <span class="lang-fav-native lang-mask" lang="ru"><span>мечта</span></span>
+                            <span class="lang-fav-latin lang-mask"><span>Mechta — a cherished dream you carry
+                                    quietly</span></span>
+                        </div>
+                    </article>
+
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- PROJECTS -->
+    <section id="projects" class="section projects-scroll-section">
+        <div class="container" style="padding-bottom: 1.5rem;">
+            <div class="section-kicker">
+                <span class="eyebrow">projects.build()</span>
+                <span class="rule"></span>
+                <span class="count">04 shown</span>
+            </div>
+            <h2 class="reveal split-text" style="margin-bottom: 1rem;">Projects</h2>
+            <p class="projects-hint reveal"><i class="fas fa-arrows-left-right"></i> Scroll to explore — drag, swipe, or
+                use the arrows</p>
+        </div>
 
+        <div class="projects-sticky">
+            <div class="projects-track" id="projectsTrack">
+                <div class="project-card-v2 tilt-card">
+                    <div class="project-thumb">
+                        <img src="images/projects/portfolio.jpg" alt="Own Portfolio thumbnail" loading="lazy"
+                            onerror="this.style.display='none'">
+                        <span class="project-status live">Live</span>
+                    </div>
+                    <div class="project-card-body">
+                        <h3>Own Portfolio</h3>
+                        <p>This site — a fully responsive personal portfolio with a light/dark theme, animated
+                            scroll experience, contact form, and a certificate & video showcase.</p>
+                        <div class="tech-stack"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
+                        <div class="project-links">
+                            <a href="https://github.com/asikafridi" target="_blank" rel="noopener"><i
+                                    class="fab fa-github"></i> Source</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card-v2 tilt-card">
+                    <div class="project-thumb">
+                        <img src="images/projects/expensio.jpg" alt="Expensio thumbnail" loading="lazy"
+                            onerror="this.style.display='none'">
+                        <span class="project-status progress">In Progress</span>
+                    </div>
+                    <div class="project-card-body">
+                        <h3>Expensio</h3>
+                        <p>A personal finance and expense-tracking app designed to make budgeting effortless —
+                            clear spending insights, categorized expenses, and simple day-to-day money tracking.</p>
+                        <div class="tech-stack"><span>Web App</span><span>Finance</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card-v2 tilt-card">
+                    <div class="project-thumb">
+                        <img src="images/projects/rootforge.jpg" alt="RootForge thumbnail" loading="lazy"
+                            onerror="this.style.display='none'">
+                        <span class="project-status progress">In Progress</span>
+                    </div>
+                    <div class="project-card-body">
+                        <h3>RootForge</h3>
+                        <p>A developer-focused tooling project aimed at streamlining project scaffolding and
+                            setup — reducing the busywork between an idea and a running codebase.</p>
+                        <div class="tech-stack"><span>Developer Tools</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card-v2 tilt-card">
+                    <div class="project-thumb">
+                        <img src="images/projects/bisonbank.jpg" alt="BisonBank thumbnail" loading="lazy"
+                            onerror="this.style.display='none'">
+                        <span class="project-status planned">Planned</span>
+                    </div>
+                    <div class="project-card-body">
+                        <h3>BisonBank</h3>
+                        <p>A conceptual digital banking platform focused on clean transaction flows, account
+                            management, and a secure, modern user experience.</p>
+                        <div class="tech-stack"><span>FinTech</span><span>Web App</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card-v2 project-card-end">
+                    <div class="project-end-inner">
+                        <i class="fas fa-arrow-up-right-from-square"></i>
+                        <h3>More on GitHub</h3>
+                        <p>Check out additional experiments, contest solutions, and repos.</p>
+                        <a href="https://github.com/asikafridi" target="_blank" rel="noopener"
+                            class="btn btn-ghost">Visit GitHub</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="projects-progress">
+                <div class="projects-progress-fill" id="projectsProgressFill"></div>
+            </div>
+            <div class="projects-arrows">
+                <button class="projects-arrow" id="projArrowLeft" aria-label="Scroll projects left"><i
+                        class="fas fa-arrow-left"></i></button>
+                <button class="projects-arrow" id="projArrowRight" aria-label="Scroll projects right"><i
+                        class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOWCASE TEASERS -->
+    <section id="showcase" class="section">
+        <div class="container">
+            <div class="section-kicker"><span class="eyebrow">more.exe</span><span class="rule"></span></div>
+            <h2 class="reveal split-text" style="margin-bottom:0.6rem;">More to Explore</h2>
+            <p class="projects-hint reveal" style="margin-bottom:2.75rem;"><i class="fas fa-compass"></i> two side
+                quests, zero loading screens</p>
+            <div class="teaser-grid reveal-stagger reveal">
+                <a href="certificates.html" class="teaser-card stagger-item">
+                    <span class="glass-blob blob-a" aria-hidden="true"></span>
+                    <i class="fas fa-certificate bg-icon"></i>
+                    <span class="teaser-emoji" aria-hidden="true">🏆</span>
+                    <h3>Certificates &amp; Resume</h3>
+                    <p>An interactive 3D showcase of achievements, certifications, and my resume — proof I don't just
+                        say I did things.</p>
+                    <span class="btn btn-ghost teaser-btn">View Certificates <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="video.html" class="teaser-card stagger-item">
+                    <span class="glass-blob blob-b" aria-hidden="true"></span>
+                    <i class="fas fa-video bg-icon"></i>
+                    <span class="teaser-emoji" aria-hidden="true">🎬</span>
+                    <h3>Video Editing</h3>
+                    <p>A collection of edited videos, behind-the-scenes cuts, and the questionable amount of coffee
+                        that made them.</p>
+                    <span class="btn btn-ghost teaser-btn">Watch Videos <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
     <section id="contact" class="section">
         <div class="container">
-            <h2>Get in Touch</h2>
-            <div class="contact-container">
-                <div class="contact-form">
-                    <p class="contact-disclaimer">*Want to stay anonymous? Just use a dummy name and email. Thanks for reaching out!</p>
-                    <form id="contactForm" action="https://formspree.io/f/xzzebqrd" method="POST">
-                        <input type="text" name="_gotcha" style="display:none">
-                        <div class="form-group">
-                            <input type="text" id="name" name="Name" placeholder="Your Name" autocomplete="name"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" name="Email" placeholder="Your Email" autocomplete="email"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="Message" placeholder="Your Message" rows="5" autocomplete="off"
-                                required></textarea>
-                        </div>
-                        <div class="form-button-wrapper">
-                            <button type="submit" class="submit-btn">Send Message</button>
-                            <div id="statusPopup" class="statusPopup"></div>
-                        </div>
-                    </form>
+            <div class="section-kicker"><span class="eyebrow">send.message()</span><span class="rule"></span></div>
+            <h2 class="reveal" style="margin-bottom:1.6rem;">Get in Touch</h2>
 
-                    <div id="statusPopup" class="statusPopup"></div>
-                </div>
 
-                <div class="social-links">
-                    <a href="https://github.com/asikafridi" target="_blank">
-                        <i class="fab fa-github"></i>
-                        GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/asikafridi" target="_blank">
-                        <i class="fab fa-linkedin"></i>
-                        LinkedIn
-                    </a>
-                    <a href="mailto:asikafridi0@gmail.com">
-                        <i class="fas fa-envelope"></i>
-                        Email
-                    </a>
-                    <a href="https://codeforces.com/profile/asikafridi" target="_blank">
-                        <i class="fas fa-code"></i>
-                        Codeforces
-                    </a>
+            <div class="contact-liquid reveal" id="contactLiquid">
+                <span class="contact-blob blob-a" aria-hidden="true"></span>
+                <span class="contact-blob blob-b" aria-hidden="true"></span>
+                <span class="contact-blob blob-c" aria-hidden="true"></span>
+                <span class="contact-sheen" aria-hidden="true"></span>
+
+                <div class="contact-container">
+                    <div class="contact-form">
+                        <p class="contact-disclaimer">*Want to stay anonymous? Just use a dummy name and email. Thanks
+                            for reaching out!</p>
+                        <form id="contactForm" action="https://formspree.io/f/xzzebqrd" method="POST">
+                            <input type="text" name="_gotcha" style="display:none">
+                            <div class="form-group">
+                                <input type="text" id="name" name="Name" placeholder="Your Name" autocomplete="name"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="email" name="Email" placeholder="Your Email"
+                                    autocomplete="email" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea id="message" name="Message" placeholder="Your Message" rows="5"
+                                    autocomplete="off" required></textarea>
+                            </div>
+                            <div class="form-button-wrapper">
+                                <button type="submit" class="submit-btn"><span>Send Message</span> <i
+                                        class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </form>
+                        <div id="statusPopup" class="statusPopup"></div>
+                    </div>
+
+                    <div class="contact-dock-wrap">
+                        <span class="contact-dock-label">elsewhere</span>
+                        <div class="social-links">
+                            <a class="social-dot" href="https://github.com/asikafridi" target="_blank" data-tip="GitHub"
+                                aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a class="social-dot" href="https://linkedin.com/in/asikafridi" target="_blank"
+                                data-tip="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a class="social-dot" href="mailto:asikurrahman.contact@gmail.com" data-tip="Email"
+                                aria-label="Email"><i class="fas fa-envelope"></i></a>
+                            <a class="social-dot" href="https://codeforces.com/profile/asikafridi" target="_blank"
+                                data-tip="Codeforces" aria-label="Codeforces"><i class="fas fa-code"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -366,14 +877,12 @@
 
     <footer>
         <div class="container">
-            <p>&copy; <span id="currentYear">2025</span> All rights reserved to <strong>ASIKUR RAHMAN</strong></p>
+            <p>&copy; <span id="currentYear">2026</span> All rights reserved to <strong>ASIKUR RAHMAN</strong></p>
         </div>
     </footer>
 
     <div class="particles"></div>
     <script src="script.js"></script>
-
 </body>
 
 </html>
-
