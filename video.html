@@ -2,7 +2,7 @@
 <html lang="en-BD">
 
 <head>
-    <meta name="theme-color" content="#0a192f">
+    <meta name="theme-color" content="#0b0b0d">
     <meta property="og:locale" content="en_BD">
     <meta name="twitter:creator" content="@asikafridi">
     <meta charset="UTF-8">
@@ -31,12 +31,14 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="video.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <script type="application/ld+json">
     {
@@ -58,14 +60,18 @@
     <div class="scroll-progress"></div>
     <div class="interactive-bg"></div>
 
+    <!-- Video Background Particles -->
+    <div class="video-particles" id="videoParticles"></div>
+
     <nav aria-label="Main navigation">
         <div role="navigation">
             <div class="container nav-content">
-                <h1><a href="index.html" style="text-decoration: none; color: inherit;">Asikur Rahman</a></h1>
+                <h1><a href="index.html" style="text-decoration: none; color: inherit;">asikur.dev</a></h1>
 
                 <div class="hamburger-menu">
                     <div class="visible-links">
-                        <a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a>
+                        <a href="index.html"><i class="fas fa-house"></i> <span>Home</span></a>
+                        <a href="certificates.html"><i class="fas fa-certificate"></i> <span>Certificates</span></a>
                         <a href="index.html#contact"><i class="fas fa-envelope"></i> <span>Contact</span></a>
                     </div>
 
@@ -74,8 +80,9 @@
                     </button>
 
                     <div class="dropdown-links" id="dropdown-nav">
-                        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                        <a href="index.html"><i class="fas fa-house"></i> Home</a>
                         <a href="index.html#about"><i class="fas fa-user"></i> About</a>
+                        <a href="index.html#experience"><i class="fas fa-briefcase"></i> Experience</a>
                         <a href="index.html#achievements"><i class="fas fa-trophy"></i> Achievements</a>
                         <a href="index.html#skills"><i class="fas fa-code"></i> Skills</a>
                         <a href="index.html#projects"><i class="fas fa-folder-open"></i> Projects</a>
@@ -87,56 +94,243 @@
         </div>
     </nav>
 
-    <section class="video-hero">
-        <div class="container">
-            <h1 data-text="Video Portfolio">
-                <span>Video Portfolio</span>
-            </h1>
-            <p>
-                Showcasing my Video Editing Skills and Video Resume..
-            </p>
-        </div>
-    </section>
+    <!-- Video Hero Section -->
+    <section class="video-hero" id="video-hero">
+        <div class="video-hero-background"></div>
 
-    <section class="video-showcase">
         <div class="container">
-            <div class="video-player-container">
-                <div class="video-player" id="videoPlayer">
-                    <div class="video-thumbnail-overlay" id="videoThumbnail">
-                        <img id="mainVideoThumb" src="images/Idol_Cover.jpg" alt="Video Resume">
-                        <div class="play-button-overlay">
-                            <i class="fas fa-play"></i>
+            <div class="video-hero-grid">
+                <div class="video-hero-text" data-aos="fade-up">
+                    <div class="hero-eyebrow"><span class="dot"></span> Cut, graded &amp; mixed by hand</div>
+
+                    <h1 class="video-main-title">
+                        <span class="video-title-gradient">Video</span>
+                        <span class="video-title-gradient">Portfolio</span>
+                    </h1>
+
+                    <p class="video-hero-lede">Showcasing my video editing skills and video resume — every cut,
+                        transition and colour grade in this reel is my own work.</p>
+
+                    <div class="reel-stats" id="reelStats">
+                        <div class="reel-stat">
+                            <i class="fas fa-clapperboard"></i>
+                            <div>
+                                <span class="reel-stat-num" id="statVideos" data-suffix="">0</span>
+                                <span class="reel-stat-label">Videos edited</span>
+                            </div>
+                        </div>
+                        <div class="reel-stat">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <span class="reel-stat-num" id="statMinutes" data-suffix="m">0</span>
+                                <span class="reel-stat-label">Minutes of footage</span>
+                            </div>
+                        </div>
+                        <div class="reel-stat">
+                            <i class="fas fa-layer-group"></i>
+                            <div>
+                                <span class="reel-stat-num" id="statGenres" data-suffix="">0</span>
+                                <span class="reel-stat-label">Genres explored</span>
+                            </div>
                         </div>
                     </div>
-                    <iframe id="mainVideo"
-                        data-src="https://drive.google.com/file/d/17DyGcv52ayyl1Zq5X-TG4W1kR9fnXx16/preview"
-                        width="100%" height="100%" frameborder="0" allowfullscreen allow="autoplay; fullscreen"
-                        style="display: none;">
-                    </iframe>
+
+                    <a href="#video-gallery" class="hero-scroll-cta">
+                        <span>Watch the reel</span>
+                        <i class="fas fa-arrow-down"></i>
+                    </a>
                 </div>
-                <div class="video-info">
-                    <div class="video-header">
-                        <h2 id="video-title">My Idol: Hazrat Umar Ibn al-Khattab(RA)</h2>
-                        <div class="video-badge">Ready to Play</div>
-                    </div>
-                    <p id="video-description">
-                        A heartfelt tribute to my idol, Hazrat Umar Ibn al-Khattab (RA), this video reflects the values
-                        that inspire me—justice, integrity, courage, and unwavering leadership. Through this showcase, I
-                        share how his life and principles continue to shape my character, mindset, and aspirations both
-                        personally and professionally.
-                    </p>
-                    <div class="video-details">
-                        <span><i class="fas fa-clock"></i> Duration: <span id="video-duration">3:34</span></span>
-                        <span><i class="fas fa-calendar"></i> Created: <span id="video-date">December
-                                2025</span></span>
+
+                <div class="video-hero-preview liquid-glass" data-aos="fade-left" data-aos-delay="200">
+                    <div class="glass-blob blob-a"></div>
+                    <div class="glass-blob blob-b"></div>
+                    <div class="preview-container">
+                        <img src="images/Idol_Cover.jpg" alt="Featured Video Thumbnail" class="preview-thumbnail">
+                        <div class="preview-play-btn">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="preview-info">
+                            <span class="preview-tag">Featured</span>
+                            <h3>My Idol: Hazrat Umar Ibn al-Khattab (RA)</h3>
+                            <p>3:34 &middot; Tribute film</p>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="video-gallery">
-                <h2>Other Video Projects</h2>
+        <div class="scroll-hint">
+            <span>Explore Videos</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Video Gallery Section -->
+    <section class="video-gallery-section" id="video-gallery">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-kicker"><span class="eyebrow">gallery.render()</span><span class="rule"></span>
+                </div>
+                <h2 class="section-title">Video Collection</h2>
+                <p class="section-subtitle">A showcase of my video editing skills and creative projects</p>
+            </div>
+
+            <div class="gallery-controls liquid-glass" data-aos="fade-up" data-aos-delay="100">
+                <div class="filter-tags">
+                    <button class="filter-tag active" data-filter="all">All Videos</button>
+                    <button class="filter-tag" data-filter="documentary">Documentary</button>
+                    <button class="filter-tag" data-filter="creative">Creative</button>
+                    <button class="filter-tag" data-filter="sample">Samples</button>
+                </div>
+
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="gallery-container" data-aos="fade-up" data-aos-delay="200">
                 <div class="gallery-grid" id="gallery-grid">
-                    <!-- Thumbnails will be dynamically populated by JavaScript -->
+                    <!-- Videos will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Player Modal -->
+    <div class="video-player-modal" id="videoPlayerModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container liquid-glass">
+            <div class="glass-blob blob-c"></div>
+            <button class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-content">
+                <div class="video-player-wrapper">
+                    <div class="player-header">
+                        <h3 id="modal-video-title">Video Title</h3>
+                        <div class="player-controls">
+                            <button class="control-btn" id="playPauseBtn">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="control-btn" id="fullscreenBtn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="video-container">
+                        <div class="video-thumbnail-overlay" id="videoThumbnailModal">
+                            <img id="modal-video-thumb" src="" alt="Video Thumbnail">
+                            <div class="play-overlay">
+                                <div class="play-button">
+                                    <i class="fas fa-play"></i>
+                                    <span>Ready to Play</span>
+                                </div>
+                            </div>
+                        </div>
+                        <iframe id="modal-video-player" src="" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <div class="video-info-modal">
+                        <div class="info-header">
+                            <div class="video-meta">
+                                <span class="duration" id="modal-duration">0:00</span>
+                                <span class="date" id="modal-date">Date</span>
+                            </div>
+                            <div class="video-actions">
+                                <button class="action-btn like-btn">
+                                    <i class="far fa-thumbs-up"></i>
+                                    <span>Like</span>
+                                </button>
+                                <button class="action-btn share-btn">
+                                    <i class="fas fa-share"></i>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="video-description" id="modal-description">
+                            Video description will appear here.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Skills Section -->
+    <section class="video-skills-section" id="video-skills">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-kicker"><span class="eyebrow">skills.exe</span><span class="rule"></span></div>
+                <h2 class="section-title">Video Editing Skills</h2>
+                <p class="section-subtitle">Technical expertise and software proficiency</p>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-category liquid-glass" data-aos="fade-up" data-aos-delay="100">
+                    <h3>Editing Software</h3>
+                    <div class="software-list">
+
+                        <div class="software-item">
+                            <i class="fas fa-video"></i>
+                            <span>CapCut</span>
+                            <div class="skill-level">
+                                <div class="level-bar" style="width: 60%"></div>
+                            </div>
+                        </div>
+
+                        <div class="software-item">
+                            <i class="fas fa-film"></i>
+                            <span>Adobe Premiere Pro</span>
+                            <div class="skill-level">
+                                <div class="level-bar" style="width: 30%"></div>
+                            </div>
+                        </div>
+
+                        <div class="software-item">
+                            <i class="fas fa-sliders-h"></i>
+                            <span>DaVinci Resolve</span>
+                            <div class="skill-level">
+                                <div class="level-bar" style="width: 30%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category liquid-glass" data-aos="fade-up" data-aos-delay="200">
+                    <h3>Editing Techniques</h3>
+                    <div class="techniques-list">
+                        <div class="technique-item">
+                            <i class="fas fa-cut"></i>
+                            <div>
+                                <h4>Color Grading</h4>
+                                <p>Beginner level color correction and grading.</p>
+                            </div>
+                        </div>
+                        <div class="technique-item">
+                            <i class="fas fa-wave-square"></i>
+                            <div>
+                                <h4>Audio Mixing</h4>
+                                <p>Clean audio editing and sound design.</p>
+                            </div>
+                        </div>
+                        <div class="technique-item">
+                            <i class="fas fa-magic"></i>
+                            <div>
+                                <h4>Visual Effects</h4>
+                                <p>Basic VFX and motion graphics.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,6 +343,8 @@
     </footer>
 
     <div class="particles"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="script.js"></script>
     <script src="video.js"></script>
 </body>
