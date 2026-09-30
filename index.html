@@ -30,6 +30,7 @@
     <meta name="twitter:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,27 +60,16 @@
 </head>
 
 <body>
-    <!-- Cinema opening — a projector countdown leader that plays once per
-         session, then iris-wipes away to reveal the site. Hidden by
-         default in CSS so a JS failure never leaves visitors stuck behind
-         a black screen; script.js opts it in only when it can also run the
-         reveal. -->
+    <!-- Opening title card — shows the name for a moment, then iris-wipes
+         away to reveal the site. Hidden by default in CSS so a JS failure
+         never leaves visitors stuck behind a black screen; script.js opts it
+         in only when it can also run the reveal. -->
     <div class="cinema-intro" id="cinemaIntro" aria-hidden="true">
         <span class="cinema-intro-grain"></span>
-        <div class="cinema-leader" id="cinemaLeader">
-            <svg class="cinema-leader-ring" viewBox="0 0 200 200" aria-hidden="true">
-                <circle class="ring-track" cx="100" cy="100" r="88"></circle>
-                <circle class="ring-sweep" cx="100" cy="100" r="88"></circle>
-                <line class="leader-cross" x1="100" y1="6" x2="100" y2="194"></line>
-                <line class="leader-cross" x1="6" y1="100" x2="194" y2="100"></line>
-            </svg>
-            <span class="cinema-leader-count" id="cinemaCount">3</span>
-        </div>
         <div class="cinema-intro-title" id="cinemaTitle">
             <span class="cinema-intro-kicker">dhushor.dev presents</span>
             <span class="cinema-intro-name">Asikur Rahman</span>
         </div>
-        <span class="cinema-flash" id="cinemaFlash"></span>
     </div>
 
     <button class="theme-toggle" aria-label="Toggle theme" aria-pressed="false"></button>
@@ -883,6 +873,7 @@
 
     <div class="particles"></div>
     <script src="script.js"></script>
+    <script src="mobile.js"></script>
 </body>
 
 </html>
