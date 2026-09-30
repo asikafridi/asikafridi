@@ -23,92 +23,42 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCurrentYear();
 });
 
-// ==================== CINEMA OPENING ====================
-// A projector countdown leader (3-2-1, ring sweep, title card, flash) that
-// plays once per browser session on entry, then iris-wipes away to reveal
-// the site — like a film starting. The overlay is invisible unless this
-// function explicitly opts it in, and every step has a fallback timer, so
-// a stalled animation or thrown error can never leave a visitor stuck
-// behind a black screen.
+// ==================== OPENING TITLE CARD ====================
+// Shows "dhushor.dev presents / Asikur Rahman" for about a second on the
+// first visit of a session, then iris-wipes away to reveal the site. The
+// overlay is invisible unless this function opts it in, and a safety timer
+// guarantees it always comes down, so a stalled animation or thrown error
+// can never leave a visitor stuck behind a black screen.
 function initCinemaIntro() {
     const intro = document.getElementById('cinemaIntro');
     if (!intro) return;
 
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const alreadyShown = sessionStorage.getItem('cinemaIntroShown');
-
-    if (alreadyShown) {
-        return; // stays display:none per its default CSS — nothing to clean up
-    }
+    if (sessionStorage.getItem('cinemaIntroShown')) return; // stays display:none
     sessionStorage.setItem('cinemaIntroShown', '1');
 
-    // Reduced motion: skip straight to a quick, static reveal instead of
-    // the full countdown sequence.
-    if (reduceMotion) {
-        intro.classList.add('is-active');
-        requestAnimationFrame(() => {
-            intro.style.transition = 'opacity 0.3s ease';
-            intro.style.opacity = '0';
-            setTimeout(() => intro.classList.add('is-hidden'), 320);
-        });
-        return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const titleEl = document.getElementById('cinemaTitle');
+
+    function finish() {
+        document.body.style.overflow = '';
+        intro.classList.remove('is-active');
+        intro.classList.add('is-hidden');
     }
 
     try {
         intro.classList.add('is-active');
         document.body.style.overflow = 'hidden';
+        const safety = setTimeout(finish, 3500);
 
-        const countEl = document.getElementById('cinemaCount');
-        const sweepEl = intro.querySelector('.ring-sweep');
-        const leaderEl = document.getElementById('cinemaLeader');
-        const titleEl = document.getElementById('cinemaTitle');
-        const flashEl = document.getElementById('cinemaFlash');
-
-        function finish() {
+        // Fade the name in right away, hold it ~1s, then wipe.
+        requestAnimationFrame(() => titleEl && titleEl.classList.add('is-visible'));
+        setTimeout(() => {
+            intro.classList.add('is-wiping');
             document.body.style.overflow = '';
-            intro.classList.remove('is-active');
-            intro.classList.add('is-hidden');
-        }
-
-        // Safety net — whatever else happens, the overlay comes down well
-        // before this fires.
-        const safety = setTimeout(finish, 6500);
-
-        const beats = ['3', '2', '1'];
-        let i = 0;
-        function tick() {
-            if (i < beats.length) {
-                countEl.textContent = beats[i];
-                countEl.classList.remove('is-visible');
-                sweepEl.classList.remove('is-sweeping');
-                void countEl.offsetWidth; // restart the CSS animations
-                void sweepEl.getBoundingClientRect();
-                countEl.classList.add('is-visible');
-                sweepEl.classList.add('is-sweeping');
-                i++;
-                setTimeout(tick, 680);
-            } else {
-                leaderEl.classList.add('is-done');
-                titleEl.classList.add('is-visible');
-                setTimeout(() => {
-                    titleEl.classList.remove('is-visible');
-                    flashEl.classList.add('is-flashing');
-                    setTimeout(() => {
-                        intro.classList.add('is-wiping');
-                        document.body.style.overflow = '';
-                        setTimeout(() => {
-                            clearTimeout(safety);
-                            finish();
-                        }, 1250);
-                    }, 260);
-                }, 950);
-            }
-        }
-        setTimeout(tick, 350);
+            setTimeout(() => { clearTimeout(safety); finish(); }, reduceMotion ? 450 : 1250);
+        }, reduceMotion ? 700 : 1100);
     } catch (err) {
-        // If anything above throws, never leave the site hidden.
-        document.body.style.overflow = '';
-        intro.classList.add('is-hidden');
+        finish();
     }
 }
 
@@ -956,15 +906,18 @@ function initializePhotoCompanion() {
             frame.style.setProperty('--tilt', tilt + 'deg');
         }
 
-        // Hide the travelling companion where it would clash: near the footer,
-        // and across the About section (which now has its own portrait).
+        // Hide the travelling companion only near the footer. It now stays
+        // visible across the About section too (previously hidden there);
+        // inside About it tucks into the right gutter a little smaller so
+        // it doesn't cover the story text.
         const nearBottom = window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 260;
         let overAbout = false;
         if (about) {
             const ar = about.getBoundingClientRect();
-            overAbout = ar.top < window.innerHeight * 0.5 && ar.bottom > window.innerHeight * 0.15;
+            overAbout = ar.top < window.innerHeight * 0.75 && ar.bottom > window.innerHeight * 0.25;
         }
-        frame.classList.toggle('is-hidden', pinned && (nearBottom || overAbout));
+        frame.classList.toggle('is-over-about', pinned && overAbout);
+        frame.classList.toggle('is-hidden', pinned && nearBottom);
     }
 
     function onScroll() {
@@ -977,7 +930,7 @@ function initializePhotoCompanion() {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', () => {
         if (window.innerWidth < 900) {
-            frame.classList.remove('is-pinned', 'is-hidden');
+            frame.classList.remove('is-pinned', 'is-hidden', 'is-over-about');
             pinned = false;
         }
     });
