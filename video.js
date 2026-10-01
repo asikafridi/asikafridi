@@ -1,17 +1,7 @@
-// Enhanced Video Portfolio Functionality
+// Video page (v2) — gallery, featured stage, cinema player modal, toolkit.
+// Video data below is the single source of truth: add or edit entries here
+// and the hero stats, filter counts, cards and "Up next" list update.
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize AOS — guarded so that if the CDN script is slow/blocked,
-    // the rest of this file (gallery, stats, modal) still runs instead of
-    // the whole page's interactivity being silently aborted by a single
-    // uncaught "AOS is not defined" error.
-    if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 800,
-            once: true,
-            offset: 100,
-            easing: 'ease-out-cubic'
-        });
-    }
 
     // Video data
     const videoData = [
@@ -65,447 +55,322 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     ];
 
-    // DOM Elements
-    const galleryGrid = document.getElementById('gallery-grid');
-    const videoPlayerModal = document.getElementById('videoPlayerModal');
-    const modalCloseBtn = document.querySelector('.modal-close');
-    const modalVideoTitle = document.getElementById('modal-video-title');
-    const modalVideoThumb = document.getElementById('modal-video-thumb');
-    const modalVideoPlayer = document.getElementById('modal-video-player');
-    const modalDuration = document.getElementById('modal-duration');
-    const modalDate = document.getElementById('modal-date');
-    const modalDescription = document.getElementById('modal-description');
-    const videoThumbnailModal = document.getElementById('videoThumbnailModal');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    const playOverlayBtn = document.querySelector('.play-button');
-    const previewPlayBtn = document.querySelector('.preview-play-btn');
-    const previewThumbnail = document.querySelector('.preview-thumbnail');
+    // ---------- helpers ----------
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const seconds = d => String(d).split(':').map(n => parseInt(n, 10) || 0).reduce((a, n) => a * 60 + n, 0);
 
-    // Hero stats elements
-    const reelStatsEl = document.getElementById('reelStats');
-    const reelStatItems = document.querySelectorAll('.reel-stat');
+    // ---------- elements ----------
+    const grid = $('#gallery-grid');
+    const modal = $('#videoPlayerModal');
+    const panel = $('.vx-panel', modal);
+    const closeBtn = $('.modal-close', modal);
+    const player = $('#modal-video-player');
+    const poster = $('#videoThumbnailModal');
+    const posterImg = $('#modal-video-thumb');
+    const bigPlay = $('#vxBigPlay');
+    const nextList = $('#vxNextList');
+    const toast = $('#vxToast');
+    const seg = $('#vxSeg');
+    const segThumb = $('.vx-seg-thumb', seg);
+    const segBtns = $$('.vx-seg-btn');
+    const viewBtns = $$('.view-btn');
 
-    // Filter elements
-    const filterTags = document.querySelectorAll('.filter-tag');
-    const viewBtns = document.querySelectorAll('.view-btn');
+    let filter = 'all';
+    let view = 'grid';
+    let current = null;
+    let lastFocus = null;
 
-    // State variables
-    let currentVideo = null;
-    let isPlaying = false;
-    let currentFilter = 'all';
-    let currentView = 'grid';
-    let hasStatsAnimated = false;
+    // ---------- hero: featured stage ----------
+    const featured = videoData[0];
+    const stage = $('#vxStage');
+    if (featured && stage) {
+        $('#vxStageImg').src = featured.thumbnail;
+        $('#vxStageImg').alt = featured.title;
+        $('#vxStageTitle').textContent = featured.title;
+        $('#vxStageMeta').textContent = featured.duration + ' · ' + cap(featured.category) + ' film';
+        const open = () => openPlayer(featured.id);
+        stage.addEventListener('click', open);
+        stage.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+        const pf = $('#vxPlayFeatured');
+        if (pf) pf.addEventListener('click', open);
 
-    // Initialize
-    initVideoGallery();
-    initParticles();
-    initEventListeners();
-    initStatsAnimation();
-    setFeaturedVideo();
+        if (finePointer && !reduce) {
+            stage.addEventListener('pointermove', e => {
+                const r = stage.getBoundingClientRect();
+                stage.style.setProperty('--ry', (((e.clientX - r.left) / r.width - 0.5) * 8).toFixed(2) + 'deg');
+                stage.style.setProperty('--rx', ((0.5 - (e.clientY - r.top) / r.height) * 6).toFixed(2) + 'deg');
+            });
+            stage.addEventListener('pointerleave', () => { stage.style.setProperty('--rx', '0deg'); stage.style.setProperty('--ry', '0deg'); });
+        }
 
-    // Initialize video gallery
-    function initVideoGallery() {
-        galleryGrid.innerHTML = '';
-        const filteredVideos = videoData.filter(video =>
-            currentFilter === 'all' || video.category === currentFilter
-        );
-
-        filteredVideos.forEach(video => {
-            const videoCard = createVideoCard(video);
-            galleryGrid.appendChild(videoCard);
-        });
-
-        // Update view mode
-        galleryGrid.className = `gallery-grid ${currentView}`;
-
-        // Add AOS animation to cards
-        document.querySelectorAll('.video-card').forEach((card, index) => {
-            card.setAttribute('data-aos', 'fade-up');
-            card.setAttribute('data-aos-delay', `${index * 100}`);
-        });
-
-        // Re-initialize AOS for new elements
-        if (typeof AOS !== 'undefined') AOS.refresh();
-
-        // Newly-created cards carry the .liquid-glass class, so re-run the
-        // cursor-follow refraction binder (defined in script.js) to pick
-        // them up — it no-ops on panels it has already bound.
-        if (typeof initContactLiquidGlass === 'function') {
-            initContactLiquidGlass();
+        // running timecode (only while on screen)
+        const tc = $('#vxTimecode');
+        let tcOn = true;
+        if ('IntersectionObserver' in window) new IntersectionObserver(es => { tcOn = es[0].isIntersecting; }).observe(stage);
+        if (tc && !reduce) {
+            const t0 = performance.now();
+            setInterval(() => {
+                if (!tcOn || document.hidden) return;
+                const t = (performance.now() - t0) / 1000;
+                const p = n => String(n).padStart(2, '0');
+                tc.textContent = `${p(Math.floor(t / 3600) % 100)}:${p(Math.floor(t / 60) % 60)}:${p(Math.floor(t) % 60)}:${p(Math.floor((t % 1) * 25))}`;
+            }, 80);
         }
     }
 
-    // Create video card element
-    function createVideoCard(video) {
-        const card = document.createElement('div');
-        card.className = 'video-card liquid-glass';
-        card.dataset.id = video.id;
-        card.dataset.category = video.category;
+    // ---------- hero stats (count-up, computed from the data) ----------
+    (function initStats() {
+        const wrap = $('#reelStats');
+        if (!wrap) return;
+        const totalMin = Math.max(1, Math.round(videoData.reduce((s, v) => s + seconds(v.duration), 0) / 60));
+        const targets = { statVideos: videoData.length, statMinutes: totalMin, statGenres: new Set(videoData.map(v => v.category)).size };
+        let done = false;
+        const run = () => {
+            if (done) return; done = true;
+            Object.keys(targets).forEach(id => {
+                const el = document.getElementById(id); if (!el) return;
+                const suffix = el.dataset.suffix || '', start = performance.now(), dur = 1100;
+                const tick = now => {
+                    const p = Math.min((now - start) / dur, 1);
+                    el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * targets[id]) + suffix;
+                    if (p < 1) requestAnimationFrame(tick);
+                };
+                requestAnimationFrame(tick);
+            });
+            $$('.vx-stat', wrap).forEach((c, i) => setTimeout(() => c.classList.add('is-visible'), i * 130));
+        };
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { run(); io.disconnect(); } }, { threshold: 0.3 });
+            io.observe(wrap);
+        } else run();
+    })();
 
-        card.innerHTML = `
-            <div class="video-thumb">
-                <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
-                <div class="video-overlay">
-                    <div class="play-icon">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>
-                <span class="video-duration-badge"><i class="far fa-clock"></i> ${video.duration}</span>
+    // ---------- filter counts + sliding thumb ----------
+    $$('[data-count]').forEach(b => {
+        const k = b.dataset.count;
+        b.textContent = k === 'all' ? videoData.length : videoData.filter(v => v.category === k).length;
+    });
+
+    function moveThumb() {
+        const on = segBtns.find(b => b.classList.contains('active'));
+        if (!on || !segThumb) return;
+        segThumb.style.setProperty('--x', on.offsetLeft + 'px');
+        segThumb.style.setProperty('--w', on.offsetWidth + 'px');
+        // keep the active tab visible inside the scroller on small screens
+        const left = on.offsetLeft - (seg.clientWidth - on.offsetWidth) / 2;
+        seg.scrollTo({ left: Math.max(0, left), behavior: reduce ? 'auto' : 'smooth' });
+    }
+
+    // ---------- gallery ----------
+    function cardHTML(v, i) {
+        return `
+        <article class="vx-card vx-glass" data-id="${esc(v.id)}" data-category="${esc(v.category)}" style="--i:${i}" tabindex="0" aria-label="Play ${esc(v.title)}">
+            <div class="vx-card-media">
+                <img src="${esc(v.thumbnail)}" alt="${esc(v.title)} thumbnail" loading="lazy">
+                <span class="vx-card-play"><i class="fas fa-play"></i></span>
+                <span class="vx-dur"><i class="far fa-clock"></i> ${esc(v.duration)}</span>
             </div>
-            <div class="video-info">
-                <div class="video-meta">
-                    <span class="video-category">${video.category.charAt(0).toUpperCase() + video.category.slice(1)}</span>
-                    <span class="video-date">${video.date}</span>
+            <div class="vx-card-body">
+                <div class="vx-card-meta">
+                    <span class="vx-chip" data-cat="${esc(v.category)}">${esc(cap(v.category))}</span>
+                    <span>${esc(v.date)}</span>
                 </div>
-                <h3>${video.title}</h3>
-                <p>${video.description.substring(0, 100)}...</p>
-                <div class="video-description">${video.description}</div>
-                <div class="video-actions">
-                    <button class="action-btn watch-btn primary" data-id="${video.id}">
-                        <i class="fas fa-play"></i>
-                        Watch Now
-                    </button>
-                    <button class="action-btn details-btn" data-id="${video.id}">
-                        <i class="fas fa-info-circle"></i>
-                        Details
-                    </button>
+                <h3>${esc(v.title)}</h3>
+                <p>${esc(v.description)}</p>
+                <div class="vx-card-foot">
+                    <span class="vx-watch watch-btn"><i class="fas fa-play"></i> Watch now</span>
+                    <i class="fas fa-arrow-right vx-arrow"></i>
                 </div>
             </div>
-        `;
-
-        return card;
+        </article>`;
     }
 
-    // Set featured video
-    function setFeaturedVideo() {
-        if (previewThumbnail && videoData[0]) {
-            previewThumbnail.src = videoData[0].thumbnail;
-            previewThumbnail.alt = videoData[0].title;
-        }
+    let cardObserver = null;
+    function render() {
+        const list = videoData.filter(v => filter === 'all' || v.category === filter);
+        grid.dataset.filter = filter;
+        grid.dataset.view = view;
+        grid.innerHTML = list.length ? list.map(cardHTML).join('') : '<div class="vx-empty">No videos in this category yet.</div>';
+        const countEl = $('#vxCount');
+        if (countEl) countEl.textContent = String(list.length).padStart(2, '0') + (list.length === 1 ? ' cut' : ' cuts');
+
+        const cards = $$('.vx-card', grid);
+        if (cardObserver) cardObserver.disconnect();
+        const reveal = c => {
+            c.classList.add('is-in');
+            c.addEventListener('animationend', () => c.classList.add('is-done'), { once: true });
+            if (reduce) c.classList.add('is-done');
+        };
+        if ('IntersectionObserver' in window && !reduce) {
+            cardObserver = new IntersectionObserver(es => es.forEach(e => {
+                if (e.isIntersecting) { reveal(e.target); cardObserver.unobserve(e.target); }
+            }), { threshold: 0.12 });
+            cards.forEach(c => cardObserver.observe(c));
+        } else cards.forEach(reveal);
     }
 
-    // Parse an "M:SS" (or "H:MM:SS") duration string into whole seconds.
-    function parseDurationToSeconds(duration) {
-        return String(duration)
-            .split(':')
-            .map(n => parseInt(n, 10) || 0)
-            .reduce((acc, n) => acc * 60 + n, 0);
-    }
-
-    // Initialize stats animation — fires once the hero stats row is in view.
-    function initStatsAnimation() {
-        if (!reelStatsEl) return;
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !hasStatsAnimated) {
-                    animateStats();
-                    hasStatsAnimated = true;
-                    observer.disconnect();
-                }
-            });
-        }, { threshold: 0.4 });
-        observer.observe(reelStatsEl);
-    }
-
-    // Animate the hero stats with a count-up effect. Targets are computed
-    // live from videoData — not hardcoded — so the numbers always match the
-    // actual portfolio content (fixes the counters silently freezing at 0 /
-    // never advancing, since the old hardcoded targets referenced a
-    // .stat-number list that no longer matched the markup).
-    function animateStats() {
-        const totalSeconds = videoData.reduce((sum, v) => sum + parseDurationToSeconds(v.duration), 0);
-        const totalMinutes = Math.max(1, Math.round(totalSeconds / 60));
-        const genreCount = new Set(videoData.map(v => v.category)).size;
-
-        const stats = [
-            { id: 'statVideos', target: videoData.length },
-            { id: 'statMinutes', target: totalMinutes },
-            { id: 'statGenres', target: genreCount }
-        ];
-
-        stats.forEach(stat => {
-            const el = document.getElementById(stat.id);
-            if (!el) return;
-            const suffix = el.dataset.suffix || '';
-            const duration = 1100;
-            const start = performance.now();
-            function tick(now) {
-                const p = Math.min((now - start) / duration, 1);
-                const eased = 1 - Math.pow(1 - p, 3);
-                el.textContent = Math.round(eased * stat.target) + suffix;
-                if (p < 1) requestAnimationFrame(tick);
-            }
-            requestAnimationFrame(tick);
+    // card interactions (delegated)
+    grid.addEventListener('click', e => {
+        const card = e.target.closest('.vx-card');
+        if (card) openPlayer(card.dataset.id);
+    });
+    grid.addEventListener('keydown', e => {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('vx-card')) { e.preventDefault(); openPlayer(e.target.dataset.id); }
+    });
+    if (finePointer && !reduce) {
+        grid.addEventListener('pointermove', e => {
+            const card = e.target.closest('.vx-card.is-done');
+            if (!card) return;
+            const r = card.getBoundingClientRect();
+            const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+            card.style.setProperty('--ry', ((px - 0.5) * 5).toFixed(2) + 'deg');
+            card.style.setProperty('--rx', ((0.5 - py) * 4).toFixed(2) + 'deg');
+            card.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+            card.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
         });
-
-        // Stagger the stat chips into view.
-        reelStatItems.forEach((item, index) => {
-            setTimeout(() => item.classList.add('is-visible'), index * 130);
+        grid.addEventListener('pointerout', e => {
+            const card = e.target.closest('.vx-card');
+            if (card && !card.contains(e.relatedTarget)) { card.style.setProperty('--rx', '0deg'); card.style.setProperty('--ry', '0deg'); }
         });
     }
 
-    // Initialize particles
-    function initParticles() {
-        const particlesContainer = document.getElementById('videoParticles');
-        const particleCount = 20;
+    segBtns.forEach(b => b.addEventListener('click', () => {
+        if (b.dataset.filter === filter) return;
+        segBtns.forEach(x => { const on = x === b; x.classList.toggle('active', on); x.setAttribute('aria-selected', on ? 'true' : 'false'); });
+        filter = b.dataset.filter;
+        moveThumb();
+        render();
+    }));
+    viewBtns.forEach(b => b.addEventListener('click', () => {
+        viewBtns.forEach(x => x.classList.toggle('active', x === b));
+        view = b.dataset.view;
+        render();
+    }));
+    window.addEventListener('resize', moveThumb);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveThumb);
 
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'video-particle';
+    // ---------- toolkit rings ----------
+    const rings = $$('.vx-ring-card');
+    const fillRing = c => { const r = $('.vx-ring', c); if (r) r.style.setProperty('--p', c.dataset.level || 0); };
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { fillRing(e.target); io.unobserve(e.target); } }), { threshold: 0.4 });
+        rings.forEach(c => io.observe(c));
+    } else rings.forEach(fillRing);
 
-            const size = Math.random() * 3 + 1;
-            const posX = Math.random() * 100;
-            const posY = Math.random() * 100;
-            const duration = Math.random() * 20 + 10;
-            const delay = Math.random() * 5;
-
-            particle.style.cssText = `
-                width: ${size}px;
-                height: ${size}px;
-                left: ${posX}%;
-                top: ${posY}%;
-                animation-delay: ${delay}s;
-                animation-duration: ${duration}s;
-            `;
-
-            particlesContainer.appendChild(particle);
-        }
+    // ---------- player ----------
+    function say(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(say.t);
+        say.t = setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    // Initialize event listeners
-    function initEventListeners() {
-        // Filter tags
-        filterTags.forEach(tag => {
-            tag.addEventListener('click', () => {
-                filterTags.forEach(t => t.classList.remove('active'));
-                tag.classList.add('active');
-                currentFilter = tag.dataset.filter;
-                initVideoGallery();
-            });
-        });
-
-        // View toggle
-        viewBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                viewBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentView = btn.dataset.view;
-                galleryGrid.className = `gallery-grid ${currentView}`;
-            });
-        });
-
-        // Video card clicks
-        document.addEventListener('click', (e) => {
-            // Watch button
-            if (e.target.closest('.watch-btn')) {
-                const videoId = e.target.closest('.watch-btn').dataset.id;
-                openVideoPlayer(videoId);
-            }
-
-            // Details button
-            if (e.target.closest('.details-btn')) {
-                const videoId = e.target.closest('.details-btn').dataset.id;
-                openVideoDetails(videoId);
-            }
-
-            // Video card click
-            if (e.target.closest('.video-card') &&
-                !e.target.closest('.action-btn') &&
-                !e.target.closest('.video-actions')) {
-                const videoId = e.target.closest('.video-card').dataset.id;
-                openVideoPlayer(videoId);
-            }
-
-            // Play overlay click
-            if (e.target.closest('.play-button') || e.target.closest('.play-overlay')) {
-                playCurrentVideo();
-            }
-
-            // Preview play button
-            if (e.target.closest('.preview-play-btn') || e.target.closest('.preview-container')) {
-                openVideoPlayer('idol');
-            }
-        });
-
-        // Modal close
-        modalCloseBtn.addEventListener('click', closeVideoPlayer);
-
-        // Play/Pause button
-        playPauseBtn.addEventListener('click', togglePlayPause);
-
-        // Fullscreen button
-        fullscreenBtn.addEventListener('click', toggleFullscreen);
-
-        // Close modal on overlay click
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-overlay')) {
-                closeVideoPlayer();
-            }
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && videoPlayerModal.classList.contains('active')) {
-                closeVideoPlayer();
-            }
-        });
-
-        // Handle fullscreen change
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+    function fillUpNext() {
+        nextList.innerHTML = videoData.filter(v => v.id !== current.id).map(v => `
+            <button type="button" class="vx-next-item" data-id="${esc(v.id)}">
+                <img src="${esc(v.thumbnail)}" alt="" loading="lazy">
+                <span><b>${esc(v.title)}</b>${esc(v.duration)} · ${esc(cap(v.category))}</span>
+            </button>`).join('');
     }
 
-    // Handle fullscreen change
-    function handleFullscreenChange() {
-        if (!document.fullscreenElement &&
-            !document.webkitFullscreenElement &&
-            !document.mozFullScreenElement &&
-            !document.msFullscreenElement) {
-            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-        }
+    function load(v) {
+        current = v;
+        $('#modal-video-title').textContent = v.title;
+        $('#modal-description').textContent = v.description;
+        $('#modal-cat').textContent = cap(v.category);
+        $('#modal-cat').dataset.cat = v.category;
+        $('#modal-duration').innerHTML = '<i class="far fa-clock"></i> ' + esc(v.duration);
+        $('#modal-date').innerHTML = '<i class="far fa-calendar"></i> ' + esc(v.date);
+        posterImg.src = v.thumbnail;
+        posterImg.alt = v.title;
+        poster.classList.remove('hidden');
+        player.src = 'https://drive.google.com/file/d/' + v.videoId + '/preview';
+        fillUpNext();
     }
 
-    // Open video player
-    function openVideoPlayer(videoId) {
-        currentVideo = videoData.find(v => v.id === videoId);
-
-        if (!currentVideo) return;
-
-        // Update modal content
-        modalVideoTitle.textContent = currentVideo.title;
-        modalVideoThumb.src = currentVideo.thumbnail;
-        modalVideoThumb.alt = currentVideo.title;
-        modalDuration.innerHTML = `<i class="far fa-clock"></i> ${currentVideo.duration}`;
-        modalDate.innerHTML = `<i class="far fa-calendar"></i> ${currentVideo.date}`;
-        modalDescription.textContent = currentVideo.description;
-
-        // Set video source
-        modalVideoPlayer.src = `https://drive.google.com/file/d/${currentVideo.videoId}/preview`;
-
-        // Show modal
-        videoPlayerModal.classList.add('active');
+    function openPlayer(id) {
+        const v = videoData.find(x => x.id === id);
+        if (!v) return;
+        lastFocus = document.activeElement;
+        load(v);
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-
-        // Reset player state
-        isPlaying = false;
-        videoThumbnailModal.classList.remove('hidden');
-        modalVideoPlayer.style.display = 'none';
-        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-
-        // Add animation
-        videoPlayerModal.style.animation = 'none';
-        setTimeout(() => {
-            videoPlayerModal.style.animation = 'fadeIn 0.3s ease';
-        }, 10);
+        setTimeout(() => bigPlay.focus({ preventScroll: true }), 80);
     }
 
-    // Open video details
-    function openVideoDetails(videoId) {
-        currentVideo = videoData.find(v => v.id === videoId);
-
-        if (!currentVideo) return;
-
-        // For now, just open the player
-        openVideoPlayer(videoId);
-    }
-
-    // Close video player
-    function closeVideoPlayer() {
-        videoPlayerModal.classList.remove('active');
+    function closePlayer() {
+        if (!modal.classList.contains('active')) return;
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
-
-        // Pause video
-        if (isPlaying) {
-            modalVideoPlayer.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-            isPlaying = false;
-        }
-
-        // Reset video source
-        modalVideoPlayer.src = '';
+        if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
+        setTimeout(() => { if (!modal.classList.contains('active')) player.src = 'about:blank'; }, 400);
+        if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
     }
 
-    // Play current video
-    function playCurrentVideo() {
-        if (!currentVideo) return;
-
-        // Hide thumbnail and show player
-        videoThumbnailModal.classList.add('hidden');
-        modalVideoPlayer.style.display = 'block';
-
-        // Play video
-        modalVideoPlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        isPlaying = true;
-        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-
-        // Track view
-        trackVideoView(currentVideo.id);
+    function step(dir) {
+        if (!current) return;
+        const i = videoData.findIndex(v => v.id === current.id);
+        load(videoData[(i + dir + videoData.length) % videoData.length]);
     }
 
-    // Toggle play/pause
-    function togglePlayPause() {
-        if (!currentVideo) return;
+    bigPlay.addEventListener('click', () => poster.classList.add('hidden'));
+    poster.addEventListener('click', e => { if (e.target === poster || e.target === posterImg) poster.classList.add('hidden'); });
+    closeBtn.addEventListener('click', closePlayer);
+    $('.modal-overlay', modal).addEventListener('click', closePlayer);
+    $('#vxPrev').addEventListener('click', () => step(-1));
+    $('#vxNext').addEventListener('click', () => step(1));
+    nextList.addEventListener('click', e => {
+        const b = e.target.closest('.vx-next-item');
+        if (b) { const v = videoData.find(x => x.id === b.dataset.id); if (v) load(v); }
+    });
 
-        if (isPlaying) {
-            modalVideoPlayer.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        } else {
-            modalVideoPlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        }
-
-        isPlaying = !isPlaying;
-    }
-
-    // Toggle fullscreen
-    function toggleFullscreen() {
-        const videoContainer = document.querySelector('.video-container');
-
+    $('#fullscreenBtn').addEventListener('click', () => {
+        const el = $('#vxScreen');
+        poster.classList.add('hidden');
         if (!document.fullscreenElement) {
-            if (videoContainer.requestFullscreen) {
-                videoContainer.requestFullscreen();
-            } else if (videoContainer.webkitRequestFullscreen) {
-                videoContainer.webkitRequestFullscreen();
-            } else if (videoContainer.mozRequestFullScreen) {
-                videoContainer.mozRequestFullScreen();
-            } else if (videoContainer.msRequestFullscreen) {
-                videoContainer.msRequestFullscreen();
-            }
-            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-        }
-    }
+            (el.requestFullscreen || el.webkitRequestFullscreen || function () { say('Fullscreen is not supported here'); }).call(el);
+        } else if (document.exitFullscreen) document.exitFullscreen();
+    });
 
-    // Track video view
-    function trackVideoView(videoId) {
-        console.log(`Video ${videoId} viewed`);
+    $('#vxShare').addEventListener('click', async () => {
+        const url = location.href.split('#')[0];
+        try {
+            if (navigator.share) { await navigator.share({ title: current.title, url }); return; }
+            await navigator.clipboard.writeText(url);
+            say('Link copied to clipboard');
+        } catch (err) { if (err && err.name !== 'AbortError') say('Could not share — copy the address bar link'); }
+    });
 
-        // Update local data for demo
-        const video = videoData.find(v => v.id === videoId);
-        if (video) {
-            video.views++;
+    document.addEventListener('keydown', e => {
+        if (!modal.classList.contains('active')) return;
+        if (e.key === 'Escape') closePlayer();
+        else if (e.key === 'ArrowRight' && !e.target.closest('iframe')) step(1);
+        else if (e.key === 'ArrowLeft' && !e.target.closest('iframe')) step(-1);
+        else if (e.key === 'Tab') {   // keep focus inside the dialog
+            const f = $$('button, [href], [tabindex]:not([tabindex="-1"])', panel).filter(x => x.offsetParent !== null);
+            if (!f.length) return;
+            const first = f[0], last = f[f.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
         }
-    }
+    });
 
-    // Add fade-in animation for the video player modal
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    `;
-    document.head.appendChild(style);
+    // swipe the sheet down to dismiss (mobile)
+    let sy = null;
+    panel.addEventListener('touchstart', e => { sy = panel.scrollTop <= 0 ? e.touches[0].clientY : null; }, { passive: true });
+    panel.addEventListener('touchend', e => {
+        if (sy != null && e.changedTouches[0].clientY - sy > 110) closePlayer();
+        sy = null;
+    }, { passive: true });
+
+    // ---------- init ----------
+    render();
+    moveThumb();
 });
