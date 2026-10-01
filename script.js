@@ -1,5 +1,7 @@
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', function () {
+    initPageTransitions();
+    initThemeSwitcher();
     initCinemaIntro();
     initSplitText();
     initializeNavigation();
@@ -19,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initLanguageRings();
     initLanguagePassport();
     initProjectsScroller();
+    initProjectsShowcase();
     initContactLiquidGlass();
     updateCurrentYear();
 });
@@ -33,6 +36,7 @@ function initCinemaIntro() {
     const intro = document.getElementById('cinemaIntro');
     if (!intro) return;
 
+    if (window.__pt) { sessionStorage.setItem('cinemaIntroShown', '1'); return; } // arrived via page transition
     if (sessionStorage.getItem('cinemaIntroShown')) return; // stays display:none
     sessionStorage.setItem('cinemaIntroShown', '1');
 
@@ -409,7 +413,7 @@ function initProjectsScroller() {
     if (!section || !track || !sticky) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isDesktop = () => window.innerWidth >= 900;
+    const isDesktop = () => false; // desktop now uses initProjectsShowcase()
 
     function updateDesktop() {
         if (!isDesktop() || prefersReducedMotion) return;
@@ -719,14 +723,13 @@ function initializeTheme() {
     document.documentElement.classList.toggle('light-mode', currentTheme === 'light');
     updateThemeIndicator();
 
-    themeToggle.addEventListener('click', () => {
-        const htmlEl = document.documentElement;
-        htmlEl.classList.toggle('light-mode');
-
-        const theme = htmlEl.classList.contains('light-mode') ? 'light' : 'dark';
-        localStorage.setItem('theme', theme);
-        updateThemeIndicator();
+    themeToggle.addEventListener('click', (e) => {
+        const r = themeToggle.getBoundingClientRect();
+        let x = e.clientX, y = e.clientY;
+        if (!x && !y) { x = r.left + r.width / 2; y = r.top + r.height / 2; }
+        if (window.switchTheme) window.switchTheme(x, y);
     });
+    document.addEventListener('themechange', updateThemeIndicator);
 
     function updateThemeIndicator() {
         themeIndicator.textContent = document.documentElement.classList.contains('light-mode')
@@ -807,6 +810,10 @@ function initializeScrollEffects() {
         const scrolled = height > 0 ? Math.min(winScroll / height, 1) : 0;
         bar.style.transform = `scaleX(${scrolled})`;
     }
+    const navEl = document.querySelector('nav[aria-label="Main navigation"]');
+    const navState = () => navEl && navEl.classList.toggle('is-scrolled', window.scrollY > 24);
+    window.addEventListener('scroll', navState, { passive: true });
+    navState();
     window.addEventListener('scroll', () => {
         if (!ticking) {
             ticking = true;
@@ -917,7 +924,14 @@ function initializePhotoCompanion() {
             overAbout = ar.top < window.innerHeight * 0.75 && ar.bottom > window.innerHeight * 0.25;
         }
         frame.classList.toggle('is-over-about', pinned && overAbout);
-        frame.classList.toggle('is-hidden', pinned && nearBottom);
+        // also step aside over the Projects showcase, where it would cover the info column
+        let overProjects = false;
+        const projSec = document.getElementById('projects');
+        if (projSec && window.innerWidth >= 900) {
+            const pr = projSec.getBoundingClientRect();
+            overProjects = pr.top < window.innerHeight * 0.9 && pr.bottom > window.innerHeight * 0.1;
+        }
+        frame.classList.toggle('is-hidden', pinned && (nearBottom || overProjects));
     }
 
     function onScroll() {
@@ -1083,4 +1097,380 @@ function initContactLiquidGlass() {
 function updateCurrentYear() {
     const el = document.getElementById('currentYear');
     if (el) el.textContent = new Date().getFullYear();
+}
+
+// ==================== THEME SWITCH (animated) ====================
+// window.switchTheme(x, y) flips the theme with a circular reveal that
+// grows from the pressed button. Uses the View Transitions API where
+// available, otherwise a colour-wipe overlay; always adds a glass ripple
+// ring and spins the toggle icon. Reduced-motion users get an instant swap.
+function initThemeSwitcher() {
+    if (window.switchTheme) return;
+    const root = document.documentElement;
+    let busy = false;
+
+    function apply() {
+        root.classList.toggle('light-mode');
+        try { localStorage.setItem('theme', root.classList.contains('light-mode') ? 'light' : 'dark'); } catch (e) { }
+        document.dispatchEvent(new CustomEvent('themechange'));
+    }
+
+    window.switchTheme = function (x, y) {
+        if (busy) return;
+        const W = window.innerWidth, H = window.innerHeight;
+        if (typeof x !== 'number' || (x === 0 && y === 0)) { x = W - 40; y = 40; }
+        const radius = Math.hypot(Math.max(x, W - x), Math.max(y, H - y));
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { apply(); return; }
+        busy = true;
+
+        // glass ripple ring
+        const ring = document.createElement('div');
+        ring.className = 'theme-ripple';
+        ring.style.setProperty('--tx', x + 'px');
+        ring.style.setProperty('--ty', y + 'px');
+        ring.style.setProperty('--s', (radius * 2 / 40).toFixed(2));
+        document.body.appendChild(ring);
+        setTimeout(() => ring.remove(), 900);
+
+        root.classList.add('theme-anim');
+        const done = () => { busy = false; root.classList.remove('theme-vt'); setTimeout(() => root.classList.remove('theme-anim'), 300); };
+        const ease = 'cubic-bezier(0.65, 0, 0.2, 1)';
+
+        if (document.startViewTransition) {
+            root.classList.add('theme-vt');
+            let vt;
+            try { vt = document.startViewTransition(apply); } catch (e) { apply(); done(); return; }
+            vt.ready.then(() => {
+                root.animate(
+                    { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+                    { duration: 800, easing: ease, pseudoElement: '::view-transition-new(root)' }
+                );
+            }).catch(() => { });
+            vt.finished.then(done, done);
+        } else {
+            // Fallback: wipe in the incoming theme's base colour, swap underneath, fade out.
+            const goingLight = !root.classList.contains('light-mode');
+            const wipe = document.createElement('div');
+            wipe.className = 'theme-wipe';
+            wipe.style.background = goingLight ? '#eeecf6' : '#0b0b0d';
+            wipe.style.clipPath = `circle(0px at ${x}px ${y}px)`;
+            document.body.appendChild(wipe);
+            const a = wipe.animate(
+                { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+                { duration: 650, easing: ease, fill: 'forwards' }
+            );
+            a.onfinish = () => {
+                apply();
+                wipe.animate({ opacity: [1, 0] }, { duration: 350, fill: 'forwards' }).onfinish = () => { wipe.remove(); done(); };
+            };
+        }
+    };
+}
+
+// ==================== PAGE TRANSITIONS ====================
+// Moving between index / certificates / video plays a slat-wipe: panels
+// sweep across in the direction of travel (forward = right-to-left) with
+// the destination's name, then the new page reveals itself the same way.
+// A tiny inline <head> script adds html.pt-cover on arrival so there is
+// never a flash of un-covered content between the two pages.
+function initPageTransitions() {
+    const PAGES = {
+        'index.html': { i: 0, name: 'Home', icon: 'fa-house' },
+        'certificates.html': { i: 1, name: 'Certificates', icon: 'fa-certificate' },
+        'video.html': { i: 2, name: 'Videos', icon: 'fa-video' }
+    };
+    const root = document.documentElement;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pageOf = p => {
+        const f = (p.split('/').pop() || 'index.html').toLowerCase();
+        return PAGES[f] ? f : (f === '' ? 'index.html' : f);
+    };
+    const cur = pageOf(location.pathname);
+    if (!PAGES[cur]) { root.classList.remove('pt-cover'); return; }
+
+    const SLATS = 7;
+    const pt = document.createElement('div');
+    pt.className = 'pt';
+    pt.setAttribute('aria-hidden', 'true');
+    pt.innerHTML = '<div class="pt-slats">' +
+        Array.from({ length: SLATS }, (_, k) => `<i class="pt-slat" style="--i:${k}"></i>`).join('') +
+        '</div><div class="pt-label"><span class="pt-icon"><i class="fas"></i></span><span class="pt-name"></span><span class="pt-line"></span></div>';
+    document.body.appendChild(pt);
+
+    function setLabel(file) {
+        pt.querySelector('.pt-icon i').className = 'fas ' + PAGES[file].icon;
+        pt.querySelector('.pt-name').textContent = PAGES[file].name;
+    }
+    function reset() {
+        pt.className = 'pt';
+        pt.style.removeProperty('--dir');
+    }
+
+    // ---- arrival: we're covered by html.pt-cover; swap to the slats and reveal
+    const arrival = window.__pt;
+    if (arrival && !reduce) {
+        pt.style.setProperty('--dir', arrival.d === -1 ? -1 : 1);
+        setLabel(cur);
+        pt.className = 'pt is-on is-covered';
+        root.classList.remove('pt-cover');
+        setTimeout(() => {
+            pt.classList.remove('is-covered');
+            pt.classList.add('is-out');
+            setTimeout(reset, 480 + SLATS * 40 + 150);
+        }, 260);
+    } else {
+        root.classList.remove('pt-cover');
+    }
+
+    // ---- departure
+    let leaving = false;
+    function go(href, file) {
+        if (leaving) return;
+        if (reduce) { location.href = href; return; }
+        leaving = true;
+        const dir = PAGES[file].i >= PAGES[cur].i ? 1 : -1;
+        try { sessionStorage.setItem('pt', JSON.stringify({ d: dir, f: file })); } catch (e) { }
+        reset();
+        pt.style.setProperty('--dir', dir);
+        setLabel(file);
+        pt.classList.add('is-on');
+        void pt.offsetWidth;
+        pt.classList.add('is-in');
+        setTimeout(() => { location.href = href; }, 480 + SLATS * 40 + 60);
+        // safety: if navigation is blocked, don't trap the visitor
+        setTimeout(() => { leaving = false; reset(); try { sessionStorage.removeItem('pt'); } catch (e) { } }, 5000);
+    }
+
+    document.addEventListener('click', e => {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        const a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        if (a.target && a.target !== '_self') return;
+        if (a.hasAttribute('download')) return;
+        let url;
+        try { url = new URL(a.href, location.href); } catch (err) { return; }
+        if (url.origin !== location.origin) return;
+        const file = pageOf(url.pathname);
+        if (!PAGES[file] || file === cur) return;   // same page: normal behaviour
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        go(url.href, file);
+    }, true);
+
+    // back/forward cache restore: never come back to a covered screen
+    window.addEventListener('pageshow', ev => {
+        if (ev.persisted) { leaving = false; reset(); root.classList.remove('pt-cover'); }
+    });
+}
+
+// ==================== PROJECTS SHOWCASE (desktop) ====================
+// Builds an interactive stage from the existing project cards (single
+// source of truth): a glass index with a sliding lens + autoplay progress,
+// a 3D-tilting media panel with directional wipe transitions, and an info
+// column with staggered word-by-word title reveals.
+function initProjectsShowcase() {
+    const section = document.querySelector('.projects-scroll-section');
+    const track = document.getElementById('projectsTrack');
+    if (!section || !track || document.getElementById('pjStage')) return;
+
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const KNOWN = ['live', 'progress', 'planned'];
+    const items = Array.from(track.querySelectorAll('.project-card-v2')).map(c => {
+        const img = c.querySelector('.project-thumb img');
+        const st = c.querySelector('.project-status');
+        return {
+            end: c.classList.contains('project-card-end'),
+            title: ((c.querySelector('h3') || {}).textContent || 'More').trim(),
+            desc: ((c.querySelector('p') || {}).textContent || '').trim(),
+            img: img ? img.getAttribute('src') : '',
+            alt: img ? img.getAttribute('alt') : '',
+            status: st ? st.textContent.trim() : '',
+            sClass: st ? (KNOWN.find(k => st.classList.contains(k)) || '') : '',
+            tech: Array.from(c.querySelectorAll('.tech-stack span, .project-tech span, .tech-tag')).map(s => s.textContent.trim()),
+            links: Array.from(c.querySelectorAll('.project-links a, .project-end-inner a')).map(a => ({
+                href: a.getAttribute('href'),
+                html: a.querySelector('i') ? a.innerHTML : '<i class="fab fa-github"></i> ' + esc(a.textContent.trim())
+            }))
+        };
+    }).filter(it => it.title);
+    if (!items.length) return;
+
+    const pad = n => String(n + 1).padStart(2, '0');
+    const wrap = document.createElement('div');
+    wrap.className = 'container pj-wrap';
+    wrap.innerHTML = `
+      <div class="pj-stage" id="pjStage" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Projects showcase — use arrow keys to switch">
+        <span class="pj-blob a"></span><span class="pj-blob b"></span>
+        <div class="pj-list" role="tablist" aria-orientation="vertical">
+          <span class="pj-lens" aria-hidden="true"></span>
+          ${items.map((it, i) => `
+            <button class="pj-item" role="tab" type="button" data-i="${i}" aria-selected="false">
+              <span class="pj-num">${items[i].end ? '→' : pad(i)}</span>
+              <span class="pj-name">${esc(it.end ? 'More on GitHub' : it.title)}</span>
+              ${it.status ? `<span class="pj-tag ${it.sClass}">${esc(it.status)}</span>` : '<i class="fas fa-arrow-up-right-from-square" style="color:var(--paper-faint);font-size:.8rem"></i>'}
+              <span class="pj-bar"><i></i></span>
+            </button>`).join('')}
+        </div>
+        <div class="pj-view">
+          <div class="pj-media" id="pjMedia">
+            ${items.map((it, i) => `
+              <div class="pj-slide" data-i="${i}">
+                <div class="pj-fallback">${it.end ? '<b><i class="fab fa-github" style="font-size:.8em"></i></b>' : `<b>${esc(it.title.charAt(0))}</b>`}<span>${esc(it.end ? 'github.com' : 'preview')}</span></div>
+                ${it.img ? `<img src="${esc(it.img)}" alt="${esc(it.alt)}" loading="lazy" onerror="this.style.display='none'">` : ''}
+              </div>`).join('')}
+            <span class="pj-shade"></span>
+            <span class="pj-status" id="pjStatus"></span>
+            <span class="pj-corner tr"></span><span class="pj-corner bl"></span><span class="pj-corner br"></span>
+          </div>
+          <div class="pj-info" id="pjInfo" aria-live="polite">
+            <div class="pj-count"><b id="pjCur">01</b> / ${pad(items.filter(x => !x.end).length - 1)}</div>
+            <h3 class="pj-title" id="pjTitle"></h3>
+            <p class="pj-desc" id="pjDesc"></p>
+            <div class="pj-tech" id="pjTech"></div>
+            <div class="pj-links" id="pjLinks"></div>
+            <div class="pj-nav">
+              <button type="button" id="pjPrev" aria-label="Previous project"><i class="fas fa-arrow-left"></i></button>
+              <button type="button" id="pjNext" aria-label="Next project"><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    const sticky = section.querySelector('.projects-sticky');
+    section.insertBefore(wrap, sticky || null);
+
+    const stage = wrap.querySelector('#pjStage');
+    const list = Array.from(stage.querySelectorAll('.pj-item'));
+    const slides = Array.from(stage.querySelectorAll('.pj-slide'));
+    const lens = stage.querySelector('.pj-lens');
+    const media = stage.querySelector('#pjMedia');
+    const info = stage.querySelector('#pjInfo');
+    const $ = id => stage.querySelector('#' + id);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const AUTO_MS = 7000;
+    let cur = -1;
+    stage.style.setProperty('--pj-dur', AUTO_MS + 'ms');
+    if (reduce) stage.classList.add('no-auto');
+
+    function placeLens() {
+        const el = list[Math.max(cur, 0)];
+        if (!el) return;
+        lens.style.setProperty('--y', el.offsetTop + 'px');
+        lens.style.setProperty('--h', el.offsetHeight + 'px');
+    }
+
+    function renderInfo(it, k) {
+        $('pjCur').textContent = it.end ? '→' : pad(k);
+        const words = it.title.split(/\s+/);
+        $('pjTitle').innerHTML = words.map((w, wi) => `<span class="w"><span style="--wi:${wi}">${esc(w)}</span></span>`).join('');
+        $('pjDesc').textContent = it.desc;
+        $('pjTech').innerHTML = it.tech.map(t => `<span>${esc(t)}</span>`).join('');
+        $('pjTech').style.display = it.tech.length ? '' : 'none';
+        $('pjLinks').innerHTML = it.links.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noopener">${l.html}</a>`).join('');
+        const st = $('pjStatus');
+        st.className = 'pj-status ' + it.sClass;
+        st.textContent = it.status;
+        st.style.display = it.status ? '' : 'none';
+        Array.from(info.children).forEach((c, n) => c.style.setProperty('--k', n));
+        info.classList.remove('is-in');
+        void info.offsetWidth;
+        info.classList.add('is-in');
+    }
+
+    function select(n, dir) {
+        n = (n + items.length) % items.length;
+        if (n === cur) return;
+        const first = cur === -1;
+        if (!dir) dir = first || n > cur ? 1 : -1;
+        stage.dataset.dir = dir;
+        const prev = cur;
+        cur = n;
+
+        list.forEach((el, i) => {
+            const on = i === n;
+            el.classList.toggle('is-active', on);
+            el.setAttribute('aria-selected', on ? 'true' : 'false');
+            el.tabIndex = on ? 0 : -1;
+        });
+        // restart the autoplay bar
+        const bar = list[n].querySelector('.pj-bar i');
+        bar.style.animation = 'none';
+        void bar.offsetWidth;
+        bar.style.animation = '';
+
+        slides.forEach((s, i) => {
+            s.classList.remove('is-prev', 'no-anim');
+            if (i === n) { s.classList.remove('is-active'); void s.offsetWidth; s.classList.add('is-active'); if (first || reduce) s.classList.add('no-anim'); }
+            else if (i === prev && !reduce) { s.classList.remove('is-active'); s.classList.add('is-prev'); }
+            else s.classList.remove('is-active');
+        });
+        if (prev !== -1) setTimeout(() => slides[prev] && slides[prev].classList.remove('is-prev'), 1000);
+
+        renderInfo(items[n], n);
+        placeLens();
+    }
+
+    list.forEach((el, i) => el.addEventListener('click', () => select(i, i > cur ? 1 : -1)));
+    $('pjNext').addEventListener('click', () => select(cur + 1, 1));
+    $('pjPrev').addEventListener('click', () => select(cur - 1, -1));
+
+    // autoplay: when the active bar completes, advance
+    stage.addEventListener('animationend', e => {
+        if (e.animationName === 'pjFill' && !reduce) select(cur + 1, 1);
+    });
+
+    // pause on hover/focus, and whenever the stage is off-screen
+    const pause = on => stage.classList.toggle('is-paused', on);
+    let hovering = false, visible = true;
+    const sync = () => pause(hovering || !visible || document.hidden);
+    stage.addEventListener('pointerenter', () => { hovering = true; sync(); });
+    stage.addEventListener('pointerleave', () => { hovering = false; sync(); });
+    stage.addEventListener('focusin', () => { hovering = true; sync(); });
+    stage.addEventListener('focusout', () => { hovering = false; sync(); });
+    document.addEventListener('visibilitychange', sync);
+    if ('IntersectionObserver' in window) {
+        new IntersectionObserver(es => { visible = es[0].isIntersecting; sync(); }, { threshold: 0.25 }).observe(stage);
+    }
+
+    // keyboard
+    stage.addEventListener('keydown', e => {
+        const k = e.key;
+        if (k === 'ArrowDown' || k === 'ArrowRight') { e.preventDefault(); select(cur + 1, 1); }
+        else if (k === 'ArrowUp' || k === 'ArrowLeft') { e.preventDefault(); select(cur - 1, -1); }
+        else if (k === 'Home') { e.preventDefault(); select(0, -1); }
+        else if (k === 'End') { e.preventDefault(); select(items.length - 1, 1); }
+    });
+
+    // 3D tilt + parallax + cursor glare on the media panel
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reduce) {
+        media.addEventListener('pointermove', e => {
+            const r = media.getBoundingClientRect();
+            const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+            media.classList.remove('is-leaving');
+            media.style.setProperty('--ry', ((px - 0.5) * 9).toFixed(2) + 'deg');
+            media.style.setProperty('--rx', ((0.5 - py) * 7).toFixed(2) + 'deg');
+            media.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+            media.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+            media.style.setProperty('--px', ((0.5 - px) * 16).toFixed(1) + 'px');
+            media.style.setProperty('--py', ((0.5 - py) * 12).toFixed(1) + 'px');
+        });
+        media.addEventListener('pointerleave', () => {
+            media.classList.add('is-leaving');
+            ['--rx', '--ry', '--px', '--py'].forEach(p => media.style.removeProperty(p));
+        });
+    }
+
+    // swipe (touch laptops / tablets in landscape)
+    let sx = null;
+    media.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') sx = e.clientX; });
+    media.addEventListener('pointerup', e => {
+        if (sx == null) return;
+        const dx = e.clientX - sx; sx = null;
+        if (Math.abs(dx) > 50) select(cur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+    });
+
+    window.addEventListener('resize', placeLens);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeLens);
+    select(0, 1);
+    requestAnimationFrame(placeLens);
 }
