@@ -342,6 +342,60 @@
         setActiveTab(PAGE === 'certificates.html' ? 'certs' : PAGE === 'video.html' ? 'videos' : 'home');
     }
 
+
+    // ------------------------------------------------- swipe carousels
+    // Turns a stack of cards into a horizontal scroll-snap row with a dots
+    // bar. The CSS only takes effect at <= 899px; on desktop these classes
+    // are inert and the original layouts are untouched.
+    function makeSwipe(selector) {
+        var row = document.querySelector(selector);
+        if (!row || row.classList.contains('m-swipe')) return;
+        var slides = [].slice.call(row.children).filter(function (c) {
+            return !c.classList.contains('scrolly-spine');
+        });
+        if (slides.length < 2) return;
+        row.classList.add('m-swipe');
+        slides.forEach(function (s) { s.classList.add('m-slide'); });
+
+        var wrap = el('div', 'm-dots-wrap');
+        var hint = el('span', 'm-swipe-hint', '<i class="fas fa-arrow-left-long"></i> swipe');
+        var dots = el('div', 'm-dots');
+        var dotEls = slides.map(function (s, i) {
+            var b = el('button');
+            b.type = 'button';
+            b.setAttribute('aria-label', 'Go to card ' + (i + 1));
+            b.addEventListener('click', function () {
+                row.scrollTo({ left: s.offsetLeft - (row.clientWidth - s.offsetWidth) / 2, behavior: 'smooth' });
+            });
+            dots.appendChild(b);
+            return b;
+        });
+        wrap.appendChild(hint);
+        wrap.appendChild(dots);
+        row.parentNode.insertBefore(wrap, row.nextSibling);
+
+        var ticking = false, used = false;
+        function update() {
+            ticking = false;
+            var r = row.getBoundingClientRect();
+            var cx = r.left + r.width / 2, best = 0, bestD = Infinity;
+            slides.forEach(function (s, i) {
+                var sr = s.getBoundingClientRect();
+                var d = Math.abs(sr.left + sr.width / 2 - cx);
+                if (d < bestD) { bestD = d; best = i; }
+            });
+            slides.forEach(function (s, i) { s.classList.toggle('is-snap', i === best); });
+            dotEls.forEach(function (d, i) { d.classList.toggle('is-on', i === best); });
+            if (!used && row.scrollLeft > 24) { used = true; wrap.classList.add('is-used'); }
+        }
+        row.addEventListener('scroll', function () {
+            if (!ticking) { ticking = true; requestAnimationFrame(update); }
+        }, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    }
+    ['#scrollySteps', '.achievements-grid', '.languages-track', '.teaser-grid'].forEach(makeSwipe);
+
     // ---------------------------------------- hide tab bar while typing
     function isTextField(n) {
         return n && /^(INPUT|TEXTAREA|SELECT)$/.test(n.tagName) && n.type !== 'checkbox' && n.type !== 'radio';
