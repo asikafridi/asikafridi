@@ -866,3 +866,262 @@
         background: var(--panel);
     }
 }
+
+
+/* ==========================================================================
+   SWIPE CAROUSELS (mobile) — About beats, Achievements, Languages, Explore.
+   mobile.js adds .m-swipe to the row, .m-slide to each card, and a dots bar.
+   ========================================================================== */
+.m-dots-wrap {
+    display: none;
+}
+
+@media (max-width: 899px) {
+    .m-swipe {
+        --sw: min(86vw, 380px);
+        position: relative;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch;
+        gap: 12px !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: calc((100vw - var(--sw)) / 2);
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+        margin-left: calc(-1 * var(--edge)) !important;
+        margin-right: calc(-1 * var(--edge)) !important;
+        padding: 6px calc((100vw - var(--sw)) / 2) 18px !important;
+        grid-template-columns: none !important;
+    }
+
+    .m-swipe::-webkit-scrollbar {
+        display: none;
+    }
+
+    .m-swipe>.m-slide {
+        flex: 0 0 var(--sw) !important;
+        width: var(--sw) !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        transform: none !important;
+        filter: none !important;
+        opacity: 0.55 !important;
+        scale: 0.95;
+        transition: opacity 0.4s ease, scale 0.55s var(--ease) !important;
+    }
+
+    .m-swipe>.m-slide.is-snap {
+        opacity: 1 !important;
+        scale: 1;
+    }
+
+    .m-dots-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin: -4px 0 4px;
+    }
+
+    .m-swipe-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--font-mono);
+        font-size: 0.64rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--paper-faint);
+        transition: opacity 0.5s ease, max-width 0.5s ease;
+        max-width: 90px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .m-swipe-hint i {
+        animation: mNudge 1.6s ease-in-out infinite;
+        color: var(--signal);
+    }
+
+    .m-dots-wrap.is-used .m-swipe-hint {
+        opacity: 0;
+        max-width: 0;
+    }
+
+    @keyframes mNudge {
+        50% {
+            transform: translateX(-4px);
+        }
+    }
+
+    .m-dots {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+    }
+
+    .m-dots button {
+        width: 7px;
+        height: 7px;
+        padding: 0;
+        border: 0;
+        border-radius: 7px;
+        background: var(--hairline-strong);
+        cursor: pointer;
+        transition: width 0.45s var(--ease), background 0.3s ease;
+    }
+
+    .m-dots button.is-on {
+        width: 24px;
+        background: var(--signal);
+    }
+
+    /* About: the portrait stays on top; the four beats swipe underneath */
+    #scrollySteps.m-swipe .scrolly-spine {
+        display: none !important;
+    }
+
+    #scrollySteps.m-swipe>.scrolly-step {
+        padding: 1.3rem !important;
+    }
+
+    /* the language photo / aside stays put above its swipe row */
+    .languages-track.m-swipe>.lang-card {
+        height: auto;
+    }
+
+    /* ======================================================================
+       MENU SHEET — extra motion: circular reveal from the burger, light
+       sweep, springy icons, staggered label/footer
+       ====================================================================== */
+    .m-sheet {
+        overflow-x: hidden;
+        touch-action: pan-y;
+        clip-path: circle(0px at calc(100% - 34px) 34px);
+        transition: transform 0.55s cubic-bezier(0.34, 1.3, 0.5, 1), opacity 0.3s ease, visibility 0.6s, clip-path 0.65s cubic-bezier(0.65, 0, 0.2, 1);
+    }
+
+    .m-sheet.is-open {
+        clip-path: circle(170% at calc(100% - 34px) 34px);
+    }
+
+    .m-sheet::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -60%;
+        width: 40%;
+        background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+        transform: skewX(-18deg);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .m-sheet.is-open::after {
+        animation: mSheen 1.2s ease 0.25s both;
+    }
+
+    @keyframes mSheen {
+        from {
+            left: -60%;
+            opacity: 0.9;
+        }
+
+        to {
+            left: 130%;
+            opacity: 0;
+        }
+    }
+
+    .m-tile-icon {
+        position: relative;
+        transform: scale(0.5) rotate(-16deg);
+        transition: transform 0.6s cubic-bezier(0.34, 1.8, 0.5, 1) calc(var(--d, 0) * 35ms + 220ms);
+    }
+
+    .m-sheet.is-open .m-tile-icon {
+        transform: none;
+    }
+
+    .m-tile:active .m-tile-icon {
+        transform: scale(0.9) rotate(-6deg);
+        transition-delay: 0s;
+    }
+
+    .m-tile.is-current .m-tile-icon {
+        outline: 0;
+    }
+
+    .m-tile.is-current .m-tile-icon::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: inherit;
+        border: 2px solid var(--signal);
+        animation: mRing 2s ease-out infinite;
+    }
+
+    @keyframes mRing {
+        from {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+
+        to {
+            transform: scale(1.28);
+            opacity: 0;
+        }
+    }
+
+    .m-sheet-label,
+    .m-sheet-foot {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.4s ease, transform 0.5s var(--ease);
+    }
+
+    .m-sheet.is-open .m-sheet-label {
+        opacity: 1;
+        transform: none;
+        transition-delay: 0.25s;
+    }
+
+    .m-sheet.is-open .m-sheet-foot {
+        opacity: 1;
+        transform: none;
+        transition-delay: 0.6s;
+    }
+
+    .m-sheet.is-open .m-sheet-head .m-brand-dot {
+        animation: mDot 1.8s ease-in-out infinite;
+    }
+
+    @keyframes mDot {
+        50% {
+            transform: scale(1.5);
+            box-shadow: 0 0 18px var(--signal);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .m-sheet::after,
+    .m-tile.is-current .m-tile-icon::after,
+    .m-swipe-hint i,
+    .m-sheet.is-open .m-sheet-head .m-brand-dot {
+        animation: none;
+    }
+
+    .m-swipe>.m-slide {
+        transition: none !important;
+    }
+}
