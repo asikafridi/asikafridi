@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initCinemaIntro();
     initSplitText();
     initializeNavigation();
+    initDesktopMenu();
     initializeTheme();
     initializeTypewriter();
     initializeScrollEffects();
@@ -264,7 +265,7 @@ function initScrolly() {
         let bestIndex = 0, bestDist = Infinity;
         steps.forEach((s, n) => {
             const r = s.getBoundingClientRect();
-            const dist = Math.abs((r.top + r.height / 2) - viewportCenter);
+            const dist = Math.abs((r.top + r.height / 2) - viewportCenter) + Math.abs((r.left + r.width / 2) - window.innerWidth / 2);
             if (dist < bestDist) { bestDist = dist; bestIndex = n; }
         });
         activate(bestIndex);
@@ -276,6 +277,8 @@ function initScrolly() {
         }
     }
     window.addEventListener('scroll', onStepScroll, { passive: true });
+    // capture: also fires when the mobile swipe carousel scrolls horizontally
+    document.addEventListener('scroll', onStepScroll, { passive: true, capture: true });
     window.addEventListener('resize', updateActiveStep);
 
     activate(0);
@@ -384,7 +387,8 @@ function initLanguagePassport() {
         let bestIndex = 0, bestDist = Infinity;
         cards.forEach((c, n) => {
             const r = c.getBoundingClientRect();
-            const dist = Math.abs((r.top + r.height / 2) - viewportCenter);
+            // + horizontal distance: on mobile the cards sit side by side in a swipe row
+            const dist = Math.abs((r.top + r.height / 2) - viewportCenter) + Math.abs((r.left + r.width / 2) - window.innerWidth / 2);
             if (dist < bestDist) { bestDist = dist; bestIndex = n; }
         });
         activate(bestIndex);
@@ -396,6 +400,8 @@ function initLanguagePassport() {
         }
     }
     window.addEventListener('scroll', onCardScroll, { passive: true });
+    // capture: also fires when the mobile swipe row scrolls horizontally
+    document.addEventListener('scroll', onCardScroll, { passive: true, capture: true });
     window.addEventListener('resize', updateActiveCard);
 
     activate(0);
@@ -1207,18 +1213,18 @@ function initPageTransitions() {
         pt.style.removeProperty('--dir');
     }
 
-    // ---- arrival: we're covered by html.pt-cover; swap to the slats and reveal
+    // ---- arrival: only the first half of the animation plays (the cover on
+    // leaving). Here the covered screen simply dissolves quickly.
     const arrival = window.__pt;
     if (arrival && !reduce) {
         pt.style.setProperty('--dir', arrival.d === -1 ? -1 : 1);
         setLabel(cur);
         pt.className = 'pt is-on is-covered';
         root.classList.remove('pt-cover');
-        setTimeout(() => {
-            pt.classList.remove('is-covered');
-            pt.classList.add('is-out');
-            setTimeout(reset, 480 + SLATS * 40 + 150);
-        }, 260);
+        requestAnimationFrame(() => {
+            pt.classList.add('is-fade');
+            setTimeout(reset, 300);
+        });
     } else {
         root.classList.remove('pt-cover');
     }
@@ -1237,7 +1243,7 @@ function initPageTransitions() {
         pt.classList.add('is-on');
         void pt.offsetWidth;
         pt.classList.add('is-in');
-        setTimeout(() => { location.href = href; }, 480 + SLATS * 40 + 60);
+        setTimeout(() => { location.href = href; }, 420 + SLATS * 30 + 40);
         // safety: if navigation is blocked, don't trap the visitor
         setTimeout(() => { leaving = false; reset(); try { sessionStorage.removeItem('pt'); } catch (e) { } }, 5000);
     }
@@ -1473,4 +1479,132 @@ function initProjectsShowcase() {
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeLens);
     select(0, 1);
     requestAnimationFrame(placeLens);
+}
+
+
+// ==================== DESKTOP HAMBURGER MENU ====================
+// A glass dropdown that blooms out of the nav pill: burger morphs to an X,
+// the panel reveals with a circular clip from the button, and the items
+// spring in one after another. Desktop only (mobile uses the app shell).
+function initDesktopMenu() {
+    const nav = document.querySelector('nav[aria-label="Main navigation"]');
+    const host = nav && nav.querySelector('.hamburger-menu');
+    if (!host || document.getElementById('dmPanel')) return;
+
+    const curPage = (location.pathname.split('/').pop() || 'index.html').toLowerCase() || 'index.html';
+    const ITEMS = [
+        { l: 'Home', d: 'Back to the top', i: 'fa-house', p: 'index.html', c: ['#f0b25a', '#dd7a3b'] },
+        { l: 'About', d: 'The story so far', i: 'fa-user', s: 'about', c: ['#9d8cff', '#6d5bd0'] },
+        { l: 'Experience', d: 'Roles & work', i: 'fa-briefcase', s: 'experience', c: ['#5fb3a3', '#2f8272'] },
+        { l: 'Achievements', d: 'Milestones', i: 'fa-trophy', s: 'achievements', c: ['#f0b25a', '#b9741e'] },
+        { l: 'Skills', d: 'Tools & stack', i: 'fa-code', s: 'skills', c: ['#6f8cf0', '#4a5fd0'] },
+        { l: 'Languages', d: 'Five and counting', i: 'fa-language', s: 'languages', c: ['#c97b84', '#b5566b'] },
+        { l: 'Projects', d: 'Things I build', i: 'fa-folder-open', s: 'projects', c: ['#5fb3a3', '#3a9a88'] },
+        { l: 'Certificates', d: 'Proof of learning', i: 'fa-certificate', p: 'certificates.html', c: ['#dd9a3b', '#c97b84'] },
+        { l: 'Videos', d: 'Editing portfolio', i: 'fa-video', p: 'video.html', c: ['#9d8cff', '#c97b84'] },
+        { l: 'Contact', d: 'Say hello', i: 'fa-envelope', s: 'contact', c: ['#7fb87f', '#2f8272'] }
+    ];
+    const SOCIAL = [
+        ['fab fa-github', 'https://github.com/asikafridi', 'GitHub'],
+        ['fab fa-linkedin', 'https://linkedin.com/in/asikafridi', 'LinkedIn'],
+        ['fas fa-envelope', 'mailto:asikurrahman.contact@gmail.com', 'Email'],
+        ['fas fa-code', 'https://codeforces.com/profile/asikafridi', 'Codeforces']
+    ];
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dm-btn';
+    btn.setAttribute('aria-label', 'Open menu');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'dmPanel');
+    btn.innerHTML = '<span class="dm-burger"><i></i><i></i><i></i></span>';
+    host.appendChild(btn);
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'dm-backdrop';
+    const panel = document.createElement('aside');
+    panel.className = 'dm-panel';
+    panel.id = 'dmPanel';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-label', 'Site menu');
+    panel.innerHTML = `
+        <div class="dm-head"><span>// navigate</span><kbd>esc</kbd></div>
+        <div class="dm-grid">${ITEMS.map((it, n) => {
+        const href = it.s ? 'index.html#' + it.s : it.p;
+        const cur = !it.s && it.p === curPage ? ' is-current' : '';
+        return `<a class="dm-item${cur}" href="${href}" ${it.s ? `data-section="${it.s}"` : ''} data-page="${it.s ? 'index.html' : it.p}" style="--d:${n};--c1:${it.c[0]};--c2:${it.c[1]}">
+                <span class="dm-ic"><i class="fas ${it.i}"></i></span>
+                <span class="dm-t"><b>${it.l}</b><small>${it.d}</small></span></a>`;
+    }).join('')}</div>
+        <div class="dm-foot">
+            <div class="dm-social">${SOCIAL.map(s => `<a href="${s[1]}" aria-label="${s[2]}" ${s[1].indexOf('http') === 0 ? 'target="_blank" rel="noopener"' : ''}><i class="${s[0]}"></i></a>`).join('')}</div>
+            <div class="dm-seg" role="group" aria-label="Appearance">
+                <button type="button" data-t="dark"><i class="fas fa-moon"></i> Dark</button>
+                <button type="button" data-t="light"><i class="fas fa-sun"></i> Light</button>
+            </div>
+        </div>`;
+    document.body.appendChild(backdrop);
+    document.body.appendChild(panel);
+
+    const root = document.documentElement;
+    const segBtns = Array.from(panel.querySelectorAll('.dm-seg button'));
+    const syncSeg = () => {
+        const light = root.classList.contains('light-mode');
+        segBtns.forEach(b => b.classList.toggle('is-on', (b.dataset.t === 'light') === light));
+    };
+    syncSeg();
+    document.addEventListener('themechange', syncSeg);
+    new MutationObserver(syncSeg).observe(root, { attributes: true, attributeFilter: ['class'] });
+    segBtns.forEach(b => b.addEventListener('click', () => {
+        const wantLight = b.dataset.t === 'light';
+        if (wantLight === root.classList.contains('light-mode')) return;
+        const r = b.getBoundingClientRect();
+        if (window.switchTheme) window.switchTheme(r.left + r.width / 2, r.top + r.height / 2);
+    }));
+
+    // keep the panel aligned under the nav pill's right edge
+    function place() {
+        const scrolled = nav.classList.contains('is-scrolled');
+        const w = Math.min(scrolled ? 1000 : 1140, window.innerWidth - 48);
+        panel.style.right = ((window.innerWidth - w) / 2) + 'px';
+        panel.style.top = ((scrolled ? 10 : 14) + 62 + 12) + 'px';
+    }
+
+    let lastFocus = null;
+    const isOpen = () => panel.classList.contains('is-open');
+    function open() {
+        place();
+        lastFocus = document.activeElement;
+        panel.classList.add('is-open');
+        backdrop.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.setAttribute('aria-label', 'Close menu');
+    }
+    function close(restore) {
+        if (!isOpen()) return;
+        panel.classList.remove('is-open');
+        backdrop.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', 'Open menu');
+        if (restore !== false) btn.focus({ preventScroll: true });
+    }
+    btn.addEventListener('click', () => (isOpen() ? close() : open()));
+    backdrop.addEventListener('click', () => close(false));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    window.addEventListener('scroll', () => { if (isOpen()) place(); }, { passive: true });
+    window.addEventListener('resize', () => { if (window.innerWidth < 900) close(false); else if (isOpen()) place(); });
+
+    // same-page jumps scroll smoothly; cross-page links go through the page transition
+    panel.querySelectorAll('.dm-item').forEach(a => a.addEventListener('click', e => {
+        const onThisPage = a.dataset.page === curPage || (a.dataset.page === 'index.html' && curPage === 'index.html');
+        if (!onThisPage) { close(false); return; }
+        e.preventDefault();
+        close(false);
+        setTimeout(() => {
+            const sec = a.dataset.section && document.getElementById(a.dataset.section);
+            const top = sec ? sec.getBoundingClientRect().top + window.pageYOffset - 92 : 0;
+            window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+            try { history.replaceState(null, '', sec ? '#' + a.dataset.section : location.pathname); } catch (err) { }
+        }, 120);
+    }));
 }
