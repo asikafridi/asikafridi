@@ -177,15 +177,17 @@
     // --------------------------------------------------------------- theme
     // Drive the original (now hidden) toggle so script.js stays in charge of
     // the class + localStorage. Fall back to doing it ourselves if absent.
-    function toggleTheme() {
+    function toggleTheme(x, y) {
         var orig = document.querySelector('.theme-toggle');
-        if (orig) { orig.click(); }
+        if (window.switchTheme) { window.switchTheme(x, y); }
+        else if (orig) { orig.click(); }
         else {
             root.classList.toggle('light-mode');
             try { localStorage.setItem('theme', isLight() ? 'light' : 'dark'); } catch (e) { }
         }
     }
-    function setTheme(wantLight) { if (wantLight !== isLight()) toggleTheme(); }
+    function centerOf(n) { var r = n.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+    function setTheme(wantLight, btn) { if (wantLight !== isLight()) { var c = centerOf(btn); toggleTheme(c[0], c[1]); } }
 
     var metaTheme = document.querySelector('meta[name="theme-color"]');
     function syncTheme() {
@@ -195,9 +197,9 @@
         segLight.classList.toggle('is-on', light);
         if (metaTheme) metaTheme.setAttribute('content', light ? '#eeecf6' : '#0b0b0d');
     }
-    themeBtn.addEventListener('click', function () { buzz(); toggleTheme(); });
-    segDark.addEventListener('click', function () { setTheme(false); });
-    segLight.addEventListener('click', function () { setTheme(true); });
+    themeBtn.addEventListener('click', function () { buzz(); var c = centerOf(themeBtn); toggleTheme(c[0], c[1]); });
+    segDark.addEventListener('click', function () { setTheme(false, segDark); });
+    segLight.addEventListener('click', function () { setTheme(true, segLight); });
     new MutationObserver(syncTheme).observe(root, { attributes: true, attributeFilter: ['class'] });
     syncTheme();
 
