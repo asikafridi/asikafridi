@@ -6,6 +6,26 @@
     <meta property="og:locale" content="en_BD">
     <meta name="twitter:creator" content="@asikafridi">
     <meta charset="UTF-8">
+    <script>
+        /* Runs before first paint: applies the saved theme (no flash) and, when
+           arriving via a page transition, covers the screen until script.js
+           reveals the page. Self-heals after 4s if script.js never loads. */
+        (function () {
+            try {
+                var d = document.documentElement;
+                if (localStorage.getItem('theme') === 'light') d.classList.add('light-mode');
+                var p = sessionStorage.getItem('pt');
+                if (p) {
+                    sessionStorage.removeItem('pt');
+                    window.__pt = JSON.parse(p);
+                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                        d.classList.add('pt-cover');
+                        setTimeout(function () { d.classList.remove('pt-cover'); }, 4000);
+                    }
+                }
+            } catch (e) { }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -61,7 +81,7 @@
         <div role="navigation">
             <div class="container nav-content">
                 <h1>
-                    <a href="index.html" style="text-decoration: none; color: inherit;">asikur.dev</a>
+                    <a href="index.html" style="text-decoration: none; color: inherit;">dhushor.dev</a>
                 </h1>
 
                 <div class="hamburger-menu">
