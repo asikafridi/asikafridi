@@ -6,6 +6,26 @@
     <meta property="og:locale" content="en_BD">
     <meta name="twitter:creator" content="@asikafridi">
     <meta charset="UTF-8">
+    <script>
+        /* Runs before first paint: applies the saved theme (no flash) and, when
+           arriving via a page transition, covers the screen until script.js
+           reveals the page. Self-heals after 4s if script.js never loads. */
+        (function () {
+            try {
+                var d = document.documentElement;
+                if (localStorage.getItem('theme') === 'light') d.classList.add('light-mode');
+                var p = sessionStorage.getItem('pt');
+                if (p) {
+                    sessionStorage.removeItem('pt');
+                    window.__pt = JSON.parse(p);
+                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                        d.classList.add('pt-cover');
+                        setTimeout(function () { d.classList.remove('pt-cover'); }, 4000);
+                    }
+                }
+            } catch (e) { }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -686,8 +706,8 @@
                 <span class="count">04 shown</span>
             </div>
             <h2 class="reveal split-text" style="margin-bottom: 1rem;">Projects</h2>
-            <p class="projects-hint reveal"><i class="fas fa-arrows-left-right"></i> Scroll to explore — drag, swipe, or
-                use the arrows</p>
+            <p class="projects-hint reveal"><i class="fas fa-arrows-left-right"></i> Pick a project, swipe, or use the
+                arrow keys</p>
         </div>
 
         <div class="projects-sticky">
@@ -765,7 +785,7 @@
             </div>
         </div>
 
-        <div class="container">
+        <div class="container projects-ctrl">
             <div class="projects-progress">
                 <div class="projects-progress-fill" id="projectsProgressFill"></div>
             </div>
