@@ -4215,6 +4215,7 @@ html.pt-cover::after {
 
 .pt {
     --dir: 1;
+    opacity: 1;
     position: fixed;
     inset: 0;
     z-index: 2147483001;
@@ -4226,6 +4227,12 @@ html.pt-cover::after {
 .pt.is-on {
     visibility: visible;
     pointer-events: auto;
+}
+
+/* Arrival: no second animation — the covered screen just dissolves quickly */
+.pt.is-fade {
+    opacity: 0;
+    transition: opacity 0.22s ease;
 }
 
 .pt-slats {
@@ -4242,7 +4249,7 @@ html.pt-cover::after {
     background: var(--ink);
     box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.10), inset -1px 0 0 rgba(0, 0, 0, 0.25);
     transform: translateX(calc(var(--dir) * 101%));
-    transition: transform 0.48s cubic-bezier(0.76, 0, 0.24, 1) calc(var(--i) * 40ms);
+    transition: transform 0.42s cubic-bezier(0.76, 0, 0.24, 1) calc(var(--i) * 30ms);
     will-change: transform;
 }
 
@@ -4336,9 +4343,6 @@ html.pt-cover::after {
     animation: ptLine 0.7s var(--ease) 0.1s forwards;
 }
 
-.pt.is-covered .pt-label {
-    animation: ptLabelIn 0.35s ease both;
-}
 
 @keyframes ptLine {
     to {
@@ -4992,5 +4996,414 @@ html.pt-cover::after {
 
     .pj-slide.is-prev {
         display: none;
+    }
+}
+
+
+/* ---------------------------------- Desktop hamburger menu ---------------------------------- */
+.dm-btn,
+.dm-panel,
+.dm-backdrop {
+    display: none;
+}
+
+@media (min-width: 900px) {
+    .dm-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        margin-left: 0.5rem;
+        border-radius: 50%;
+        cursor: pointer;
+        color: var(--paper);
+        background: var(--m-lens);
+        border: 1px solid var(--m-lens-border);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        transition: transform 0.35s var(--ease), background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .dm-btn:hover {
+        transform: scale(1.08);
+        border-color: var(--signal);
+    }
+
+    .dm-btn:active {
+        transform: scale(0.92);
+    }
+
+    .dm-btn:focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 2px;
+    }
+
+    .dm-burger {
+        position: relative;
+        width: 18px;
+        height: 12px;
+        display: block;
+    }
+
+    .dm-burger i {
+        position: absolute;
+        left: 0;
+        height: 2px;
+        width: 100%;
+        border-radius: 2px;
+        background: currentColor;
+        transition: transform 0.5s cubic-bezier(0.34, 1.5, 0.5, 1), top 0.4s var(--ease), width 0.35s var(--ease), opacity 0.2s ease, background 0.3s ease;
+    }
+
+    .dm-burger i:nth-child(1) {
+        top: 0;
+    }
+
+    .dm-burger i:nth-child(2) {
+        top: 5px;
+        width: 65%;
+    }
+
+    .dm-burger i:nth-child(3) {
+        top: 10px;
+        width: 82%;
+    }
+
+    .dm-btn:hover .dm-burger i:nth-child(2),
+    .dm-btn:hover .dm-burger i:nth-child(3) {
+        width: 100%;
+    }
+
+    .dm-btn[aria-expanded="true"] {
+        background: var(--signal);
+        color: #16130a;
+        border-color: var(--signal);
+    }
+
+    .dm-btn[aria-expanded="true"] .dm-burger i:nth-child(1) {
+        top: 5px;
+        transform: rotate(45deg);
+    }
+
+    .dm-btn[aria-expanded="true"] .dm-burger i:nth-child(2) {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    .dm-btn[aria-expanded="true"] .dm-burger i:nth-child(3) {
+        top: 5px;
+        width: 100%;
+        transform: rotate(-45deg);
+    }
+
+    .dm-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 1190;
+        background: rgba(6, 5, 10, 0.34);
+        -webkit-backdrop-filter: blur(5px);
+        backdrop-filter: blur(5px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s;
+    }
+
+    .dm-backdrop.is-open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .dm-panel {
+        display: block;
+        position: fixed;
+        z-index: 1250;
+        top: 90px;
+        right: 24px;
+        width: 500px;
+        max-height: calc(100vh - 110px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 16px 16px 14px;
+        border-radius: 32px;
+        isolation: isolate;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04) 60%, rgba(255, 255, 255, 0.08)), var(--m-sheet-tint);
+        border: 1px solid var(--m-glass-border);
+        box-shadow: var(--m-glass-shadow), 0 40px 80px -30px rgba(0, 0, 0, 0.55);
+        -webkit-backdrop-filter: blur(30px) saturate(190%);
+        backdrop-filter: blur(30px) saturate(190%);
+        transform-origin: calc(100% - 30px) -24px;
+        transform: translateY(-10px) scale(0.9);
+        clip-path: circle(0px at calc(100% - 30px) -24px);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.6s cubic-bezier(0.34, 1.3, 0.5, 1), clip-path 0.65s cubic-bezier(0.65, 0, 0.2, 1), opacity 0.3s ease, visibility 0.65s, top 0.4s var(--ease), right 0.4s var(--ease);
+    }
+
+    .dm-panel.is-open {
+        transform: none;
+        clip-path: circle(1400px at calc(100% - 30px) -24px);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .dm-panel::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: var(--m-rim);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+        pointer-events: none;
+        z-index: 3;
+    }
+
+    .dm-panel::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -50%;
+        width: 35%;
+        background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transform: skewX(-18deg);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .dm-panel.is-open::after {
+        animation: dmSheen 1.2s ease 0.25s both;
+    }
+
+    @keyframes dmSheen {
+        from {
+            left: -50%;
+            opacity: 0.9;
+        }
+
+        to {
+            left: 130%;
+            opacity: 0;
+        }
+    }
+
+    .dm-head,
+    .dm-foot {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.4s ease, transform 0.5s var(--ease);
+    }
+
+    .dm-panel.is-open .dm-head,
+    .dm-panel.is-open .dm-foot {
+        opacity: 1;
+        transform: none;
+        transition-delay: 0.3s;
+    }
+
+    .dm-panel.is-open .dm-foot {
+        transition-delay: 0.55s;
+    }
+
+    .dm-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2px 8px 10px;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--paper-faint);
+    }
+
+    .dm-head kbd {
+        font-family: var(--font-mono);
+        font-size: 0.64rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 6px;
+        border: 1px solid var(--hairline-strong);
+        color: var(--paper-faint);
+    }
+
+    .dm-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+    }
+
+    .dm-item {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.65rem 0.75rem;
+        border-radius: 20px;
+        border: 1px solid transparent;
+        color: var(--paper);
+        text-decoration: none;
+        opacity: 0;
+        transform: translateY(14px) scale(0.94);
+        transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .dm-panel.is-open .dm-item {
+        opacity: 1;
+        transform: none;
+        transition: opacity 0.45s ease calc(var(--d, 0) * 38ms + 160ms), transform 0.6s cubic-bezier(0.34, 1.4, 0.5, 1) calc(var(--d, 0) * 38ms + 160ms), background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .dm-panel.is-open .dm-item:hover {
+        background: var(--m-lens);
+        border-color: var(--m-lens-border);
+        transform: translateX(4px);
+        transition-delay: 0s;
+    }
+
+    .dm-item:focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: -2px;
+    }
+
+    .dm-ic {
+        position: relative;
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        color: #fff;
+        background: linear-gradient(150deg, var(--c1), var(--c2));
+        box-shadow: 0 8px 18px -8px var(--c1), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        transition: transform 0.45s cubic-bezier(0.34, 1.8, 0.5, 1);
+    }
+
+    .dm-item:hover .dm-ic {
+        transform: rotate(-8deg) scale(1.12);
+    }
+
+    .dm-item.is-current .dm-ic::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: inherit;
+        border: 2px solid var(--signal);
+        animation: dmRing 2s ease-out infinite;
+    }
+
+    @keyframes dmRing {
+        from {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+
+        to {
+            transform: scale(1.25);
+            opacity: 0;
+        }
+    }
+
+    .dm-t b {
+        display: block;
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .dm-t small {
+        font-family: var(--font-mono);
+        font-size: 0.66rem;
+        color: var(--paper-faint);
+    }
+
+    .dm-foot {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 10px;
+        padding: 12px 6px 2px;
+        border-top: 1px solid var(--m-glass-border);
+    }
+
+    .dm-social {
+        display: flex;
+        gap: 8px;
+    }
+
+    .dm-social a {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--paper);
+        background: var(--lg-dot-bg);
+        border: 1px solid var(--lg-dot-border);
+        text-decoration: none;
+        transition: transform 0.3s var(--ease), background 0.3s ease, color 0.3s ease;
+    }
+
+    .dm-social a:hover {
+        transform: translateY(-3px);
+        background: var(--signal);
+        color: #16130a;
+    }
+
+    .dm-seg {
+        display: inline-flex;
+        padding: 3px;
+        border-radius: 999px;
+        background: var(--lg-input-bg);
+        border: 1px solid var(--lg-input-border);
+    }
+
+    .dm-seg button {
+        border: 0;
+        background: transparent;
+        color: var(--paper-dim);
+        font-family: var(--font-body);
+        font-size: 0.74rem;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .dm-seg button.is-on {
+        background: var(--signal);
+        color: #16130a;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .dm-panel,
+    .dm-item,
+    .dm-burger i,
+    .dm-head,
+    .dm-foot {
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
+    }
+
+    .dm-panel::after,
+    .dm-item.is-current .dm-ic::after {
+        animation: none;
     }
 }
