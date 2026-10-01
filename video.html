@@ -6,6 +6,26 @@
     <meta property="og:locale" content="en_BD">
     <meta name="twitter:creator" content="@asikafridi">
     <meta charset="UTF-8">
+    <script>
+        /* Runs before first paint: applies the saved theme (no flash) and, when
+           arriving via a page transition, covers the screen until script.js
+           reveals the page. Self-heals after 4s if script.js never loads. */
+        (function () {
+            try {
+                var d = document.documentElement;
+                if (localStorage.getItem('theme') === 'light') d.classList.add('light-mode');
+                var p = sessionStorage.getItem('pt');
+                if (p) {
+                    sessionStorage.removeItem('pt');
+                    window.__pt = JSON.parse(p);
+                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                        d.classList.add('pt-cover');
+                        setTimeout(function () { d.classList.remove('pt-cover'); }, 4000);
+                    }
+                }
+            } catch (e) { }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -38,9 +58,6 @@
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
 
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -61,13 +78,10 @@
     <div class="scroll-progress"></div>
     <div class="interactive-bg"></div>
 
-    <!-- Video Background Particles -->
-    <div class="video-particles" id="videoParticles"></div>
-
     <nav aria-label="Main navigation">
         <div role="navigation">
             <div class="container nav-content">
-                <h1><a href="index.html" style="text-decoration: none; color: inherit;">asikur.dev</a></h1>
+                <h1><a href="index.html" style="text-decoration: none; color: inherit;">dhushor.dev</a></h1>
 
                 <div class="hamburger-menu">
                     <div class="visible-links">
@@ -95,247 +109,266 @@
         </div>
     </nav>
 
-    <!-- Video Hero Section -->
-    <section class="video-hero" id="video-hero">
-        <div class="video-hero-background"></div>
-
-        <div class="container">
-            <div class="video-hero-grid">
-                <div class="video-hero-text" data-aos="fade-up">
-                    <div class="hero-eyebrow"><span class="dot"></span> Cut, graded &amp; mixed by hand</div>
-
-                    <h1 class="video-main-title">
-                        <span class="video-title-gradient">Video</span>
-                        <span class="video-title-gradient">Portfolio</span>
-                    </h1>
-
-                    <p class="video-hero-lede">Showcasing my video editing skills and video resume — every cut,
-                        transition and colour grade in this reel is my own work.</p>
-
-                    <div class="reel-stats" id="reelStats">
-                        <div class="reel-stat">
-                            <i class="fas fa-clapperboard"></i>
-                            <div>
-                                <span class="reel-stat-num" id="statVideos" data-suffix="">0</span>
-                                <span class="reel-stat-label">Videos edited</span>
-                            </div>
-                        </div>
-                        <div class="reel-stat">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <span class="reel-stat-num" id="statMinutes" data-suffix="m">0</span>
-                                <span class="reel-stat-label">Minutes of footage</span>
-                            </div>
-                        </div>
-                        <div class="reel-stat">
-                            <i class="fas fa-layer-group"></i>
-                            <div>
-                                <span class="reel-stat-num" id="statGenres" data-suffix="">0</span>
-                                <span class="reel-stat-label">Genres explored</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <a href="#video-gallery" class="hero-scroll-cta">
-                        <span>Watch the reel</span>
-                        <i class="fas fa-arrow-down"></i>
-                    </a>
-                </div>
-
-                <div class="video-hero-preview liquid-glass" data-aos="fade-left" data-aos-delay="200">
-                    <div class="glass-blob blob-a"></div>
-                    <div class="glass-blob blob-b"></div>
-                    <div class="preview-container">
-                        <img src="images/Idol_Cover.jpg" alt="Featured Video Thumbnail" class="preview-thumbnail">
-                        <div class="preview-play-btn">
-                            <i class="fas fa-play"></i>
-                        </div>
-                        <div class="preview-info">
-                            <span class="preview-tag">Featured</span>
-                            <h3>My Idol: Hazrat Umar Ibn al-Khattab (RA)</h3>
-                            <p>3:34 &middot; Tribute film</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="scroll-hint">
-            <span>Explore Videos</span>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </section>
-
-    <!-- Video Gallery Section -->
-    <section class="video-gallery-section" id="video-gallery">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <div class="section-kicker"><span class="eyebrow">gallery.render()</span><span class="rule"></span>
-                </div>
-                <h2 class="section-title">Video Collection</h2>
-                <p class="section-subtitle">A showcase of my video editing skills and creative projects</p>
+        <main>
+        <!-- ============ HERO ============ -->
+        <section class="vx-hero" id="video-hero">
+            <div class="vx-hero-bg" aria-hidden="true">
+                <span class="vx-orb o1"></span><span class="vx-orb o2"></span><span class="vx-orb o3"></span>
+                <span class="vx-grid-lines"></span>
             </div>
 
-            <div class="gallery-controls liquid-glass" data-aos="fade-up" data-aos-delay="100">
-                <div class="filter-tags">
-                    <button class="filter-tag active" data-filter="all">All Videos</button>
-                    <button class="filter-tag" data-filter="documentary">Documentary</button>
-                    <button class="filter-tag" data-filter="creative">Creative</button>
-                    <button class="filter-tag" data-filter="sample">Samples</button>
-                </div>
+            <div class="container">
+                <div class="vx-hero-grid">
+                    <div class="vx-hero-text">
+                        <div class="vx-eyebrow"><span class="vx-rec"></span> Cut, graded &amp; mixed by hand</div>
 
-                <div class="view-toggle">
-                    <button class="view-btn active" data-view="grid">
-                        <i class="fas fa-th-large"></i>
-                    </button>
-                    <button class="view-btn" data-view="list">
-                        <i class="fas fa-list"></i>
-                    </button>
-                </div>
-            </div>
+                        <h1 class="vx-title">
+                            <span class="vx-title-line"><span>Video</span></span>
+                            <span class="vx-title-line"><span><em>Portfolio</em></span></span>
+                        </h1>
 
-            <div class="gallery-container" data-aos="fade-up" data-aos-delay="200">
-                <div class="gallery-grid" id="gallery-grid">
-                    <!-- Videos will be loaded here dynamically -->
-                </div>
-            </div>
-        </div>
-    </section>
+                        <p class="vx-lede">Showcasing my video editing skills and video resume — every cut, transition
+                            and colour grade in this reel is my own work.</p>
 
-    <!-- Video Player Modal -->
-    <div class="video-player-modal" id="videoPlayerModal">
-        <div class="modal-overlay"></div>
-        <div class="modal-container liquid-glass">
-            <div class="glass-blob blob-c"></div>
-            <button class="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
-
-            <div class="modal-content">
-                <div class="video-player-wrapper">
-                    <div class="player-header">
-                        <h3 id="modal-video-title">Video Title</h3>
-                        <div class="player-controls">
-                            <button class="control-btn" id="playPauseBtn">
-                                <i class="fas fa-play"></i>
+                        <div class="vx-cta">
+                            <button type="button" class="vx-btn vx-btn-primary" id="vxPlayFeatured">
+                                <i class="fas fa-play"></i> Play featured
                             </button>
-                            <button class="control-btn" id="fullscreenBtn">
-                                <i class="fas fa-expand"></i>
-                            </button>
+                            <a href="#vx-reel" class="vx-btn vx-btn-glass">
+                                Browse the reel <i class="fas fa-arrow-down"></i>
+                            </a>
+                        </div>
+
+                        <div class="vx-stats" id="reelStats">
+                            <div class="vx-stat vx-glass">
+                                <i class="fas fa-clapperboard"></i>
+                                <span class="vx-stat-num" id="statVideos" data-suffix="">0</span>
+                                <span class="vx-stat-label">Videos edited</span>
+                            </div>
+                            <div class="vx-stat vx-glass">
+                                <i class="fas fa-clock"></i>
+                                <span class="vx-stat-num" id="statMinutes" data-suffix="m">0</span>
+                                <span class="vx-stat-label">Minutes of footage</span>
+                            </div>
+                            <div class="vx-stat vx-glass">
+                                <i class="fas fa-layer-group"></i>
+                                <span class="vx-stat-num" id="statGenres" data-suffix="">0</span>
+                                <span class="vx-stat-label">Genres explored</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="video-container">
-                        <div class="video-thumbnail-overlay" id="videoThumbnailModal">
-                            <img id="modal-video-thumb" src="" alt="Video Thumbnail">
-                            <div class="play-overlay">
-                                <div class="play-button">
-                                    <i class="fas fa-play"></i>
-                                    <span>Ready to Play</span>
+                    <!-- Featured "monitor" -->
+                    <div class="vx-stage-wrap">
+                        <div class="vx-stage vx-glass" id="vxStage" tabindex="0" role="button"
+                            aria-label="Play the featured video">
+                            <div class="vx-stage-bar">
+                                <span class="vx-rec-tag"><span class="vx-rec"></span> REC · Featured cut</span>
+                                <span class="vx-timecode" id="vxTimecode">00:00:00:00</span>
+                            </div>
+                            <div class="vx-stage-screen">
+                                <img id="vxStageImg" src="images/Idol_Cover.jpg" alt="Featured video thumbnail">
+                                <span class="vx-vf tl"></span><span class="vx-vf tr"></span>
+                                <span class="vx-vf bl"></span><span class="vx-vf br"></span>
+                                <span class="vx-stage-shade"></span>
+                                <span class="vx-stage-play"><i class="fas fa-play"></i></span>
+                                <div class="vx-stage-caption">
+                                    <h3 id="vxStageTitle">My Idol: Hazrat Umar Ibn al-Khattab (RA)</h3>
+                                    <p id="vxStageMeta">3:34 &middot; Tribute film</p>
                                 </div>
                             </div>
-                        </div>
-                        <iframe id="modal-video-player" src="" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                    </div>
-
-                    <div class="video-info-modal">
-                        <div class="info-header">
-                            <div class="video-meta">
-                                <span class="duration" id="modal-duration">0:00</span>
-                                <span class="date" id="modal-date">Date</span>
-                            </div>
-                            <div class="video-actions">
-                                <button class="action-btn like-btn">
-                                    <i class="far fa-thumbs-up"></i>
-                                    <span>Like</span>
-                                </button>
-                                <button class="action-btn share-btn">
-                                    <i class="fas fa-share"></i>
-                                    <span>Share</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="video-description" id="modal-description">
-                            Video description will appear here.
+                            <div class="vx-scrub"><i></i></div>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
+
+        <!-- ============ REEL / GALLERY ============ -->
+        <section class="vx-section" id="vx-reel">
+            <div class="container">
+                <div class="vx-head reveal">
+                    <div class="section-kicker"><span class="eyebrow">gallery.render()</span><span
+                            class="rule"></span><span class="count" id="vxCount">00 cuts</span></div>
+                    <h2 class="vx-h2">The <em>Reel</em></h2>
+                    <p class="vx-sub">A showcase of my video editing skills and creative projects.</p>
+                </div>
+
+                <div class="vx-controls vx-glass reveal">
+                    <div class="vx-seg" id="vxSeg" role="tablist" aria-label="Filter videos">
+                        <div class="vx-seg-inner">
+                            <span class="vx-seg-thumb" aria-hidden="true"></span>
+                            <button class="filter-tag vx-seg-btn active" role="tab" aria-selected="true"
+                                data-filter="all">All <b data-count="all">0</b></button>
+                            <button class="filter-tag vx-seg-btn" role="tab" aria-selected="false"
+                                data-filter="documentary">Documentary <b data-count="documentary">0</b></button>
+                            <button class="filter-tag vx-seg-btn" role="tab" aria-selected="false"
+                                data-filter="creative">Creative <b data-count="creative">0</b></button>
+                            <button class="filter-tag vx-seg-btn" role="tab" aria-selected="false"
+                                data-filter="sample">Samples <b data-count="sample">0</b></button>
+                        </div>
+                    </div>
+                    <div class="vx-view" role="group" aria-label="Layout">
+                        <button class="view-btn active" data-view="grid" aria-label="Grid view"><i
+                                class="fas fa-grip"></i></button>
+                        <button class="view-btn" data-view="list" aria-label="List view"><i
+                                class="fas fa-bars"></i></button>
+                    </div>
+                </div>
+
+                <div class="vx-grid" id="gallery-grid" data-view="grid"></div>
+            </div>
+        </section>
+
+        <!-- ============ PROCESS ============ -->
+        <section class="vx-section" id="vx-process">
+            <div class="container">
+                <div class="vx-head reveal">
+                    <div class="section-kicker"><span class="eyebrow">workflow.run()</span><span class="rule"></span>
+                    </div>
+                    <h2 class="vx-h2">From script to <em>screen</em></h2>
+                    <p class="vx-sub">How a piece comes together, start to finish.</p>
+                </div>
+
+                <ol class="vx-steps">
+                    <li class="vx-step vx-glass reveal">
+                        <span class="vx-step-n">01</span>
+                        <span class="vx-step-ic"><i class="fas fa-pen-nib"></i></span>
+                        <h3>Script</h3>
+                        <p>Shape the story and write the narration.</p>
+                    </li>
+                    <li class="vx-step vx-glass reveal">
+                        <span class="vx-step-n">02</span>
+                        <span class="vx-step-ic"><i class="fas fa-camera"></i></span>
+                        <h3>Gather</h3>
+                        <p>Collect footage, stills and sound.</p>
+                    </li>
+                    <li class="vx-step vx-glass reveal">
+                        <span class="vx-step-n">03</span>
+                        <span class="vx-step-ic"><i class="fas fa-scissors"></i></span>
+                        <h3>Cut</h3>
+                        <p>Pace the edit and build transitions.</p>
+                    </li>
+                    <li class="vx-step vx-glass reveal">
+                        <span class="vx-step-n">04</span>
+                        <span class="vx-step-ic"><i class="fas fa-palette"></i></span>
+                        <h3>Grade</h3>
+                        <p>Correct and style the colour.</p>
+                    </li>
+                    <li class="vx-step vx-glass reveal">
+                        <span class="vx-step-n">05</span>
+                        <span class="vx-step-ic"><i class="fas fa-sliders"></i></span>
+                        <h3>Mix</h3>
+                        <p>Clean the audio, then export.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ============ TOOLKIT ============ -->
+        <section class="vx-section" id="video-skills">
+            <div class="container">
+                <div class="vx-head reveal">
+                    <div class="section-kicker"><span class="eyebrow">toolkit.load()</span><span class="rule"></span>
+                    </div>
+                    <h2 class="vx-h2">Editing <em>toolkit</em></h2>
+                    <p class="vx-sub">Software I use and techniques I'm building (levels are self-assessed).</p>
+                </div>
+
+                <div class="vx-tool-grid">
+                    <div class="vx-rings">
+                        <div class="vx-ring-card vx-glass reveal" data-level="60">
+                            <div class="vx-ring" style="--p:0"><span>60%</span></div>
+                            <div><h3>CapCut</h3><p>Everyday cuts &amp; captions</p></div>
+                        </div>
+                        <div class="vx-ring-card vx-glass reveal" data-level="30">
+                            <div class="vx-ring" style="--p:0"><span>30%</span></div>
+                            <div><h3>Adobe Premiere Pro</h3><p>Learning the timeline workflow</p></div>
+                        </div>
+                        <div class="vx-ring-card vx-glass reveal" data-level="30">
+                            <div class="vx-ring" style="--p:0"><span>30%</span></div>
+                            <div><h3>DaVinci Resolve</h3><p>Exploring colour &amp; edit pages</p></div>
+                        </div>
+                    </div>
+
+                    <div class="vx-tech">
+                        <article class="vx-tech-card vx-glass reveal">
+                            <i class="fas fa-palette"></i>
+                            <div><h3>Color Grading</h3><p>Beginner level color correction and grading.</p></div>
+                        </article>
+                        <article class="vx-tech-card vx-glass reveal">
+                            <i class="fas fa-wave-square"></i>
+                            <div><h3>Audio Mixing</h3><p>Clean audio editing and sound design.</p></div>
+                        </article>
+                        <article class="vx-tech-card vx-glass reveal">
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                            <div><h3>Visual Effects</h3><p>Basic VFX and motion graphics.</p></div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="vx-banner vx-glass reveal">
+                    <div>
+                        <h3>Have a story that needs cutting?</h3>
+                        <p>Let's talk about your next video.</p>
+                    </div>
+                    <a href="index.html#contact" class="vx-btn vx-btn-primary">Get in touch <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ PLAYER MODAL ============ -->
+    <div class="vx-modal" id="videoPlayerModal" aria-hidden="true">
+        <div class="modal-overlay vx-backdrop"></div>
+        <div class="vx-panel vx-glass" role="dialog" aria-modal="true" aria-labelledby="modal-video-title">
+            <button class="modal-close vx-close" type="button" aria-label="Close player"><i
+                    class="fas fa-xmark"></i></button>
+
+            <div class="vx-panel-main">
+                <div class="vx-screen" id="vxScreen">
+                    <iframe id="modal-video-player" src="" title="Video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                    <div class="vx-poster" id="videoThumbnailModal">
+                        <img id="modal-video-thumb" src="" alt="">
+                        <button class="vx-bigplay" id="vxBigPlay" type="button" aria-label="Play video">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="vx-info">
+                    <div class="vx-info-top">
+                        <span class="vx-chip" id="modal-cat">Category</span>
+                        <span class="vx-meta" id="modal-duration">0:00</span>
+                        <span class="vx-meta" id="modal-date">Date</span>
+                    </div>
+                    <h3 id="modal-video-title">Video Title</h3>
+                    <p id="modal-description">Video description will appear here.</p>
+                    <div class="vx-actions">
+                        <button class="vx-icon-btn" id="vxPrev" type="button" aria-label="Previous video"><i
+                                class="fas fa-backward-step"></i></button>
+                        <button class="vx-icon-btn" id="vxNext" type="button" aria-label="Next video"><i
+                                class="fas fa-forward-step"></i></button>
+                        <span class="vx-spacer"></span>
+                        <button class="vx-pill-btn" id="vxShare" type="button"><i class="fas fa-share-nodes"></i>
+                            Share</button>
+                        <button class="vx-pill-btn" id="fullscreenBtn" type="button"><i class="fas fa-expand"></i>
+                            Fullscreen</button>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="vx-next" aria-label="More videos">
+                <h4>Up next</h4>
+                <div class="vx-next-list" id="vxNextList"></div>
+            </aside>
         </div>
     </div>
 
-    <!-- Video Skills Section -->
-    <section class="video-skills-section" id="video-skills">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <div class="section-kicker"><span class="eyebrow">skills.exe</span><span class="rule"></span></div>
-                <h2 class="section-title">Video Editing Skills</h2>
-                <p class="section-subtitle">Technical expertise and software proficiency</p>
-            </div>
-
-            <div class="skills-grid">
-                <div class="skill-category liquid-glass" data-aos="fade-up" data-aos-delay="100">
-                    <h3>Editing Software</h3>
-                    <div class="software-list">
-
-                        <div class="software-item">
-                            <i class="fas fa-video"></i>
-                            <span>CapCut</span>
-                            <div class="skill-level">
-                                <div class="level-bar" style="width: 60%"></div>
-                            </div>
-                        </div>
-
-                        <div class="software-item">
-                            <i class="fas fa-film"></i>
-                            <span>Adobe Premiere Pro</span>
-                            <div class="skill-level">
-                                <div class="level-bar" style="width: 30%"></div>
-                            </div>
-                        </div>
-
-                        <div class="software-item">
-                            <i class="fas fa-sliders-h"></i>
-                            <span>DaVinci Resolve</span>
-                            <div class="skill-level">
-                                <div class="level-bar" style="width: 30%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-category liquid-glass" data-aos="fade-up" data-aos-delay="200">
-                    <h3>Editing Techniques</h3>
-                    <div class="techniques-list">
-                        <div class="technique-item">
-                            <i class="fas fa-cut"></i>
-                            <div>
-                                <h4>Color Grading</h4>
-                                <p>Beginner level color correction and grading.</p>
-                            </div>
-                        </div>
-                        <div class="technique-item">
-                            <i class="fas fa-wave-square"></i>
-                            <div>
-                                <h4>Audio Mixing</h4>
-                                <p>Clean audio editing and sound design.</p>
-                            </div>
-                        </div>
-                        <div class="technique-item">
-                            <i class="fas fa-magic"></i>
-                            <div>
-                                <h4>Visual Effects</h4>
-                                <p>Basic VFX and motion graphics.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="vx-toast" id="vxToast" role="status" aria-live="polite"></div>
 
     <footer>
         <div class="container">
@@ -345,7 +378,6 @@
 
     <div class="particles"></div>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="script.js"></script>
     <script src="video.js"></script>
     <script src="mobile.js"></script>
