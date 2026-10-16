@@ -66,7 +66,7 @@
         var t = document.getElementById(id);
         if (!t) return false;
         var y = t.getBoundingClientRect().top + window.pageYOffset - topOffset();
-        window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+        window.smoothScrollTo(Math.max(y, 0));
         return true;
     }
 
@@ -263,7 +263,7 @@
                     scrollToSection(sectionId);
                     try { history.replaceState(null, '', '#' + sectionId); } catch (err) { }
                 } else {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.smoothScrollTo(0);
                     try { history.replaceState(null, '', location.pathname); } catch (err) { }
                 }
             }, delay);
@@ -275,7 +275,7 @@
             e.stopPropagation();
             buzz();
             closeMenu(false);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.smoothScrollTo(0);
             return;
         }
         // cross-page: stop script.js intercepting, let the browser navigate
@@ -285,7 +285,7 @@
     tabEls.concat(tileEls).forEach(function (a) { a.addEventListener('click', onNavClick); });
     brand.addEventListener('click', function (e) {
         e.stopPropagation();
-        if (IS_HOME) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        if (IS_HOME) { e.preventDefault(); window.smoothScrollTo(0); }
     });
     sheetBrand.addEventListener('click', function () { closeMenu(); });
 
@@ -394,7 +394,178 @@
         window.addEventListener('resize', update);
         update();
     }
-    ['#scrollySteps', '.achievements-grid', '.languages-track', '.teaser-grid'].forEach(makeSwipe);
+    // ---------------------------------------------------- card stacks
+    // Achievements / Languages / More-to-explore become a deck of stacked
+    // cards on phones: the top card can be flicked away (either direction)
+    // and goes to the back of the pile, revealing the next one. Dots jump to
+    // a specific card. At > 899px nothing is changed (original layouts).
+    var stacks = [];
+    function makeStack(selector) {
+        var row = document.querySelector(selector);
+        if (!row || row.classList.contains('m-stack')) return;
+        var slides = [].slice.call(row.children).filter(function (c) {
+            return !c.classList.contains('scrolly-spine');
+        });
+        var n = slides.length;
+        if (n < 2) return;
+
+        var STEP = 12, SX = 14, active = 0, H = 0;   // STEP = vertical peek, SX = sideways peek (shows the swipe direction)
+        row.classList.add('m-stack');
+        slides.forEach(function (s) { s.classList.add('m-card'); });
+
+        var wrap = el('div', 'm-dots-wrap');
+        var dots = el('div', 'm-dots');
+        var dotEls = slides.map(function (s, i) {
+            var b = el('button');
+            b.type = 'button';
+            b.setAttribute('aria-label', 'Show card ' + (i + 1));
+            b.addEventListener('click', function () { active = i; place(true); });
+            dots.appendChild(b);
+            return b;
+        });
+        wrap.appendChild(dots);
+        row.parentNode.insertBefore(wrap, row.nextSibling);
+
+        function measure() {
+            slides.forEach(function (s) { s.style.height = 'auto'; });
+            H = 0;
+            slides.forEach(function (s) { H = Math.max(H, s.offsetHeight); });
+            slides.forEach(function (s) { s.style.height = H + 'px'; });
+            row.style.height = (H + STEP * 2) + 'px';
+        }
+
+        function pose(s, d) {
+            var k = Math.min(d, 2);
+            s.style.transform = 'translate3d(' + (k * SX) + 'px,' + (k * STEP) + 'px,0) rotate(' + (k * 1.6) + 'deg) scale(' + (1 - k * 0.045) + ')';
+            s.style.opacity = d < 3 ? '1' : '0';
+            s.style.filter = d === 0 ? 'none' : 'brightness(' + (1 - 0.13 * k) + ')';
+            s.style.zIndex = String(n - d);
+            s.style.pointerEvents = d === 0 ? 'auto' : 'none';
+            s.setAttribute('aria-hidden', d === 0 ? 'false' : 'true');
+        }
+
+        function place(animate, jumpEl) {
+            slides.forEach(function (s, i) {
+                var d = (i - active + n) % n;
+                s.style.transition = (animate && s !== jumpEl)
+                    ? 'transform .55s cubic-bezier(.22,1,.36,1), opacity .4s ease, filter .4s ease'
+                    : 'none';
+                pose(s, d);
+            });
+            dotEls.forEach(function (d, i) { d.classList.toggle('is-on', i === active); });
+            row.dispatchEvent(new CustomEvent('stackchange', { bubbles: true, detail: { index: active } }));
+        }
+
+        // ---- drag / flick the top card
+        var drag = null, suppressClick = false;
+        function top() { return slides[active]; }
+
+        row.addEventListener('pointerdown', function (e) {
+            if (e.pointerType === 'mouse' && e.button !== 0) return;
+            if (!top().contains(e.target)) return;
+            drag = { id: e.pointerId, x: e.clientX, y: e.clientY, t: Date.now(), dx: 0, on: false };
+        });
+        row.addEventListener('pointermove', function (e) {
+            if (!drag || e.pointerId !== drag.id) return;
+            var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+            if (!drag.on) {
+                if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { drag = null; return; } // vertical = page scroll
+                if (Math.abs(dx) < 8) return;
+                drag.on = true;
+                try { row.setPointerCapture(e.pointerId); } catch (err) { }
+            }
+            drag.dx = dx;
+            var c = top();
+            c.style.transition = 'none';
+            c.style.transform = 'translate3d(' + dx + 'px,0,0) rotate(' + (dx / 18) + 'deg)';
+            c.style.opacity = String(Math.max(0.35, 1 - Math.abs(dx) / 420));
+            // the card behind creeps forward as you pull
+            var nxt = slides[(active + 1) % n], p = Math.min(Math.abs(dx) / 160, 1);
+            nxt.style.transition = 'none';
+            nxt.style.transform = 'translate3d(' + (SX * (1 - p)) + 'px,' + (STEP * (1 - p)) + 'px,0) rotate(' + (1.6 * (1 - p)) + 'deg) scale(' + (0.955 + 0.045 * p) + ')';
+        });
+        function end(e) {
+            if (!drag || e.pointerId !== drag.id) return;
+            var d = drag; drag = null;
+            if (!d.on) return;
+            suppressClick = true;
+            setTimeout(function () { suppressClick = false; }, 60);
+            var v = Math.abs(d.dx) / Math.max(Date.now() - d.t, 1);
+            if (Math.abs(d.dx) > 90 || v > 0.5) {
+                var c = top(), dir = d.dx < 0 ? -1 : 1;
+                c.style.transition = 'transform .38s cubic-bezier(.4,0,.8,.4), opacity .38s ease';
+                c.style.transform = 'translate3d(' + (dir * window.innerWidth * 1.1) + 'px,0,0) rotate(' + (dir * 16) + 'deg)';
+                c.style.opacity = '0';
+                setTimeout(function () {
+                    var gone = c;
+                    active = (active + 1) % n;
+                    place(true, gone);          // flown card jumps to the back, others slide forward
+                }, 330);
+            } else {
+                place(true);                    // spring back
+            }
+        }
+        row.addEventListener('pointerup', end);
+        row.addEventListener('pointercancel', end);
+        row.addEventListener('click', function (e) {
+            if (suppressClick) { e.preventDefault(); e.stopPropagation(); }
+        }, true);
+
+        // one-time nudge: the top card slides toward the pile and springs back,
+        // so people see it can be pulled away without any text
+        if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            var nudged = false;
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (en) {
+                    if (!en.isIntersecting || nudged || drag) return;
+                    nudged = true; io.disconnect();
+                    var c = top();
+                    setTimeout(function () {
+                        if (drag) return;
+                        c.style.transition = 'transform .45s cubic-bezier(.3,.7,.4,1)';
+                        c.style.transform = 'translate3d(-46px,0,0) rotate(-4deg)';
+                        setTimeout(function () { if (!drag) place(true); }, 480);
+                    }, 500);
+                });
+            }, { threshold: 0.6 });
+            io.observe(row);
+        }
+
+        measure();
+        place(false);
+        window.addEventListener('load', function () { measure(); place(false); });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); place(false); });
+
+        stacks.push({
+            row: row,
+            relayout: function () { measure(); place(false); },
+            destroy: function () {
+                row.classList.remove('m-stack');
+                row.style.height = '';
+                slides.forEach(function (s) {
+                    s.classList.remove('m-card');
+                    ['transform', 'opacity', 'filter', 'zIndex', 'pointerEvents', 'transition', 'height'].forEach(function (p) { s.style[p] = ''; });
+                    s.removeAttribute('aria-hidden');
+                });
+                if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+            }
+        });
+    }
+
+    var STACKS = ['.achievements-grid', '.languages-track', '.teaser-grid'];
+    var phoneMQ = window.matchMedia('(max-width: 899px)');
+    function syncStacks() {
+        if (phoneMQ.matches) {
+            if (!stacks.length) STACKS.forEach(makeStack);
+            else stacks.forEach(function (s) { s.relayout(); });
+        } else if (stacks.length) {
+            stacks.forEach(function (s) { s.destroy(); });
+            stacks = [];
+        }
+    }
+    syncStacks();
+    if (phoneMQ.addEventListener) phoneMQ.addEventListener('change', syncStacks);
+    window.addEventListener('resize', function () { if (phoneMQ.matches) stacks.forEach(function (s) { s.relayout(); }); });
 
     // ---------------------------------------- hide tab bar while typing
     function isTextField(n) {
