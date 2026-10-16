@@ -1102,7 +1102,12 @@ nav>div {
 }
 
 .achievement-card {
-    background: var(--lg-bg);
+    /* each card gets its own accent (amber / teal / rose), like the language cards */
+    --ach-accent: var(--signal);
+    --ach-glow: var(--signal-dim);
+    --card-accent-bg: linear-gradient(90deg, var(--ach-accent), transparent 82%) top / 100% 3px no-repeat,
+        radial-gradient(circle at 100% 0%, var(--ach-glow), transparent 62%);
+    background: var(--card-accent-bg), var(--lg-bg);
     border: 1px solid var(--lg-border);
     border-radius: var(--radius-m);
     padding: 1.9rem;
@@ -1122,7 +1127,7 @@ nav>div {
     z-index: 0;
     opacity: 0;
     pointer-events: none;
-    background: radial-gradient(220px circle at var(--px, 50%) var(--py, 0%), var(--signal-dim), transparent 70%);
+    background: radial-gradient(220px circle at var(--px, 50%) var(--py, 0%), var(--ach-glow), transparent 70%);
     transition: opacity 0.4s ease;
 }
 
@@ -1138,19 +1143,30 @@ nav>div {
     top: 1rem;
     right: 1.1rem;
     font-size: 1.3rem;
-    color: var(--hairline-strong);
-    transition: color 0.4s ease, transform 0.15s ease-out;
+    color: var(--ach-accent);
+    opacity: 0.6;
+    transition: opacity 0.4s ease, transform 0.15s ease-out;
     transform: translate(calc(var(--iconx, 0) * 1px), calc(var(--icony, 0) * 1px)) rotate(var(--iconr, 0deg)) scale(var(--icons, 1));
 }
 
+.achievement-card:nth-child(3n+2) {
+    --ach-accent: #5fb3a3;
+    --ach-glow: rgba(95, 179, 163, 0.16);
+}
+
+.achievement-card:nth-child(3n+3) {
+    --ach-accent: var(--rose);
+    --ach-glow: var(--rose-dim);
+}
+
 .achievement-card:hover {
-    border-color: var(--signal);
+    border-color: var(--ach-accent);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
     transform: translateY(-4px);
 }
 
 .achievement-card:hover::before {
-    color: var(--signal);
+    opacity: 1;
 }
 
 .achievement-card h3,
