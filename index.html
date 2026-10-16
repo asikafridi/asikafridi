@@ -15,6 +15,11 @@
                 var d = document.documentElement;
                 if (localStorage.getItem('theme') === 'light') d.classList.add('light-mode');
                 var p = sessionStorage.getItem('pt');
+                var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (!p && !rm && !location.hash) {
+                    d.classList.add('hero-anim', 'hero-lock');
+                    setTimeout(function () { d.classList.remove('hero-lock'); }, 9000); /* failsafe */
+                }
                 if (p) {
                     sessionStorage.removeItem('pt');
                     window.__pt = JSON.parse(p);
@@ -40,22 +45,23 @@
     <meta property="og:title" content="Asikur Rahman — Developer & Project Lead">
     <meta property="og:description"
         content="Computer Science engineer specializing in software development, currently leading projects at StratifyX.">
-    <meta property="og:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
+    <meta property="og:image" content="https://asikafridi.github.io/asikafridi/images/hero/hero-cutout.png">
     <meta property="og:url" content="https://asikafridi.github.io/asikafridi/">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Asikur Rahman — Developer & Project Lead">
     <meta name="twitter:description"
         content="Computer Science engineer, competitive programmer, and Project & Development Lead at StratifyX.">
-    <meta name="twitter:image" content="https://asikafridi.github.io/asikafridi/images/profile.jpg">
+    <meta name="twitter:image" content="https://asikafridi.github.io/asikafridi/images/hero/hero-cutout.png">
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="mobile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Bengali:wght@500;700&family=Noto+Sans+Devanagari:wght@500;600&family=Noto+Nastaliq+Urdu:wght@500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Bengali:wght@500;700&family=Noto+Sans+Devanagari:wght@500;600&family=Noto+Nastaliq+Urdu:wght@500;700&display=swap"
         rel="stylesheet">
 
     <script type="application/ld+json">
@@ -64,7 +70,7 @@
           "@type": "Person",
           "name": "Asikur Rahman",
           "url": "https://asikafridi.github.io/asikafridi/",
-          "image": "https://asikafridi.github.io/asikafridi/images/profile.jpg",
+          "image": "https://asikafridi.github.io/asikafridi/images/hero/hero-cutout.png",
           "jobTitle": "Project & Development Lead",
           "worksFor": { "@type": "Organization", "name": "StratifyX" },
           "alumniOf": "Daffodil International University",
@@ -80,18 +86,6 @@
 </head>
 
 <body>
-    <!-- Opening title card — shows the name for a moment, then iris-wipes
-         away to reveal the site. Hidden by default in CSS so a JS failure
-         never leaves visitors stuck behind a black screen; script.js opts it
-         in only when it can also run the reveal. -->
-    <div class="cinema-intro" id="cinemaIntro" aria-hidden="true">
-        <span class="cinema-intro-grain"></span>
-        <div class="cinema-intro-title" id="cinemaTitle">
-            <span class="cinema-intro-kicker">dhushor.dev presents</span>
-            <span class="cinema-intro-name">Asikur Rahman</span>
-        </div>
-    </div>
-
     <button class="theme-toggle" aria-label="Toggle theme" aria-pressed="false"></button>
     <div class="scroll-progress"></div>
     <div class="interactive-bg"></div>
@@ -127,52 +121,50 @@
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="container hero-content">
-            <div>
-                <div class="hero-eyebrow"><span class="dot"></span> Available for internships & collaborations</div>
-                <h1>
-                    <span class="line-1">Hello, world! I'm</span>
-                    <span>ASIKUR <span class="name-em">RAHMAN</span></span>
-                </h1>
-                <div class="typewriter-container">
-                    <div id="typewriter-text" class="typewriter-text"></div>
-                </div>
-                <div class="hero-cta">
-                    <a href="#projects" class="btn btn-primary"><i class="fas fa-folder-open"></i> View Projects</a>
-                    <a href="#contact" class="btn btn-ghost"><i class="fas fa-paper-plane"></i> Get in Touch</a>
-                </div>
-                <div class="hero-stats">
-                    <div><strong><span class="scrolly-stat-num"><span
-                                    data-count="2">0</span>+</span></strong><span>Roles Held</span></div>
-                    <div><strong><span class="scrolly-stat-num"><span
-                                    data-count="200">0</span>+</span></strong><span>Problems Solved</span></div>
-                    <div><strong><span class="scrolly-stat-num"><span
-                                    data-count="4">0</span>+</span></strong><span>Projects Building</span></div>
-                </div>
-            </div>
+    <!-- HERO — "HELLO WORLD" scrambles into the name, then the cut-out portrait rises over it.
+         Replace images/hero/hero-cutout.png with your transparent PNG. -->
+    <section class="hero" id="home" aria-label="Introduction">
+        <div class="hero-bg" aria-hidden="true"></div>
 
-            <div class="photo-stage">
-                <div class="editor-frame" id="editorFrame">
-                    <div class="frame-bar">
-                        <span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span>
-                        <span class="frame-name">asikur.jpg</span>
-                    </div>
-                    <div class="frame-body">
-                        <img src="images/profilemain.jpg" data-src="images/profilemain.jpg" alt="Asikur Rahman"
-                            loading="lazy">
-                        <div class="frame-scan"></div>
-                    </div>
-                    <div class="frame-caption">
-                        <span>status: <span class="ok">online</span></span>
-                        <span>Dhaka, BD</span>
+        <div class="hero-title">
+            <div class="hero-title-inner">
+                <h1 class="hero-name" id="heroName" aria-label="Asikur Rahman" data-start="HELLO WORLD"
+                    data-end="ASIKUR RAHMAN"><span id="heroNameText" aria-hidden="true">ASIKUR RAHMAN</span></h1>
+                <div class="hero-meta">
+                    <p class="hero-sub">
+                        <span class="hero-sub-strong">Project</span>
+                        <span class="hero-sub-soft">&amp; Development Lead</span>
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#projects" class="hero-pill hero-pill-icon" aria-label="View projects">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M7 17L17 7M17 7H8M17 7V16" />
+                            </svg>
+                        </a>
+                        <a href="#contact" class="hero-pill hero-pill-text">Contact</a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="hero-scroll-indicator">
-                <span>SCROLL</span>
-                <i class="fas fa-chevron-down"></i>
+        <div class="hero-portrait">
+            <img src="images/hero/hero-cutout.png" alt="Portrait of Asikur Rahman" width="1127" height="1396"
+                decoding="async" onerror="this.style.display='none'">
+        </div>
+
+        <!-- Desktop-only corner details -->
+        <div class="hero-corner hero-corner-left">
+            <div class="hero-eyebrow"><span class="dot"></span> Available for internships &amp; collaborations</div>
+            <div class="typewriter-container">
+                <div id="typewriter-text" class="typewriter-text"></div>
+            </div>
+        </div>
+        <div class="hero-corner hero-corner-right">
+            <div class="hero-stats">
+                <div><span class="stat-num"><span data-count="2">0</span>+</span><span>Roles Held</span></div>
+                <div><span class="stat-num"><span data-count="200">0</span>+</span><span>Problems Solved</span></div>
+                <div><span class="stat-num"><span data-count="4">0</span>+</span><span>Projects Building</span></div>
             </div>
         </div>
     </section>
@@ -192,107 +184,109 @@
         </div>
     </div>
 
-    <!-- ABOUT -->
-    <section id="about" class="section">
-        <div class="container">
+    <!-- ABOUT — scroll-lit paragraph + cut-out portrait + 4-row skills marquee.
+         Replace images/about/about-cutout.png with your transparent PNG. -->
+    <section id="about" class="about">
+        <div class="about-inner">
             <div class="section-kicker"><span class="eyebrow">whoami</span><span class="rule"></span></div>
-            <h2 class="reveal split-text" style="margin-bottom:2.75rem;">About Me</h2>
-            <div class="scrolly">
-                <!-- Sticky narrator: portrait, chapter caption, progress rail -->
-                <div class="scrolly-visual reveal">
-                    <figure class="scrolly-portrait">
-                        <div class="scrolly-rail"><span class="scrolly-rail-fill" id="scrollyRail"></span></div>
-                        <div class="scrolly-portrait-frame">
-                            <img src="images/profile2.jpg" onerror="this.onerror=null;this.src='images/profilemain.jpg'"
-                                alt="Asikur Rahman" loading="lazy">
-                            <span class="scrolly-scan" aria-hidden="true"></span>
+            <h2 class="sec-title about-title about-title-mobile reveal"><span class="grad-text">About</span> <em>me</em>
+            </h2>
+
+            <div class="about-grid">
+                <figure class="about-figure reveal" id="aboutFigure">
+                    <img src="images/about/about-cutout.png" alt="Asikur Rahman" loading="lazy" decoding="async"
+                        onerror="this.style.display='none'">
+                </figure>
+
+                <div class="about-body">
+                    <h2 class="sec-title about-title about-title-desktop reveal"><span class="grad-text">About</span>
+                        <em>me</em>
+                    </h2>
+                    <div class="about-card reveal">
+                        <p class="about-text" id="aboutText"><span class="word">Hey,</span> <span
+                                class="word">I'm</span> <span class="word nm">Asikur</span> <span
+                                class="word nm">Rahman.</span> <span class="word">A</span> <span
+                                class="word k">Computer</span> <span class="word k">Science</span> <span
+                                class="word k">&amp;</span> <span class="word k">Engineering</span> <span
+                                class="word">student</span> <span class="word">at</span> <span
+                                class="word k">Daffodil</span> <span class="word k">International</span> <span
+                                class="word k">University</span> <span class="word">and</span> <span
+                                class="word k">Project</span> <span class="word k">&amp;</span> <span
+                                class="word k">Development</span> <span class="word k">Lead</span> <span
+                                class="word">at</span> <span class="word k">StratifyX.</span> <span
+                                class="word">I've</span> <span class="word">worked</span> <span
+                                class="word">through</span> <span class="word k">200+</span> <span
+                                class="word k">problems</span> <span class="word">on</span> <span
+                                class="word">Codeforces</span> <span class="word">and</span> <span
+                                class="word">in</span> <span class="word">contest</span> <span
+                                class="word">practice</span> <span class="word">—</span> <span class="word">each</span>
+                            <span class="word">one</span> <span class="word">a</span> <span class="word">lesson</span>
+                            <span class="word">in</span> <span class="word">staying</span> <span
+                                class="word">calm</span> <span class="word">and</span> <span class="word">finding</span>
+                            <span class="word">structure</span> <span class="word">—</span> <span
+                                class="word">and</span> <span class="word">now</span> <span class="word">I</span> <span
+                                class="word">turn</span> <span class="word">plans</span> <span class="word">into</span>
+                            <span class="word">working</span> <span class="word">software,</span> <span
+                                class="word">owning</span> <span class="word">technical</span> <span
+                                class="word">decisions</span> <span class="word">and</span> <span
+                                class="word">shipping</span> <span class="word">products</span> <span
+                                class="word">like</span> <span class="word k">Expensio</span> <span
+                                class="word">end</span> <span class="word">to</span> <span class="word">end.</span>
+                            <span class="word">I</span> <span class="word">also</span> <span
+                                class="word">volunteered</span> <span class="word">with</span> <span
+                                class="word">the</span> <span class="word k">Office</span> <span
+                                class="word k">of</span> <span class="word k">International</span> <span
+                                class="word k">Affairs</span> <span class="word">at</span> <span class="word">DIU</span>
+                            <span class="word">on</span> <span class="word">international</span> <span
+                                class="word">conferences,</span> <span class="word">and</span> <span
+                                class="word">I'm</span> <span class="word">learning</span> <span
+                                class="word k">Russian</span> <span class="word">through</span> <span
+                                class="word">their</span> <span class="word">collaboration</span> <span
+                                class="word">with</span> <span class="word">the</span> <span class="word">Russian</span>
+                            <span class="word">House</span> <span class="word">in</span> <span
+                                class="word">Dhaka.</span>
+                        </p>
+
+                        <div class="about-chips">
+                            <span class="about-chip"><i class="fas fa-location-dot"></i> Dhaka, BD</span>
+                            <span class="about-chip"><i class="fas fa-code"></i> Developer</span>
+                            <span class="about-chip"><i class="fas fa-brain"></i> Problem Solver</span>
+                            <span class="about-chip"><i class="fas fa-users"></i> Project Lead</span>
                         </div>
-                        <figcaption class="scrolly-caption">
-                            <span class="scrolly-chapter"><span id="scrollyIndex">01</span> / 04</span>
-                            <span class="scrolly-caption-text" id="scrollyCaption">Where it compiles from</span>
-                        </figcaption>
-                    </figure>
-                    <div class="scrolly-badges">
-                        <span class="badge"><i class="fas fa-location-dot"></i> Dhaka, BD</span>
-                        <span class="badge"><i class="fas fa-code"></i> Developer</span>
-                        <span class="badge"><i class="fas fa-brain"></i> Problem Solver</span>
-                        <span class="badge"><i class="fas fa-users"></i> Project Lead</span>
+
+                        <div class="about-stats">
+                            <div class="about-stat"><span class="stat-num"><span
+                                        data-count="200">0</span>+</span><span>Problems solved</span></div>
+                            <div class="about-stat"><span class="stat-num"><span
+                                        data-count="2">0</span>+</span><span>Roles held</span></div>
+                            <div class="about-stat"><span class="stat-num"><span
+                                        data-count="5">0</span></span><span>Languages</span></div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Narrative beats — one holds the reader at a time -->
-                <div class="scrolly-steps" id="scrollySteps">
-                    <div class="scrolly-spine" aria-hidden="true">
-                        <span class="scrolly-spine-fill" id="scrollySpineFill"></span>
-                        <span class="scrolly-node" data-node="01"></span>
-                        <span class="scrolly-node" data-node="02"></span>
-                        <span class="scrolly-node" data-node="03"></span>
-                        <span class="scrolly-node" data-node="04"></span>
-                    </div>
-
-                    <article class="scrolly-step is-active" data-index="01" data-caption="Where it compiles from">
-                        <span class="scrolly-step-tag">the origin</span>
-                        <h3 class="scrolly-mask"><span>It starts with a question, not a keyboard.</span></h3>
-                        <p class="scrolly-mask"><span>I'm a <span class="hl-role">Computer Science &amp;
-                                    Engineering</span>
-                                student at
-                                <span class="hl-org">Daffodil International University</span> (<span
-                                    class="hl-date">2024 — present</span>). Long before the
-                                syntax, I liked pulling things apart to see why they worked — that instinct is still the
-                                engine.</span></p>
-                    </article>
-
-                    <article class="scrolly-step" data-index="02" data-caption="Sharpening the thinking">
-                        <span class="scrolly-step-tag">the problem-solver</span>
-                        <h3 class="scrolly-mask"><span>Competitive programming taught me how to think.</span></h3>
-                        <p class="scrolly-mask"><span>On Codeforces and in contest practice I've worked through
-                                <span class="hl">200+ problems</span> — each one a small exercise in staying calm,
-                                finding
-                                structure, and turning a messy prompt into a clean, provable solution.</span></p>
-                    </article>
-
-                    <article class="scrolly-step" data-index="03" data-caption="Shipping real products">
-                        <span class="scrolly-step-tag">the builder</span>
-                        <h3 class="scrolly-mask"><span>But ratings don't ship. Products do.</span></h3>
-                        <p class="scrolly-mask"><span>As <span class="hl-role">Project &amp; Development
-                                    Lead</span> at
-                                <span class="hl-org">StratifyX</span> I turn plans into
-                                working software — owning technical decisions and shipping features end to end,
-                                including
-                                <span class="hl">Expensio</span>. I don't just write code; I ship things people actually
-                                use.</span></p>
-                    </article>
-
-                    <article class="scrolly-step" data-index="04" data-caption="Working across borders">
-                        <span class="scrolly-step-tag">the collaborator</span>
-                        <h3 class="scrolly-mask"><span>The best problems get solved with people.</span></h3>
-                        <p class="scrolly-mask"><span>I volunteered with the <span class="hl-org">Office of
-                                    International
-                                    Affairs</span> at <span class="hl-org">DIU</span> on
-                                international conferences and delegate affairs — and I'm now learning
-                                <span class="hl">Russian</span> through their collaboration with the <span
-                                    class="hl-org">Russian House</span> in
-                                Dhaka.</span></p>
-                        <div class="scrolly-stats">
-                            <div class="scrolly-stat">
-                                <span class="scrolly-stat-num"><span data-count="200">0</span>+</span>
-                                <span class="scrolly-stat-label">Problems solved</span>
-                            </div>
-                            <div class="scrolly-stat">
-                                <span class="scrolly-stat-num"><span data-count="2">0</span>+</span>
-                                <span class="scrolly-stat-label">Roles held</span>
-                            </div>
-                        </div>
-                        <div class="tech-stack scrolly-tech">
-                            <i class="fab fa-cuttlefish" title="C / C++"></i>
-                            <i class="fab fa-java" title="Java"></i>
-                            <i class="fab fa-html5" title="HTML5"></i>
-                            <i class="fab fa-css3-alt" title="CSS3"></i>
-                            <i class="fab fa-js" title="JavaScript"></i>
-                            <i class="fab fa-github" title="GitHub"></i>
-                        </div>
-                    </article>
-                </div>
+        <div class="about-marquee" aria-label="Skills and languages">
+            <div class="am-row ">
+                <div class="am-track"><span class="am-item">C / C++</span><span class="am-item">Java</span><span
+                        class="am-item">JavaScript</span><span class="am-item">HTML5</span><span
+                        class="am-item">CSS3</span><span class="am-item">Git &amp; GitHub</span></div>
+            </div>
+            <div class="am-row is-rev">
+                <div class="am-track"><span class="am-item">Problem Solving</span><span class="am-item">Competitive
+                        Programming</span><span class="am-item">Web Development</span><span class="am-item">Video
+                        Editing</span><span class="am-item">Algorithms</span></div>
+            </div>
+            <div class="am-row ">
+                <div class="am-track"><span class="am-item">Project Management</span><span class="am-item">Team
+                        Leadership</span><span class="am-item">Event Coordination</span><span
+                        class="am-item">Communication</span><span class="am-item">Operations</span></div>
+            </div>
+            <div class="am-row is-rev">
+                <div class="am-track"><span class="am-item">Bengali</span><span class="am-item">English</span><span
+                        class="am-item">Hindi</span><span class="am-item">Urdu</span><span
+                        class="am-item">Russian</span></div>
             </div>
         </div>
     </section>
@@ -305,7 +299,9 @@
                 <span class="rule"></span>
                 <span class="count">02 roles</span>
             </div>
-            <h2 class="reveal" style="margin-bottom:2.75rem;">Work Experience</h2>
+            <h2 class="sec-title reveal" style="margin-bottom:2.75rem;"><span class="grad-text">Work</span>
+                <em>experience</em>
+            </h2>
 
             <div class="experience-list reveal-stagger reveal">
                 <div class="experience-item stagger-item">
@@ -370,7 +366,7 @@
     <section id="achievements" class="section">
         <div class="container">
             <div class="section-kicker"><span class="eyebrow">badges.json</span><span class="rule"></span></div>
-            <h2 class="reveal" style="margin-bottom:2.75rem;">Achievements</h2>
+            <h2 class="sec-title reveal" style="margin-bottom:2.75rem;"><span class="grad-text">Achievements</span></h2>
             <div class="achievements-grid reveal-stagger reveal">
                 <div class="achievement-card tilt-card stagger-item">
                     <h3>Certificate of Appreciation</h3>
@@ -397,7 +393,9 @@
     <section id="skills" class="section">
         <div class="container">
             <div class="section-kicker"><span class="eyebrow">stack.config</span><span class="rule"></span></div>
-            <h2 class="reveal split-text" style="margin-bottom:1.6rem;">Technical Skills</h2>
+            <h2 class="sec-title reveal" style="margin-bottom:1.6rem;"><span class="grad-text">Technical</span>
+                <em>skills</em>
+            </h2>
 
             <p class="projects-hint" style="margin-bottom:1.8rem;"><i class="fas fa-arrow-left"></i> a continuous loop —
                 hover to pause</p>
@@ -489,7 +487,9 @@
     <section id="languages" class="section">
         <div class="container">
             <div class="section-kicker"><span class="eyebrow">i18n.locales</span><span class="rule"></span></div>
-            <h2 class="reveal split-text" style="margin-bottom:1.6rem;">Language Proficiency</h2>
+            <h2 class="sec-title reveal" style="margin-bottom:1.6rem;"><span class="grad-text">Language</span>
+                <em>proficiency</em>
+            </h2>
             <p class="projects-hint reveal" style="margin-bottom:2.6rem;"><i class="fas fa-language"></i> five tongues,
                 five hellos — scroll to collect them</p>
 
@@ -697,103 +697,130 @@
         </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="section projects-scroll-section">
-        <div class="container" style="padding-bottom: 1.5rem;">
+    <!-- PROJECTS — alternating "Selected work" list.
+         Screenshots live in images/projects/ (same filenames as before). -->
+    <section id="projects" class="projects">
+        <div class="projects-inner">
             <div class="section-kicker">
                 <span class="eyebrow">projects.build()</span>
                 <span class="rule"></span>
                 <span class="count">04 shown</span>
             </div>
-            <h2 class="reveal split-text" style="margin-bottom: 1rem;">Projects</h2>
-            <p class="projects-hint reveal"><i class="fas fa-arrows-left-right"></i> Pick a project, swipe, or use the
-                arrow keys</p>
-        </div>
+            <div class="projects-head reveal">
+                <h2 class="sec-title projects-title"><span class="grad-text">Selected</span> <em>work</em></h2>
+                <div class="projects-head-side">
+                    <p>Things I'm building and shipping — from this portfolio to finance tools and developer
+                        tooling — with a focus on clean structure, simple design and products people actually use.</p>
+                    <a class="pj-btn pj-btn-primary" href="https://github.com/asikafridi" target="_blank"
+                        rel="noopener">Read More <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                        </svg></a>
+                </div>
+            </div>
 
-        <div class="projects-sticky">
-            <div class="projects-track" id="projectsTrack">
-                <div class="project-card-v2 tilt-card">
-                    <div class="project-thumb">
-                        <img src="images/projects/portfolio.jpg" alt="Own Portfolio thumbnail" loading="lazy"
-                            onerror="this.style.display='none'">
+            <div class="pj-list">
+                <article class="pj-item">
+                    <div class="pj-media reveal" data-initial="P">
+                        <img class="pj-img" src="images/projects/portfolio.jpg" alt="Own Portfolio thumbnail"
+                            loading="lazy" decoding="async" onerror="this.style.display='none'">
                         <span class="project-status live">Live</span>
                     </div>
-                    <div class="project-card-body">
-                        <h3>Own Portfolio</h3>
-                        <p>This site — a fully responsive personal portfolio with a light/dark theme, animated
-                            scroll experience, contact form, and a certificate & video showcase.</p>
-                        <div class="tech-stack"><span>HTML5</span><span>CSS3</span><span>JavaScript</span></div>
-                        <div class="project-links">
-                            <a href="https://github.com/asikafridi" target="_blank" rel="noopener"><i
-                                    class="fab fa-github"></i> Source</a>
+                    <div class="pj-text reveal">
+                        <span class="pj-num">01</span>
+                        <h3 class="pj-title">OWN <em>Portfolio</em></h3>
+                        <div class="pj-tags"><span class="pj-tag is-cat">Personal Portfolio</span><span
+                                class="pj-tag">HTML5</span><span class="pj-tag">CSS3</span><span
+                                class="pj-tag">JavaScript</span></div>
+                        <p class="pj-desc">This site — a fully responsive personal portfolio with a light/dark theme,
+                            animated scroll experience, contact form, and a certificate &amp; video showcase.</p>
+                        <div class="pj-actions">
+                            <a class="pj-btn pj-btn-primary" href="https://asikafridi.github.io/asikafridi/"
+                                target="_blank" rel="noopener">Live Site <svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                                </svg></a>
+                            <a class="pj-btn pj-btn-ghost" href="https://github.com/asikafridi" target="_blank"
+                                rel="noopener">GitHub Code <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                                </svg></a>
                         </div>
                     </div>
-                </div>
+                </article>
 
-                <div class="project-card-v2 tilt-card">
-                    <div class="project-thumb">
-                        <img src="images/projects/expensio.jpg" alt="Expensio thumbnail" loading="lazy"
-                            onerror="this.style.display='none'">
+                <article class="pj-item">
+                    <div class="pj-media reveal" data-initial="E">
+                        <img class="pj-img" src="images/projects/expensio.jpg" alt="Expensio thumbnail" loading="lazy"
+                            decoding="async" onerror="this.style.display='none'">
                         <span class="project-status progress">In Progress</span>
                     </div>
-                    <div class="project-card-body">
-                        <h3>Expensio</h3>
-                        <p>A personal finance and expense-tracking app designed to make budgeting effortless —
-                            clear spending insights, categorized expenses, and simple day-to-day money tracking.</p>
-                        <div class="tech-stack"><span>Web App</span><span>Finance</span></div>
+                    <div class="pj-text reveal">
+                        <span class="pj-num">02</span>
+                        <h3 class="pj-title">EXPENSIO <em>Finance tracker</em></h3>
+                        <div class="pj-tags"><span class="pj-tag is-cat">Personal Finance</span><span class="pj-tag">Web
+                                App</span><span class="pj-tag">Finance</span></div>
+                        <p class="pj-desc">A personal finance and expense-tracking app designed to make budgeting
+                            effortless — clear spending insights, categorized expenses, and simple day-to-day money
+                            tracking.</p>
+                        <div class="pj-actions">
+                            <span class="pj-btn pj-btn-soon"><span class="dot"></span> In progress — details soon</span>
+                        </div>
                     </div>
-                </div>
+                </article>
 
-                <div class="project-card-v2 tilt-card">
-                    <div class="project-thumb">
-                        <img src="images/projects/rootforge.jpg" alt="RootForge thumbnail" loading="lazy"
-                            onerror="this.style.display='none'">
+                <article class="pj-item">
+                    <div class="pj-media reveal" data-initial="R">
+                        <img class="pj-img" src="images/projects/rootforge.jpg" alt="RootForge thumbnail" loading="lazy"
+                            decoding="async" onerror="this.style.display='none'">
                         <span class="project-status progress">In Progress</span>
                     </div>
-                    <div class="project-card-body">
-                        <h3>RootForge</h3>
-                        <p>A developer-focused tooling project aimed at streamlining project scaffolding and
-                            setup — reducing the busywork between an idea and a running codebase.</p>
-                        <div class="tech-stack"><span>Developer Tools</span></div>
+                    <div class="pj-text reveal">
+                        <span class="pj-num">03</span>
+                        <h3 class="pj-title">ROOT <em>Forge</em></h3>
+                        <div class="pj-tags"><span class="pj-tag is-cat">Developer Tooling</span><span
+                                class="pj-tag">Developer Tools</span></div>
+                        <p class="pj-desc">A developer-focused tooling project aimed at streamlining project scaffolding
+                            and setup — reducing the busywork between an idea and a running codebase.</p>
+                        <div class="pj-actions">
+                            <span class="pj-btn pj-btn-soon"><span class="dot"></span> In progress — details soon</span>
+                        </div>
                     </div>
-                </div>
+                </article>
 
-                <div class="project-card-v2 tilt-card">
-                    <div class="project-thumb">
-                        <img src="images/projects/bisonbank.jpg" alt="BisonBank thumbnail" loading="lazy"
-                            onerror="this.style.display='none'">
+                <article class="pj-item">
+                    <div class="pj-media reveal" data-initial="B">
+                        <img class="pj-img" src="images/projects/bisonbank.jpg" alt="BisonBank thumbnail" loading="lazy"
+                            decoding="async" onerror="this.style.display='none'">
                         <span class="project-status planned">Planned</span>
                     </div>
-                    <div class="project-card-body">
-                        <h3>BisonBank</h3>
-                        <p>A conceptual digital banking platform focused on clean transaction flows, account
-                            management, and a secure, modern user experience.</p>
-                        <div class="tech-stack"><span>FinTech</span><span>Web App</span></div>
+                    <div class="pj-text reveal">
+                        <span class="pj-num">04</span>
+                        <h3 class="pj-title">BISON <em>Bank</em></h3>
+                        <div class="pj-tags"><span class="pj-tag is-cat">FinTech Concept</span><span
+                                class="pj-tag">FinTech</span><span class="pj-tag">Web App</span></div>
+                        <p class="pj-desc">A conceptual digital banking platform focused on clean transaction flows,
+                            account management, and a secure, modern user experience.</p>
+                        <div class="pj-actions">
+                            <span class="pj-btn pj-btn-soon is-planned"><span class="dot"></span> Planned — coming
+                                later</span>
+                        </div>
                     </div>
-                </div>
-
-                <div class="project-card-v2 project-card-end">
-                    <div class="project-end-inner">
-                        <i class="fas fa-arrow-up-right-from-square"></i>
-                        <h3>More on GitHub</h3>
-                        <p>Check out additional experiments, contest solutions, and repos.</p>
-                        <a href="https://github.com/asikafridi" target="_blank" rel="noopener"
-                            class="btn btn-ghost">Visit GitHub</a>
-                    </div>
-                </div>
-
+                </article>
             </div>
-        </div>
 
-        <div class="container projects-ctrl">
-            <div class="projects-progress">
-                <div class="projects-progress-fill" id="projectsProgressFill"></div>
-            </div>
-            <div class="projects-arrows">
-                <button class="projects-arrow" id="projArrowLeft" aria-label="Scroll projects left"><i
-                        class="fas fa-arrow-left"></i></button>
-                <button class="projects-arrow" id="projArrowRight" aria-label="Scroll projects right"><i
-                        class="fas fa-arrow-right"></i></button>
+            <div class="pj-more reveal">
+                <div>
+                    <h3>More on GitHub</h3>
+                    <p>Additional experiments, contest solutions, and repos.</p>
+                </div>
+                <a href="https://github.com/asikafridi" target="_blank" rel="noopener" class="pj-btn pj-btn-ghost">Visit
+                    GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                    </svg></a>
             </div>
         </div>
     </section>
@@ -802,7 +829,9 @@
     <section id="showcase" class="section">
         <div class="container">
             <div class="section-kicker"><span class="eyebrow">more.exe</span><span class="rule"></span></div>
-            <h2 class="reveal split-text" style="margin-bottom:0.6rem;">More to Explore</h2>
+            <h2 class="sec-title reveal" style="margin-bottom:0.6rem;"><span class="grad-text">More to</span>
+                <em>explore</em>
+            </h2>
             <p class="projects-hint reveal" style="margin-bottom:2.75rem;"><i class="fas fa-compass"></i> two side
                 quests, zero loading screens</p>
             <div class="teaser-grid reveal-stagger reveal">
@@ -832,7 +861,9 @@
     <section id="contact" class="section">
         <div class="container">
             <div class="section-kicker"><span class="eyebrow">send.message()</span><span class="rule"></span></div>
-            <h2 class="reveal" style="margin-bottom:1.6rem;">Get in Touch</h2>
+            <h2 class="sec-title reveal" style="margin-bottom:1.6rem;"><span class="grad-text">Get in</span>
+                <em>touch</em>
+            </h2>
 
 
             <div class="contact-liquid reveal" id="contactLiquid">
@@ -892,8 +923,13 @@
     </footer>
 
     <div class="particles"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="smooth.js"></script>
     <script src="script.js"></script>
     <script src="mobile.js"></script>
+    <script src="home.js"></script>
 </body>
 
 </html>
