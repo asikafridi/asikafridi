@@ -52,7 +52,6 @@
     nav[aria-label="Main navigation"],
     .theme-toggle,
     .theme-indicator,
-    .hero-scroll-indicator,
     .mobile-nav-overlay,
     .mobile-nav-sidebar,
     .particles,
@@ -539,157 +538,8 @@
     /* ======================================================================
        5. HOME PAGE — app-style screens
        ====================================================================== */
-    .hero {
-        min-height: auto;
-        padding-top: calc(var(--nav-h) + 4px);
-    }
-
-    .hero-content {
-        grid-template-columns: 1fr;
-        gap: 1.3rem;
-        padding-top: 0.4rem;
-        padding-bottom: 1.4rem;
-        text-align: center;
-    }
-
-    .photo-stage {
-        order: -1;
-        margin: 0;
-    }
-
-    .editor-frame {
-        width: min(228px, 60vw);
-        border-radius: 30px;
-    }
-
-    .editor-frame .frame-body {
-        aspect-ratio: 1 / 1;
-    }
-
-    .hero-eyebrow {
-        display: flex;
-        width: fit-content;
-        max-width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        font-size: 0.68rem;
-    }
-
-    .hero h1 {
-        font-size: clamp(2rem, 10.4vw, 3rem);
-        line-height: 1.04;
-    }
-
-    .typewriter-container {
-        justify-content: center;
-        text-align: center;
-    }
-
-    .typewriter-text {
-        font-size: 0.85rem;
-    }
-
-    .hero-cta {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.7rem;
-        margin-top: 1.4rem;
-    }
-
-    .hero-cta .btn {
-        width: 100%;
-        justify-content: center;
-        border-radius: 18px;
-        padding: 1rem 1.2rem;
-    }
-
-    .hero-cta .btn-ghost {
-        background: var(--m-glass-bg);
-        border: 1px solid var(--m-glass-border);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        backdrop-filter: blur(20px) saturate(180%);
-        box-shadow: var(--m-glass-shadow);
-    }
-
-    .hero-stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-        margin-top: 1.5rem;
-    }
-
-    .hero-stats div {
-        padding: 14px 4px 12px;
-        border-radius: 22px;
-        background: var(--m-glass-bg);
-        border: 1px solid var(--m-glass-border);
-        box-shadow: var(--m-glass-shadow);
-        -webkit-backdrop-filter: blur(18px) saturate(170%);
-        backdrop-filter: blur(18px) saturate(170%);
-        text-align: center;
-    }
-
-    .hero-stats .scrolly-stat-num,
-    .hero-stats .scrolly-stat-num>span {
-        font-size: 1.5rem;
-    }
-
-    .hero-stats span {
-        font-size: 0.6rem;
-    }
-
     .marquee-strip {
         font-size: 0.78rem;
-    }
-
-    /* About — each story beat becomes an app card; text is always readable */
-    .scrolly {
-        gap: 1.1rem;
-    }
-
-    .scrolly-portrait {
-        max-width: 100%;
-        border-radius: 28px;
-    }
-
-    .scrolly-portrait-frame {
-        aspect-ratio: 1 / 1;
-    }
-
-    .scrolly-spine {
-        display: none;
-    }
-
-    .scrolly-steps {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        padding-left: 0;
-    }
-
-    .scrolly-step {
-        padding: 1.3rem !important;
-        border-radius: 26px;
-        background: var(--m-glass-bg);
-        border: 1px solid var(--m-glass-border);
-        box-shadow: var(--m-glass-shadow);
-        -webkit-backdrop-filter: blur(20px) saturate(170%);
-        backdrop-filter: blur(20px) saturate(170%);
-    }
-
-    .scrolly-step h3 {
-        font-size: 1.25rem;
-    }
-
-    .scrolly-mask>span {
-        transform: none !important;
-        opacity: 1 !important;
-    }
-
-    .scrolly-badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
     }
 
     /* Work experience — stacked glass cards */
@@ -741,50 +591,6 @@
 
     .lang-card {
         border-radius: 28px;
-    }
-
-    /* Projects — native swipe carousel with snapping (the app "card stack") */
-    .projects-scroll-section {
-        padding-bottom: 1.6rem;
-    }
-
-    .projects-sticky {
-        display: block;
-    }
-
-    .projects-track {
-        display: flex;
-        gap: 12px;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        padding: 6px var(--edge) 14px;
-        transform: none !important;
-    }
-
-    .projects-track::-webkit-scrollbar {
-        display: none;
-    }
-
-    .project-card-v2 {
-        width: 80vw;
-        max-width: 340px;
-        scroll-snap-align: center;
-        border-radius: 28px;
-        transform: none !important;
-    }
-
-    .project-card-body {
-        padding: 1.25rem 1.3rem 1.5rem;
-    }
-
-    .projects-arrows {
-        display: none;
-    }
-
-    .projects-progress {
-        margin-top: 0.4rem;
     }
 
     /* More to explore */
@@ -929,6 +735,28 @@
         margin: -4px 0 4px;
     }
 
+    /* Card-stack decks (Achievements etc.): the back cards peek out below the
+       top card, so the swipe hint + dots sit lower to clear them */
+    .m-stack+.m-dots-wrap {
+        margin: 26px 0 10px;
+    }
+
+    /* the pile fans out to the right: the cards peeking out on that side show
+       the top card can be pulled away - no "swipe" label needed */
+    .m-stack {
+        margin-right: auto !important;
+        transform: translateX(-9px);
+    }
+
+    .m-stack>.m-card {
+        transform-origin: 0% 100%;
+    }
+
+    /* dots: the active one stretches toward the next card like a little arrow trail */
+    .m-stack+.m-dots-wrap .m-dots button.is-on {
+        width: 28px;
+    }
+
     .m-swipe-hint {
         display: inline-flex;
         align-items: center;
@@ -983,13 +811,7 @@
     }
 
     /* About: the portrait stays on top; the four beats swipe underneath */
-    #scrollySteps.m-swipe .scrolly-spine {
-        display: none !important;
-    }
 
-    #scrollySteps.m-swipe>.scrolly-step {
-        padding: 1.3rem !important;
-    }
 
     /* the language photo / aside stays put above its swipe row */
     .languages-track.m-swipe>.lang-card {
@@ -1123,5 +945,74 @@
 
     .m-swipe>.m-slide {
         transition: none !important;
+    }
+}
+
+
+/* Footer text: one line on phones */
+@media (max-width: 899px) {
+    footer .container {
+        padding: 0.9rem 0.8rem;
+    }
+
+    footer p {
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        gap: 0.4rem;
+        font-size: clamp(0.54rem, 2.7vw, 0.7rem);
+        letter-spacing: 0;
+    }
+
+    footer p::before {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+
+/* ==========================================================================
+   CARD STACKS (phones) — Achievements, Languages, More to explore.
+   mobile.js adds .m-stack to the row and .m-card to each card.
+   ========================================================================== */
+@media (max-width: 899px) {
+    .m-stack {
+        position: relative;
+        display: block !important;
+        width: min(86vw, 380px);
+        margin: 0 auto !important;
+        padding: 0 !important;
+        overflow: visible;
+        grid-template-columns: none !important;
+        touch-action: pan-y;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .m-stack>.m-card {
+        position: absolute !important;
+        left: 0;
+        right: 0;
+        top: 0;
+        width: 100% !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        overflow: hidden;
+        transform-origin: 50% 100%;
+        will-change: transform, opacity;
+        cursor: grab;
+        /* back cards must not show the ones behind them through the glass */
+        background: linear-gradient(155deg, var(--panel-2), var(--ink-2)) !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.38);
+    }
+
+    .m-stack>.m-card:active {
+        cursor: grabbing;
+    }
+
+    .m-stack>.m-card img {
+        -webkit-user-drag: none;
+        pointer-events: none;
     }
 }
