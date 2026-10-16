@@ -438,17 +438,18 @@
             var k = Math.min(d, 2);
             s.style.transform = 'translate3d(' + (k * SX) + 'px,' + (k * STEP) + 'px,0) rotate(' + (k * 1.6) + 'deg) scale(' + (1 - k * 0.045) + ')';
             s.style.opacity = d < 3 ? '1' : '0';
-            s.style.filter = d === 0 ? 'none' : 'brightness(' + (1 - 0.13 * k) + ')';
+            s.style.boxShadow = d === 0 ? '' : 'inset 0 0 0 100vmax rgba(0,0,0,' + (0.14 * k) + '), 0 18px 40px rgba(0,0,0,.38)';
             s.style.zIndex = String(n - d);
             s.style.pointerEvents = d === 0 ? 'auto' : 'none';
             s.setAttribute('aria-hidden', d === 0 ? 'false' : 'true');
         }
 
-        function place(animate, jumpEl) {
+        function place(animate, jumpEl, hold) {
             slides.forEach(function (s, i) {
+                if (hold && s === jumpEl) return;      // card still flying away: don't touch it
                 var d = (i - active + n) % n;
                 s.style.transition = (animate && s !== jumpEl)
-                    ? 'transform .55s cubic-bezier(.22,1,.36,1), opacity .4s ease, filter .4s ease'
+                    ? 'transform .55s cubic-bezier(.22,1,.36,1), opacity .4s ease'
                     : 'none';
                 pose(s, d);
             });
@@ -457,12 +458,22 @@
         }
 
         // ---- drag / flick the top card
-        var drag = null, suppressClick = false;
+        var drag = null, suppressClick = false, flying = null;
+
+        function sendToBack(c) {
+            var i = slides.indexOf(c), d = (i - active + n) % n;
+            c.style.transition = 'none';
+            pose(c, d);
+            c.style.opacity = '0';
+            void c.offsetWidth;                          // commit the hidden state before fading in
+            c.style.transition = 'opacity .45s ease';
+            c.style.opacity = d < 3 ? '1' : '0';
+        }
         function top() { return slides[active]; }
 
         row.addEventListener('pointerdown', function (e) {
             if (e.pointerType === 'mouse' && e.button !== 0) return;
-            if (!top().contains(e.target)) return;
+            if (!top().contains(e.target) || top() === flying) return;
             drag = { id: e.pointerId, x: e.clientX, y: e.clientY, t: Date.now(), dx: 0, on: false };
         });
         row.addEventListener('pointermove', function (e) {
@@ -494,13 +505,15 @@
             if (Math.abs(d.dx) > 90 || v > 0.5) {
                 var c = top(), dir = d.dx < 0 ? -1 : 1;
                 c.style.transition = 'transform .38s cubic-bezier(.4,0,.8,.4), opacity .38s ease';
-                c.style.transform = 'translate3d(' + (dir * window.innerWidth * 1.1) + 'px,0,0) rotate(' + (dir * 16) + 'deg)';
+                c.style.transform = 'translate3d(' + (dir * window.innerWidth * 0.85) + 'px,0,0) rotate(' + (dir * 16) + 'deg)';
                 c.style.opacity = '0';
+                active = (active + 1) % n;
+                place(true, c, true);           // the rest slide forward right away (no waiting, no jump)
+                flying = c;
                 setTimeout(function () {
-                    var gone = c;
-                    active = (active + 1) % n;
-                    place(true, gone);          // flown card jumps to the back, others slide forward
-                }, 330);
+                    sendToBack(c);              // flown card re-enters at the back, fading in
+                    if (flying === c) flying = null;
+                }, 420);
             } else {
                 place(true);                    // spring back
             }
@@ -511,23 +524,28 @@
             if (suppressClick) { e.preventDefault(); e.stopPropagation(); }
         }, true);
 
-        // one-time nudge: the top card slides toward the pile and springs back,
-        // so people see it can be pulled away without any text
+        // nudge: every time the deck scrolls back into view, the top card slides
+        // toward the pile and springs back, so people see it can be pulled away
         if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            var nudged = false;
+            var nudgeT1, nudgeT2, visible = false;
             var io = new IntersectionObserver(function (entries) {
                 entries.forEach(function (en) {
-                    if (!en.isIntersecting || nudged || drag) return;
-                    nudged = true; io.disconnect();
-                    var c = top();
-                    setTimeout(function () {
-                        if (drag) return;
+                    if (en.intersectionRatio === 0) {           // fully left the screen: re-arm
+                        clearTimeout(nudgeT1); clearTimeout(nudgeT2);
+                        visible = false;
+                        return;
+                    }
+                    if (visible || en.intersectionRatio < 0.6) return;
+                    visible = true;
+                    nudgeT1 = setTimeout(function () {
+                        if (drag || flying) return;
+                        var c = top();
                         c.style.transition = 'transform .45s cubic-bezier(.3,.7,.4,1)';
                         c.style.transform = 'translate3d(-46px,0,0) rotate(-4deg)';
-                        setTimeout(function () { if (!drag) place(true); }, 480);
-                    }, 500);
+                        nudgeT2 = setTimeout(function () { if (!drag && !flying) place(true); }, 480);
+                    }, 450);
                 });
-            }, { threshold: 0.6 });
+            }, { threshold: [0, 0.6] });
             io.observe(row);
         }
 
@@ -544,7 +562,7 @@
                 row.style.height = '';
                 slides.forEach(function (s) {
                     s.classList.remove('m-card');
-                    ['transform', 'opacity', 'filter', 'zIndex', 'pointerEvents', 'transition', 'height'].forEach(function (p) { s.style[p] = ''; });
+                    ['transform', 'opacity', 'filter', 'boxShadow', 'zIndex', 'pointerEvents', 'transition', 'height'].forEach(function (p) { s.style[p] = ''; });
                     s.removeAttribute('aria-hidden');
                 });
                 if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
