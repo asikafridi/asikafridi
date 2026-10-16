@@ -583,7 +583,7 @@ function initializeTypewriter() {
         "Project & Development Lead at StratifyX..",
         "Computer Science & Engineering Student..",
         "Competitive Programmer & Problem Solver..",
-        "Building Expensio, RootForge & BisonBank..",
+        "Building Expensio, Shuvrota, RootForge & BisonBank..",
         "Eager to Learn, Lead, and Ship.."
     ];
 
