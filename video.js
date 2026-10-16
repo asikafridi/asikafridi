@@ -86,7 +86,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let lastFocus = null;
 
     // ---------- hero: featured stage ----------
-    const featured = videoData[0];
+    // The featured video: shown in the hero monitor and as the lead card in the gallery.
+    const FEATURED_ID = 'documentary';
+    const featured = videoData.find(v => v.id === FEATURED_ID) || videoData[0];
     const stage = $('#vxStage');
     if (featured && stage) {
         $('#vxStageImg').src = featured.thumbnail;
@@ -192,7 +194,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let cardObserver = null;
     function render() {
-        const list = videoData.filter(v => filter === 'all' || v.category === filter);
+        // featured video always leads the gallery
+        const ordered = [featured].concat(videoData.filter(v => v !== featured));
+        const list = ordered.filter(v => filter === 'all' || v.category === filter);
         grid.dataset.filter = filter;
         grid.dataset.view = view;
         grid.innerHTML = list.length ? list.map(cardHTML).join('') : '<div class="vx-empty">No videos in this category yet.</div>';
@@ -290,6 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
         posterImg.alt = v.title;
         poster.classList.remove('hidden');
         player.src = 'https://drive.google.com/file/d/' + v.videoId + '/preview';
+        $('#vxOpen').href = 'https://drive.google.com/file/d/' + v.videoId + '/view';
         fillUpNext();
     }
 
@@ -300,14 +305,16 @@ document.addEventListener('DOMContentLoaded', function () {
         load(v);
         modal.classList.add('active');
         modal.setAttribute('aria-hidden', 'false');
+        document.documentElement.classList.add('vx-lock');
         document.body.style.overflow = 'hidden';
-        setTimeout(() => bigPlay.focus({ preventScroll: true }), 80);
+        if (finePointer) setTimeout(() => bigPlay.focus({ preventScroll: true }), 80);
     }
 
     function closePlayer() {
         if (!modal.classList.contains('active')) return;
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('vx-lock');
         document.body.style.overflow = '';
         if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
         setTimeout(() => { if (!modal.classList.contains('active')) player.src = 'about:blank'; }, 400);
@@ -331,7 +338,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (b) { const v = videoData.find(x => x.id === b.dataset.id); if (v) load(v); }
     });
 
-    $('#fullscreenBtn').addEventListener('click', () => {
+    const fsBtn = $('#fullscreenBtn');
+    const fsOK = !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+    if (!fsOK) fsBtn.style.display = 'none';   // e.g. iPhone Safari: use "Open in Drive" instead
+    fsBtn.addEventListener('click', () => {
         const el = $('#vxScreen');
         poster.classList.add('hidden');
         if (!document.fullscreenElement) {
@@ -362,11 +372,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // swipe the sheet down to dismiss (mobile)
+    // swipe the sheet down to dismiss (mobile) — only when the drag starts on
+    // the handle strip at the top, so scrolling the content never closes it
     let sy = null;
-    panel.addEventListener('touchstart', e => { sy = panel.scrollTop <= 0 ? e.touches[0].clientY : null; }, { passive: true });
+    panel.addEventListener('touchstart', e => {
+        const top = panel.getBoundingClientRect().top;
+        sy = (e.touches[0].clientY - top < 44 && window.innerWidth < 900) ? e.touches[0].clientY : null;
+    }, { passive: true });
     panel.addEventListener('touchend', e => {
-        if (sy != null && e.changedTouches[0].clientY - sy > 110) closePlayer();
+        if (sy != null && e.changedTouches[0].clientY - sy > 70) closePlayer();
         sy = null;
     }, { passive: true });
 
