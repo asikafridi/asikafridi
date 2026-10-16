@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     initPageTransitions();
     initThemeSwitcher();
-    initCinemaIntro();
     initSplitText();
     initializeNavigation();
     initDesktopMenu();
@@ -12,60 +11,16 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeContactForm();
     initializeAnimations();
     initializeMobileNavigation();
-    initializePhotoCompanion();
     initializeRevealObserver();
     relocateThemeToggleForMobile();
     initMagneticButtons();
     initTiltCards();
     initBentoCounters();
-    initScrolly();
     initLanguageRings();
     initLanguagePassport();
-    initProjectsScroller();
-    initProjectsShowcase();
     initContactLiquidGlass();
     updateCurrentYear();
 });
-
-// ==================== OPENING TITLE CARD ====================
-// Shows "dhushor.dev presents / Asikur Rahman" for about a second on the
-// first visit of a session, then iris-wipes away to reveal the site. The
-// overlay is invisible unless this function opts it in, and a safety timer
-// guarantees it always comes down, so a stalled animation or thrown error
-// can never leave a visitor stuck behind a black screen.
-function initCinemaIntro() {
-    const intro = document.getElementById('cinemaIntro');
-    if (!intro) return;
-
-    if (window.__pt) { sessionStorage.setItem('cinemaIntroShown', '1'); return; } // arrived via page transition
-    if (sessionStorage.getItem('cinemaIntroShown')) return; // stays display:none
-    sessionStorage.setItem('cinemaIntroShown', '1');
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const titleEl = document.getElementById('cinemaTitle');
-
-    function finish() {
-        document.body.style.overflow = '';
-        intro.classList.remove('is-active');
-        intro.classList.add('is-hidden');
-    }
-
-    try {
-        intro.classList.add('is-active');
-        document.body.style.overflow = 'hidden';
-        const safety = setTimeout(finish, 3500);
-
-        // Fade the name in right away, hold it ~1s, then wipe.
-        requestAnimationFrame(() => titleEl && titleEl.classList.add('is-visible'));
-        setTimeout(() => {
-            intro.classList.add('is-wiping');
-            document.body.style.overflow = '';
-            setTimeout(() => { clearTimeout(safety); finish(); }, reduceMotion ? 450 : 1250);
-        }, reduceMotion ? 700 : 1100);
-    } catch (err) {
-        finish();
-    }
-}
 
 // ==================== SPLIT-TEXT HEADINGS ====================
 function initSplitText() {
@@ -191,9 +146,9 @@ function initTiltCards() {
     });
 }
 
-// ==================== ANIMATED COUNTERS (hero stats + about) ====================
+// ==================== ANIMATED COUNTERS (About stats; hero stats are driven by home.js) ====================
 function initBentoCounters() {
-    const nums = document.querySelectorAll('.scrolly-stat-num [data-count]');
+    const nums = document.querySelectorAll('[data-count]:not(.hero [data-count])');
     if (!nums.length) return;
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -213,76 +168,6 @@ function initBentoCounters() {
         });
     }, { threshold: 0.4 });
     nums.forEach(el => observer.observe(el));
-}
-
-// ==================== ABOUT — SCROLLYTELLING ====================
-function initScrolly() {
-    const steps = Array.from(document.querySelectorAll('.scrolly-step'));
-    const idxEl = document.getElementById('scrollyIndex');
-    const capEl = document.getElementById('scrollyCaption');
-    const railEl = document.getElementById('scrollyRail');
-    const spineFillEl = document.getElementById('scrollySpineFill');
-    const nodes = Array.from(document.querySelectorAll('.scrolly-node'));
-    if (!steps.length) return;
-
-    let current = -1;
-    function activate(i) {
-        if (i === current || i < 0) return;
-        current = i;
-        steps.forEach((s, n) => s.classList.toggle('is-active', n === i));
-        nodes.forEach((n, idx) => n.classList.toggle('is-lit', idx <= i));
-        const step = steps[i];
-        if (idxEl) idxEl.textContent = step.dataset.index || String(i + 1).padStart(2, '0');
-        if (capEl && step.dataset.caption) {
-            capEl.style.opacity = '0';
-            setTimeout(() => { capEl.textContent = step.dataset.caption; capEl.style.opacity = '1'; }, 180);
-        }
-        if (railEl) railEl.style.height = (((i + 1) / steps.length) * 100) + '%';
-        if (spineFillEl) spineFillEl.style.height = (((i + 1) / steps.length) * 100) + '%';
-    }
-
-    // Activate whichever beat's vertical centre sits closest to the
-    // viewport's vertical centre. This is computed directly from live
-    // geometry (getBoundingClientRect) on every scroll event, instead of
-    // relying on IntersectionObserver ratio/threshold notifications. The
-    // observer-based approach turned out to still be direction-sensitive:
-    // it depends on the browser batching "leaving" and "entering"
-    // notifications together, and under fast or long scrolls a step's last
-    // known ratio can go stale before a new notification arrives, letting a
-    // taller step (like the last "collaborator" beat, which carries extra
-    // stats + tech-stack content) win out with an outdated value. Measuring
-    // distance-to-centre fresh on every event has no batching or threshold
-    // to fall out of sync with, so it's correct regardless of scroll speed
-    // or direction. With only four steps, running this on every scroll
-    // event is cheap, but it's throttled to once per animation frame so it
-    // lines up with the browser's paint cycle instead of firing once per
-    // raw scroll event (which can dispatch several times within a single
-    // frame during a fast flick).
-    let stepTicking = false;
-    function updateActiveStep() {
-        stepTicking = false;
-        const viewportCenter = window.innerHeight / 2;
-        let bestIndex = 0, bestDist = Infinity;
-        steps.forEach((s, n) => {
-            const r = s.getBoundingClientRect();
-            const dist = Math.abs((r.top + r.height / 2) - viewportCenter) + Math.abs((r.left + r.width / 2) - window.innerWidth / 2);
-            if (dist < bestDist) { bestDist = dist; bestIndex = n; }
-        });
-        activate(bestIndex);
-    }
-    function onStepScroll() {
-        if (!stepTicking) {
-            stepTicking = true;
-            requestAnimationFrame(updateActiveStep);
-        }
-    }
-    window.addEventListener('scroll', onStepScroll, { passive: true });
-    // capture: also fires when the mobile swipe carousel scrolls horizontally
-    document.addEventListener('scroll', onStepScroll, { passive: true, capture: true });
-    window.addEventListener('resize', updateActiveStep);
-
-    activate(0);
-    updateActiveStep();
 }
 
 // ==================== LANGUAGE PROFICIENCY RINGS ====================
@@ -383,6 +268,8 @@ function initLanguagePassport() {
     let cardTicking = false;
     function updateActiveCard() {
         cardTicking = false;
+        // phone card stack: mobile.js tells us which card is on top instead
+        if (document.querySelector('.languages-track.m-stack')) return;
         const viewportCenter = window.innerHeight / 2;
         let bestIndex = 0, bestDist = Infinity;
         cards.forEach((c, n) => {
@@ -404,66 +291,15 @@ function initLanguagePassport() {
     document.addEventListener('scroll', onCardScroll, { passive: true, capture: true });
     window.addEventListener('resize', updateActiveCard);
 
+    // fired by the phone card stack whenever the top card changes
+    document.addEventListener('stackchange', (e) => {
+        if (e.target && e.target.classList && e.target.classList.contains('languages-track')) {
+            activate(e.detail.index);
+        }
+    });
+
     activate(0);
     updateActiveCard();
-}
-
-// ==================== PROJECTS: HORIZONTAL SCROLLER ====================
-function initProjectsScroller() {
-    const section = document.querySelector('.projects-scroll-section');
-    const sticky = document.querySelector('.projects-sticky');
-    const track = document.getElementById('projectsTrack');
-    const progressFill = document.getElementById('projectsProgressFill');
-    const arrowLeft = document.getElementById('projArrowLeft');
-    const arrowRight = document.getElementById('projArrowRight');
-    if (!section || !track || !sticky) return;
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isDesktop = () => false; // desktop now uses initProjectsShowcase()
-
-    function updateDesktop() {
-        if (!isDesktop() || prefersReducedMotion) return;
-        const scrollableHeight = section.offsetHeight - window.innerHeight;
-        if (scrollableHeight <= 0) return;
-        const rect = section.getBoundingClientRect();
-        const progress = Math.min(Math.max(-rect.top / scrollableHeight, 0), 1);
-        const maxTranslate = Math.max(track.scrollWidth - sticky.clientWidth, 0);
-        track.style.transform = `translateX(-${progress * maxTranslate}px)`;
-        if (progressFill) progressFill.style.width = (progress * 100) + '%';
-    }
-
-    let ticking = false;
-    function onScroll() {
-        if (!ticking) {
-            requestAnimationFrame(() => { updateDesktop(); ticking = false; });
-            ticking = true;
-        }
-    }
-
-    function onMobileScroll() {
-        if (isDesktop() || !progressFill) return;
-        const maxScroll = track.scrollWidth - track.clientWidth;
-        const progress = maxScroll > 0 ? track.scrollLeft / maxScroll : 0;
-        progressFill.style.width = (progress * 100) + '%';
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    track.addEventListener('scroll', onMobileScroll, { passive: true });
-    window.addEventListener('resize', () => { track.style.transform = ''; updateDesktop(); });
-    updateDesktop();
-
-    function nudge(dir) {
-        if (isDesktop() && !prefersReducedMotion) {
-            const scrollableHeight = section.offsetHeight - window.innerHeight;
-            const step = scrollableHeight / 4;
-            window.scrollBy({ top: dir * step, behavior: 'smooth' });
-        } else {
-            const cardWidth = track.querySelector('.project-card-v2')?.offsetWidth || 320;
-            track.scrollBy({ left: dir * (cardWidth + 28), behavior: 'smooth' });
-        }
-    }
-    arrowRight?.addEventListener('click', () => nudge(1));
-    arrowLeft?.addEventListener('click', () => nudge(-1));
 }
 
 // ==================== NAVIGATION SYSTEM ====================
@@ -489,10 +325,7 @@ function handleCrossPageNavigation() {
             const sectionElement = document.getElementById(targetSection);
             if (sectionElement) {
                 const navHeight = document.querySelector('nav').offsetHeight;
-                window.scrollTo({
-                    top: sectionElement.offsetTop - navHeight,
-                    behavior: 'smooth'
-                });
+                window.smoothScrollTo(sectionElement.offsetTop - navHeight);
                 highlightSection(sectionElement);
             }
         }, 300);
@@ -532,10 +365,7 @@ function scrollToSection(sectionId) {
     const sectionElement = document.getElementById(sectionId);
     if (sectionElement) {
         const navHeight = document.querySelector('nav').offsetHeight;
-        window.scrollTo({
-            top: sectionElement.offsetTop - navHeight,
-            behavior: 'smooth'
-        });
+        window.smoothScrollTo(sectionElement.offsetTop - navHeight);
         highlightSection(sectionElement);
     }
 }
@@ -833,10 +663,7 @@ function initializeScrollEffects() {
             const aboutSection = document.getElementById('about');
             const navHeight = document.querySelector('nav').offsetHeight;
             if (aboutSection) {
-                window.scrollTo({
-                    top: aboutSection.offsetTop - navHeight + 20,
-                    behavior: 'smooth'
-                });
+                window.smoothScrollTo(aboutSection.offsetTop - navHeight + 20);
             }
         });
     }
@@ -876,102 +703,83 @@ function createParticles() {
     }
 }
 
-// ==================== PHOTO COMPANION (signature scroll animation) ====================
-function initializePhotoCompanion() {
-    const frame = document.getElementById('editorFrame');
-    const hero = document.querySelector('.hero');
-    if (!frame || !hero) return;
-    const about = document.getElementById('about');
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
-    if (window.innerWidth < 900) return; // pinned companion is desktop-only
-
-    let pinned = false;
-    let ticking = false;
-
-    function update() {
-        ticking = false;
-        const heroRect = hero.getBoundingClientRect();
-        const heroBottom = heroRect.bottom;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollFrac = docHeight > 0 ? Math.min(window.scrollY / docHeight, 1) : 0;
-
-        if (heroBottom <= 0 && !pinned) {
-            frame.classList.add('is-pinned');
-            pinned = true;
-        } else if (heroBottom > 0 && pinned) {
-            frame.classList.remove('is-pinned');
-            frame.style.setProperty('--tilt', '-3deg');
-            pinned = false;
-        }
-
-        if (pinned) {
-            // Travel gently between 12% and 78% of viewport height as user scrolls
-            const topPct = 12 + scrollFrac * 62;
-            frame.style.setProperty('--pin-top', topPct + 'vh');
-            const tilt = -3 + Math.sin(scrollFrac * Math.PI * 2) * 4;
-            frame.style.setProperty('--tilt', tilt + 'deg');
-        } else {
-            // Subtle parallax float while still in hero
-            const heroProgress = Math.min(Math.max(-heroRect.top / window.innerHeight, 0), 1);
-            const tilt = -3 + heroProgress * 6;
-            frame.style.setProperty('--tilt', tilt + 'deg');
-        }
-
-        // Hide the travelling companion only near the footer. It now stays
-        // visible across the About section too (previously hidden there);
-        // inside About it tucks into the right gutter a little smaller so
-        // it doesn't cover the story text.
-        const nearBottom = window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 260;
-        let overAbout = false;
-        if (about) {
-            const ar = about.getBoundingClientRect();
-            overAbout = ar.top < window.innerHeight * 0.75 && ar.bottom > window.innerHeight * 0.25;
-        }
-        frame.classList.toggle('is-over-about', pinned && overAbout);
-        // also step aside over the Projects showcase, where it would cover the info column
-        let overProjects = false;
-        const projSec = document.getElementById('projects');
-        if (projSec && window.innerWidth >= 900) {
-            const pr = projSec.getBoundingClientRect();
-            overProjects = pr.top < window.innerHeight * 0.9 && pr.bottom > window.innerHeight * 0.1;
-        }
-        frame.classList.toggle('is-hidden', pinned && (nearBottom || overProjects));
-    }
-
-    function onScroll() {
-        if (!ticking) {
-            requestAnimationFrame(update);
-            ticking = true;
-        }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-        if (window.innerWidth < 900) {
-            frame.classList.remove('is-pinned', 'is-hidden', 'is-over-about');
-            pinned = false;
-        }
-    });
-    update();
-}
-
 // ==================== SCROLL REVEAL ====================
+// "Scroll and reveal" — same GSAP ScrollTrigger recipe as the reference site:
+// each block rises ~70px while fading in (power3.out, 1.2s) when its top
+// reaches 88% of the viewport, and plays back in reverse when you scroll
+// back up. Grouped cards (.reveal-stagger) rise one after another.
+// Falls back to the old IntersectionObserver if GSAP isn't available
+// (offline / blocked CDN) or the visitor prefers reduced motion.
 function initializeRevealObserver() {
-    const revealEls = document.querySelectorAll('.reveal');
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
     if (!revealEls.length) return;
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    const canGsap = !!(window.gsap && window.ScrollTrigger) &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    revealEls.forEach(el => observer.observe(el));
+    // .lang-card keeps its own focus/scale choreography (CSS + passport script)
+    const legacy = revealEls.filter(el => !canGsap || el.classList.contains('lang-card'));
+    const modern = revealEls.filter(el => !legacy.includes(el));
+
+    if (legacy.length) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        legacy.forEach(el => observer.observe(el));
+    }
+    if (!modern.length) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    modern.forEach(el => {
+        const items = el.classList.contains('reveal-stagger')
+            ? Array.from(el.querySelectorAll('.stagger-item')) : [];
+        // On phones Achievements / More-to-explore become a swipeable card stack
+        // (mobile.js): the whole block rises as one instead of card-by-card.
+        const stackOnPhone = window.innerWidth < 900 && el.matches('.achievements-grid, .teaser-grid');
+        const grouped = items.length > 0 && !stackOnPhone;
+        const targets = grouped ? items : [el];
+
+        if (grouped || stackOnPhone) el.classList.add('visible');   // container shows; cards animate or stack
+        targets.forEach(t => { t.style.transition = 'none'; }); // GSAP owns the motion, not CSS
+
+        const tween = gsap.fromTo(targets,
+            { y: grouped ? 50 : 70, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
+                ease: 'power3.out',
+                stagger: grouped ? 0.12 : 0,
+                paused: true,
+                onComplete() {
+                    // hand control back to CSS so hover / tilt transforms keep working
+                    targets.forEach(t => {
+                        t.classList.add('visible');
+                        gsap.set(t, { clearProps: 'transform,opacity' });
+                        t.style.transition = '';
+                    });
+                },
+                onReverseComplete() {
+                    if (!grouped) el.classList.remove('visible');
+                }
+            });
+
+        ScrollTrigger.create({
+            trigger: el,
+            start: 'top 88%',
+            onEnter() { targets.forEach(t => { t.style.transition = 'none'; }); tween.play(); },
+            onLeaveBack() { targets.forEach(t => { t.style.transition = 'none'; }); tween.reverse(); }
+        });
+    });
+
+    // Late-loading images change the page height — re-measure once everything is in.
+    window.addEventListener('load', () => ScrollTrigger.refresh());
 }
 
 // ==================== ANIMATIONS ====================
@@ -1270,218 +1078,6 @@ function initPageTransitions() {
     });
 }
 
-// ==================== PROJECTS SHOWCASE (desktop) ====================
-// Builds an interactive stage from the existing project cards (single
-// source of truth): a glass index with a sliding lens + autoplay progress,
-// a 3D-tilting media panel with directional wipe transitions, and an info
-// column with staggered word-by-word title reveals.
-function initProjectsShowcase() {
-    const section = document.querySelector('.projects-scroll-section');
-    const track = document.getElementById('projectsTrack');
-    if (!section || !track || document.getElementById('pjStage')) return;
-
-    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    const KNOWN = ['live', 'progress', 'planned'];
-    const items = Array.from(track.querySelectorAll('.project-card-v2')).map(c => {
-        const img = c.querySelector('.project-thumb img');
-        const st = c.querySelector('.project-status');
-        return {
-            end: c.classList.contains('project-card-end'),
-            title: ((c.querySelector('h3') || {}).textContent || 'More').trim(),
-            desc: ((c.querySelector('p') || {}).textContent || '').trim(),
-            img: img ? img.getAttribute('src') : '',
-            alt: img ? img.getAttribute('alt') : '',
-            status: st ? st.textContent.trim() : '',
-            sClass: st ? (KNOWN.find(k => st.classList.contains(k)) || '') : '',
-            tech: Array.from(c.querySelectorAll('.tech-stack span, .project-tech span, .tech-tag')).map(s => s.textContent.trim()),
-            links: Array.from(c.querySelectorAll('.project-links a, .project-end-inner a')).map(a => ({
-                href: a.getAttribute('href'),
-                html: a.querySelector('i') ? a.innerHTML : '<i class="fab fa-github"></i> ' + esc(a.textContent.trim())
-            }))
-        };
-    }).filter(it => it.title);
-    if (!items.length) return;
-
-    const pad = n => String(n + 1).padStart(2, '0');
-    const wrap = document.createElement('div');
-    wrap.className = 'container pj-wrap';
-    wrap.innerHTML = `
-      <div class="pj-stage" id="pjStage" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Projects showcase — use arrow keys to switch">
-        <span class="pj-blob a"></span><span class="pj-blob b"></span>
-        <div class="pj-list" role="tablist" aria-orientation="vertical">
-          <span class="pj-lens" aria-hidden="true"></span>
-          ${items.map((it, i) => `
-            <button class="pj-item" role="tab" type="button" data-i="${i}" aria-selected="false">
-              <span class="pj-num">${items[i].end ? '→' : pad(i)}</span>
-              <span class="pj-name">${esc(it.end ? 'More on GitHub' : it.title)}</span>
-              ${it.status ? `<span class="pj-tag ${it.sClass}">${esc(it.status)}</span>` : '<i class="fas fa-arrow-up-right-from-square" style="color:var(--paper-faint);font-size:.8rem"></i>'}
-              <span class="pj-bar"><i></i></span>
-            </button>`).join('')}
-        </div>
-        <div class="pj-view">
-          <div class="pj-media" id="pjMedia">
-            ${items.map((it, i) => `
-              <div class="pj-slide" data-i="${i}">
-                <div class="pj-fallback">${it.end ? '<b><i class="fab fa-github" style="font-size:.8em"></i></b>' : `<b>${esc(it.title.charAt(0))}</b>`}<span>${esc(it.end ? 'github.com' : 'preview')}</span></div>
-                ${it.img ? `<img src="${esc(it.img)}" alt="${esc(it.alt)}" loading="lazy" onerror="this.style.display='none'">` : ''}
-              </div>`).join('')}
-            <span class="pj-shade"></span>
-            <span class="pj-status" id="pjStatus"></span>
-            <span class="pj-corner tr"></span><span class="pj-corner bl"></span><span class="pj-corner br"></span>
-          </div>
-          <div class="pj-info" id="pjInfo" aria-live="polite">
-            <div class="pj-count"><b id="pjCur">01</b> / ${pad(items.filter(x => !x.end).length - 1)}</div>
-            <h3 class="pj-title" id="pjTitle"></h3>
-            <p class="pj-desc" id="pjDesc"></p>
-            <div class="pj-tech" id="pjTech"></div>
-            <div class="pj-links" id="pjLinks"></div>
-            <div class="pj-nav">
-              <button type="button" id="pjPrev" aria-label="Previous project"><i class="fas fa-arrow-left"></i></button>
-              <button type="button" id="pjNext" aria-label="Next project"><i class="fas fa-arrow-right"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    const sticky = section.querySelector('.projects-sticky');
-    section.insertBefore(wrap, sticky || null);
-
-    const stage = wrap.querySelector('#pjStage');
-    const list = Array.from(stage.querySelectorAll('.pj-item'));
-    const slides = Array.from(stage.querySelectorAll('.pj-slide'));
-    const lens = stage.querySelector('.pj-lens');
-    const media = stage.querySelector('#pjMedia');
-    const info = stage.querySelector('#pjInfo');
-    const $ = id => stage.querySelector('#' + id);
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const AUTO_MS = 7000;
-    let cur = -1;
-    stage.style.setProperty('--pj-dur', AUTO_MS + 'ms');
-    if (reduce) stage.classList.add('no-auto');
-
-    function placeLens() {
-        const el = list[Math.max(cur, 0)];
-        if (!el) return;
-        lens.style.setProperty('--y', el.offsetTop + 'px');
-        lens.style.setProperty('--h', el.offsetHeight + 'px');
-    }
-
-    function renderInfo(it, k) {
-        $('pjCur').textContent = it.end ? '→' : pad(k);
-        const words = it.title.split(/\s+/);
-        $('pjTitle').innerHTML = words.map((w, wi) => `<span class="w"><span style="--wi:${wi}">${esc(w)}</span></span>`).join('');
-        $('pjDesc').textContent = it.desc;
-        $('pjTech').innerHTML = it.tech.map(t => `<span>${esc(t)}</span>`).join('');
-        $('pjTech').style.display = it.tech.length ? '' : 'none';
-        $('pjLinks').innerHTML = it.links.map(l => `<a href="${esc(l.href)}" target="_blank" rel="noopener">${l.html}</a>`).join('');
-        const st = $('pjStatus');
-        st.className = 'pj-status ' + it.sClass;
-        st.textContent = it.status;
-        st.style.display = it.status ? '' : 'none';
-        Array.from(info.children).forEach((c, n) => c.style.setProperty('--k', n));
-        info.classList.remove('is-in');
-        void info.offsetWidth;
-        info.classList.add('is-in');
-    }
-
-    function select(n, dir) {
-        n = (n + items.length) % items.length;
-        if (n === cur) return;
-        const first = cur === -1;
-        if (!dir) dir = first || n > cur ? 1 : -1;
-        stage.dataset.dir = dir;
-        const prev = cur;
-        cur = n;
-
-        list.forEach((el, i) => {
-            const on = i === n;
-            el.classList.toggle('is-active', on);
-            el.setAttribute('aria-selected', on ? 'true' : 'false');
-            el.tabIndex = on ? 0 : -1;
-        });
-        // restart the autoplay bar
-        const bar = list[n].querySelector('.pj-bar i');
-        bar.style.animation = 'none';
-        void bar.offsetWidth;
-        bar.style.animation = '';
-
-        slides.forEach((s, i) => {
-            s.classList.remove('is-prev', 'no-anim');
-            if (i === n) { s.classList.remove('is-active'); void s.offsetWidth; s.classList.add('is-active'); if (first || reduce) s.classList.add('no-anim'); }
-            else if (i === prev && !reduce) { s.classList.remove('is-active'); s.classList.add('is-prev'); }
-            else s.classList.remove('is-active');
-        });
-        if (prev !== -1) setTimeout(() => slides[prev] && slides[prev].classList.remove('is-prev'), 1000);
-
-        renderInfo(items[n], n);
-        placeLens();
-    }
-
-    list.forEach((el, i) => el.addEventListener('click', () => select(i, i > cur ? 1 : -1)));
-    $('pjNext').addEventListener('click', () => select(cur + 1, 1));
-    $('pjPrev').addEventListener('click', () => select(cur - 1, -1));
-
-    // autoplay: when the active bar completes, advance
-    stage.addEventListener('animationend', e => {
-        if (e.animationName === 'pjFill' && !reduce) select(cur + 1, 1);
-    });
-
-    // pause on hover/focus, and whenever the stage is off-screen
-    const pause = on => stage.classList.toggle('is-paused', on);
-    let hovering = false, visible = true;
-    const sync = () => pause(hovering || !visible || document.hidden);
-    stage.addEventListener('pointerenter', () => { hovering = true; sync(); });
-    stage.addEventListener('pointerleave', () => { hovering = false; sync(); });
-    stage.addEventListener('focusin', () => { hovering = true; sync(); });
-    stage.addEventListener('focusout', () => { hovering = false; sync(); });
-    document.addEventListener('visibilitychange', sync);
-    if ('IntersectionObserver' in window) {
-        new IntersectionObserver(es => { visible = es[0].isIntersecting; sync(); }, { threshold: 0.25 }).observe(stage);
-    }
-
-    // keyboard
-    stage.addEventListener('keydown', e => {
-        const k = e.key;
-        if (k === 'ArrowDown' || k === 'ArrowRight') { e.preventDefault(); select(cur + 1, 1); }
-        else if (k === 'ArrowUp' || k === 'ArrowLeft') { e.preventDefault(); select(cur - 1, -1); }
-        else if (k === 'Home') { e.preventDefault(); select(0, -1); }
-        else if (k === 'End') { e.preventDefault(); select(items.length - 1, 1); }
-    });
-
-    // 3D tilt + parallax + cursor glare on the media panel
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !reduce) {
-        media.addEventListener('pointermove', e => {
-            const r = media.getBoundingClientRect();
-            const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-            media.classList.remove('is-leaving');
-            media.style.setProperty('--ry', ((px - 0.5) * 9).toFixed(2) + 'deg');
-            media.style.setProperty('--rx', ((0.5 - py) * 7).toFixed(2) + 'deg');
-            media.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
-            media.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
-            media.style.setProperty('--px', ((0.5 - px) * 16).toFixed(1) + 'px');
-            media.style.setProperty('--py', ((0.5 - py) * 12).toFixed(1) + 'px');
-        });
-        media.addEventListener('pointerleave', () => {
-            media.classList.add('is-leaving');
-            ['--rx', '--ry', '--px', '--py'].forEach(p => media.style.removeProperty(p));
-        });
-    }
-
-    // swipe (touch laptops / tablets in landscape)
-    let sx = null;
-    media.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') sx = e.clientX; });
-    media.addEventListener('pointerup', e => {
-        if (sx == null) return;
-        const dx = e.clientX - sx; sx = null;
-        if (Math.abs(dx) > 50) select(cur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
-    });
-
-    window.addEventListener('resize', placeLens);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeLens);
-    select(0, 1);
-    requestAnimationFrame(placeLens);
-}
-
-
 // ==================== DESKTOP HAMBURGER MENU ====================
 // A glass dropdown that blooms out of the nav pill: burger morphs to an X,
 // the panel reveals with a circular clip from the button, and the items
@@ -1603,7 +1199,7 @@ function initDesktopMenu() {
         setTimeout(() => {
             const sec = a.dataset.section && document.getElementById(a.dataset.section);
             const top = sec ? sec.getBoundingClientRect().top + window.pageYOffset - 92 : 0;
-            window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+            window.smoothScrollTo(Math.max(top, 0));
             try { history.replaceState(null, '', sec ? '#' + a.dataset.section : location.pathname); } catch (err) { }
         }, 120);
     }));
