@@ -745,11 +745,23 @@
        the top card can be pulled away - no "swipe" label needed */
     .m-stack {
         margin-right: auto !important;
-        transform: translateX(-9px);
+        left: -9px;
     }
 
-    .m-stack>.m-card {
-        transform-origin: 0% 100%;
+    /* Keep the fixed glass bars on their own compositor layers and make sure
+       nothing flying out of a stack can ever widen the page, otherwise the
+       bars can blink while a card is flicked away */
+    .m-topbar,
+    .m-tabbar,
+    .theme-toggle {
+        will-change: transform;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+
+    html,
+    body {
+        overflow-x: clip;
     }
 
     /* dots: the active one stretches toward the next card like a little arrow trail */
@@ -998,10 +1010,9 @@
         margin: 0 !important;
         overflow: hidden;
         transform-origin: 50% 100%;
-        will-change: transform, opacity;
         cursor: grab;
         /* back cards must not show the ones behind them through the glass */
-        background: linear-gradient(155deg, var(--panel-2), var(--ink-2)) !important;
+        background: var(--card-accent-bg, none), linear-gradient(155deg, var(--panel-2), var(--ink-2)) !important;
         -webkit-backdrop-filter: none !important;
         backdrop-filter: none !important;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.38);
