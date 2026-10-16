@@ -135,24 +135,38 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // Section configurations
-    const sections = {
-        achievements: {
-            totalItems: 6,
-            angle: 360 / 6,
-            autoRotateInterval: null
-        },
-        microsoft: {
-            totalItems: 7,
-            angle: 360 / 7,
-            autoRotateInterval: null
-        },
-        training: {
-            totalItems: 8,
-            angle: 360 / 8,
-            autoRotateInterval: null
-        }
-    };
+    // ------------------------------------------------------------------
+    // AUTO-ADJUSTING SECTIONS
+    // To add a certificate, add ONE .certificate-item inside the section's
+    // carousel in certificates.html. Everything else is automatic:
+    //   - the grid view is generated from the carousel items
+    //   - the carousel angle / radius adapts to the number of items
+    //   - "View Full" works even without an entry in certificateData
+    //     (it falls back to the card's own image, title and text)
+    // To add a whole new section, copy an existing section block and give it a
+    // new id prefix (e.g. "awards-carousel" / "awards-grid" + data-section="awards").
+    // ------------------------------------------------------------------
+    const sections = {};
+    document.querySelectorAll('.carousel-container[id$="-carousel"]').forEach(container => {
+        const id = container.id.replace(/-carousel$/, '');
+        sections[id] = { autoRotateInterval: null };
+    });
+
+    // Build each grid from its carousel (single source of truth)
+    Object.keys(sections).forEach(sectionId => {
+        const grid = document.querySelector(`#${sectionId}-grid .grid`);
+        const source = document.querySelectorAll(`#${sectionId}-carousel .certificate-item`);
+        if (!grid) return;
+        grid.innerHTML = '';
+        source.forEach((item, i) => {
+            const clone = item.cloneNode(true);
+            clone.classList.remove('certificate-item', 'flipped', 'is-near', 'is-active');
+            clone.classList.add('grid-item');
+            clone.removeAttribute('style');
+            clone.dataset.index = i;
+            grid.appendChild(clone);
+        });
+    });
 
     // Initialize all sections
     Object.keys(sections).forEach(sectionId => {
@@ -171,25 +185,49 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let currentIndex = 0;
         let hasFlippedCard = false;
+        const total = items.length;
+        const angle = total ? 360 / total : 0;
 
-        // Initialize carousel
-        function initCarousel() {
+        // Place the cards on a ring. Radius is derived from the card width and
+        // the number of cards so they never overlap, however many there are.
+        function layout() {
+            if (!total) return;
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const w = items[0].offsetWidth || 300;
+            const minR = w * 1.3;
+            const fitR = total > 2 ? (w / 2) / Math.tan(Math.PI / total) + 40 : 0;
+            const radius = Math.round(Math.max(minR, fitR));
+            // pull the ring back so the front card is shown at its true size
+            const baseR = isMobile ? 0 : Math.round(minR);
+            section.radius = radius;
+            section.depth = -(radius - baseR);
             items.forEach((item, index) => {
-                const rotateY = index * section.angle;
-                item.style.transform = `rotateY(${rotateY}deg) translateZ(400px)`;
+                item.style.transform = `rotateY(${index * angle}deg) translateZ(${radius}px)`;
+            });
+            applyRotation();
+        }
+
+        function applyRotation() {
+            carousel.style.transform = `translateZ(${section.depth || 0}px) rotateY(${-currentIndex * angle}deg)`;
+            items.forEach((item, i) => {
+                const d = Math.min((i - currentIndex + total) % total, (currentIndex - i + total) % total);
+                item.classList.toggle('is-active', d === 0);
+                item.classList.toggle('is-near', d <= 1);
             });
         }
 
         // Rotate carousel
         function rotateCarousel(direction) {
-            if (direction === 'next') {
-                currentIndex = (currentIndex + 1) % section.totalItems;
-            } else {
-                currentIndex = (currentIndex - 1 + section.totalItems) % section.totalItems;
-            }
+            if (total < 2) return;
+            currentIndex = direction === 'next'
+                ? (currentIndex + 1) % total
+                : (currentIndex - 1 + total) % total;
+            applyRotation();
+        }
 
-            const rotateY = -currentIndex * section.angle;
-            carousel.style.transform = `rotateY(${rotateY}deg)`;
+        // Single item: nothing to rotate, hide arrows
+        if (total < 2) {
+            [prevBtn, nextBtn].forEach(b => b && (b.style.display = 'none'));
         }
 
         // Auto-rotate carousel
@@ -197,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (section.autoRotateInterval) {
                 clearInterval(section.autoRotateInterval);
             }
+            if (total < 2) return;
             section.autoRotateInterval = setInterval(() => {
                 if (!hasFlippedCard) {
                     rotateCarousel('next');
@@ -222,6 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.querySelector(`.view-btn[data-section="${sectionId}"][data-view="carousel"]`).classList.add('active');
                 carouselContainer.classList.remove('hidden');
                 gridContainer.classList.add('hidden');
+                layout();
                 startAutoRotate();
             } else {
                 document.querySelector(`.view-btn[data-section="${sectionId}"][data-view="grid"]`).classList.add('active');
@@ -393,8 +433,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Initialize
-        initCarousel();
+        layout();
         initCarouselItems();
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(layout, 120);
+        });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+        window.addEventListener('load', layout);
         initGridItems();
         startAutoRotate();
 
@@ -467,8 +514,22 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(downloadModal);
 
     // Show certificate in full view
-    function showFullView(certificateId) {
-        const data = certificateData[certificateId];
+    function showFullView(certificateId, button) {
+        let data = certificateData[certificateId];
+        if (!data && button) {
+            // fallback for certificates added without a certificateData entry
+            const card = button.closest('.certificate-item, .grid-item');
+            const img = card && card.querySelector('.certificate-front img');
+            const title = card && card.querySelector('.certificate-back h3');
+            const desc = card && card.querySelector('.certificate-back p');
+            if (img) {
+                data = {
+                    image: img.getAttribute('src'),
+                    title: title ? title.textContent.trim() : (img.alt || ''),
+                    description: desc ? desc.textContent.replace(/\s+/g, ' ').trim() : ''
+                };
+            }
+        }
         if (data) {
             modalImage.src = data.image;
             modalImage.alt = data.title;
@@ -525,13 +586,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // View Full buttons for all sections
-    document.querySelectorAll('.view-full-btn').forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.stopPropagation();
-            const certificateId = this.getAttribute('data-certificate');
-            showFullView(certificateId);
-        });
+    // View Full buttons (delegated, so cloned grid cards work too)
+    document.addEventListener('click', function (e) {
+        const button = e.target.closest('.view-full-btn');
+        if (!button) return;
+        e.stopPropagation();
+        const certificateId = button.getAttribute('data-certificate');
+        showFullView(certificateId, button);
     });
 
     // Modal controls
