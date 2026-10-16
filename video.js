@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
             duration: '3:34',
             date: 'December 2025',
             thumbnail: 'images/Idol_Cover.jpg',
-            videoId: '17DyGcv52ayyl1Zq5X-TG4W1kR9fnXx16',
+            videoId: '70VJk5PRikQ',
             category: 'creative',
             likes: 42,
             views: 128
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
             duration: '7:26',
             date: '28th November, 2025',
             thumbnail: 'images/Documentary Cover.jpg',
-            videoId: '19yeXo2GBwot6ybTTARJLGGRylH5qFUZf',
+            videoId: 'tUBEw7L4_f4',
             category: 'documentary',
             likes: 38,
             views: 156
@@ -36,7 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
             duration: '1:50',
             date: 'February 2024',
             thumbnail: 'images/Metro_Life.jpg',
-            videoId: '10G859vHzEXYcJXwu88ENCUKyrAz1Wrom',
+            videoId: 'e8Wd1y7-Po8',
+            vertical: true,   // YouTube Short (9:16)
             category: 'sample',
             likes: 29,
             views: 89
@@ -48,10 +49,22 @@ document.addEventListener('DOMContentLoaded', function () {
             duration: '0:18',
             date: 'July 2024',
             thumbnail: 'images/Creative_Work.jpg',
-            videoId: '11FndmQwFpI9WNnrXZQPipBHBsOZC3GgZ',
+            videoId: 'bk_gG-6IVeA',
             category: 'creative',
             likes: 31,
             views: 102
+        },
+        {
+            id: 'short-editing',
+            title: 'Short Editing',
+            description: 'A short trending-style edit built around Shah Rukh Khan\'s iconic open-arms pose. Quick cuts, beat-matched timing and punchy transitions turn one legendary moment into a fast, shareable clip.',
+            duration: '',   // unknown: the player fills it in once the video loads
+            date: 'October 2026',
+            thumbnail: 'https://img.youtube.com/vi/tuEp5iPowao/hqdefault.jpg',
+            videoId: 'tuEp5iPowao',
+            category: 'creative',
+            likes: 0,
+            views: 0
         }
     ];
 
@@ -64,12 +77,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const seconds = d => String(d).split(':').map(n => parseInt(n, 10) || 0).reduce((a, n) => a * 60 + n, 0);
 
+    // Missing local thumbnail -> fall back to the YouTube-generated one
+    document.addEventListener('error', e => {
+        const t = e.target;
+        if (t && t.tagName === 'IMG' && t.dataset.yt && !t.dataset.fb) {
+            t.dataset.fb = '1';
+            t.src = 'https://img.youtube.com/vi/' + t.dataset.yt + '/hqdefault.jpg';
+        }
+    }, true);
+    const durHTML = v => v.duration ? '<i class="far fa-clock"></i> ' + esc(v.duration) : '';
+
     // ---------- elements ----------
     const grid = $('#gallery-grid');
     const modal = $('#videoPlayerModal');
     const panel = $('.vx-panel', modal);
     const closeBtn = $('.modal-close', modal);
-    const player = $('#modal-video-player');
+    const screen = $('#vxScreen');
     const poster = $('#videoThumbnailModal');
     const posterImg = $('#modal-video-thumb');
     const bigPlay = $('#vxBigPlay');
@@ -91,10 +114,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const featured = videoData.find(v => v.id === FEATURED_ID) || videoData[0];
     const stage = $('#vxStage');
     if (featured && stage) {
+        $('#vxStageImg').dataset.yt = featured.videoId;
         $('#vxStageImg').src = featured.thumbnail;
         $('#vxStageImg').alt = featured.title;
         $('#vxStageTitle').textContent = featured.title;
-        $('#vxStageMeta').textContent = featured.duration + ' · ' + cap(featured.category) + ' film';
+        $('#vxStageMeta').textContent = (featured.duration ? featured.duration + ' · ' : '') + cap(featured.category) + ' film';
         const open = () => openPlayer(featured.id);
         stage.addEventListener('click', open);
         stage.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
@@ -173,9 +197,9 @@ document.addEventListener('DOMContentLoaded', function () {
         return `
         <article class="vx-card vx-glass" data-id="${esc(v.id)}" data-category="${esc(v.category)}" style="--i:${i}" tabindex="0" aria-label="Play ${esc(v.title)}">
             <div class="vx-card-media">
-                <img src="${esc(v.thumbnail)}" alt="${esc(v.title)} thumbnail" loading="lazy">
+                <img src="${esc(v.thumbnail)}" data-yt="${esc(v.videoId)}" alt="${esc(v.title)} thumbnail" loading="lazy">
                 <span class="vx-card-play"><i class="fas fa-play"></i></span>
-                <span class="vx-dur"><i class="far fa-clock"></i> ${esc(v.duration)}</span>
+                ${v.duration ? `<span class="vx-dur">${durHTML(v)}</span>` : ''}
             </div>
             <div class="vx-card-body">
                 <div class="vx-card-meta">
@@ -277,9 +301,53 @@ document.addEventListener('DOMContentLoaded', function () {
     function fillUpNext() {
         nextList.innerHTML = videoData.filter(v => v.id !== current.id).map(v => `
             <button type="button" class="vx-next-item" data-id="${esc(v.id)}">
-                <img src="${esc(v.thumbnail)}" alt="" loading="lazy">
-                <span><b>${esc(v.title)}</b>${esc(v.duration)} · ${esc(cap(v.category))}</span>
+                <img src="${esc(v.thumbnail)}" data-yt="${esc(v.videoId)}" alt="" loading="lazy">
+                <span><b>${esc(v.title)}</b>${v.duration ? esc(v.duration) + ' · ' : ''}${esc(cap(v.category))}</span>
             </button>`).join('');
+    }
+
+    // ---------- YouTube player (IFrame API, native YouTube controls) ----------
+    let yt = null, ytReady = false, wantPlay = false;
+    const fmt = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+
+    function loadYTApi(cb) {
+        if (window.YT && YT.Player) return cb();
+        (window.__ytq = window.__ytq || []).push(cb);
+        if (document.getElementById('yt-api')) return;
+        const s = document.createElement('script');
+        s.id = 'yt-api'; s.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(s);
+        window.onYouTubeIframeAPIReady = () => { (window.__ytq || []).forEach(f => f()); window.__ytq = []; };
+    }
+
+    function buildPlayer() {
+        if (yt || !current) return;
+        // Native controls: volume, captions (CC), speed, quality and fullscreen all come from YouTube itself
+        const vars = { controls: 1, rel: 0, modestbranding: 1, playsinline: 1, fs: 1, cc_load_policy: 0 };
+        if (/^https?:/.test(location.protocol)) vars.origin = location.origin;
+        yt = new YT.Player('modal-video-player', {
+            videoId: current.videoId,
+            playerVars: vars,
+            events: {
+                onReady: () => {
+                    ytReady = true;
+                    if (wantPlay) { wantPlay = false; yt.playVideo(); }
+                },
+                onStateChange: onState
+            }
+        });
+    }
+
+    function onState(e) {
+        const S = YT.PlayerState;
+        if (e.data === S.PLAYING || e.data === S.BUFFERING) poster.classList.add('hidden');
+        if (e.data === S.ENDED) poster.classList.remove('hidden');
+        // fill in the real length when we don't have one in the data
+        if (current && !current.duration && yt.getDuration && yt.getDuration() > 0) {
+            current.duration = fmt(yt.getDuration());
+            $('#modal-duration').innerHTML = durHTML(current);
+            $('#modal-duration').style.display = '';
+        }
     }
 
     function load(v) {
@@ -288,13 +356,19 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#modal-description').textContent = v.description;
         $('#modal-cat').textContent = cap(v.category);
         $('#modal-cat').dataset.cat = v.category;
-        $('#modal-duration').innerHTML = '<i class="far fa-clock"></i> ' + esc(v.duration);
+        $('#modal-duration').innerHTML = durHTML(v);
+        $('#modal-duration').style.display = v.duration ? '' : 'none';
         $('#modal-date').innerHTML = '<i class="far fa-calendar"></i> ' + esc(v.date);
+        posterImg.dataset.fb = '';
+        posterImg.dataset.yt = v.videoId;
         posterImg.src = v.thumbnail;
         posterImg.alt = v.title;
         poster.classList.remove('hidden');
-        player.src = 'https://drive.google.com/file/d/' + v.videoId + '/preview';
-        $('#vxOpen').href = 'https://drive.google.com/file/d/' + v.videoId + '/view';
+        screen.classList.toggle('is-vertical', !!v.vertical);
+        $('#vxOpen').href = 'https://www.youtube.com/watch?v=' + v.videoId;
+        wantPlay = false;
+        if (ytReady) yt.cueVideoById(v.videoId);
+        else loadYTApi(buildPlayer);
         fillUpNext();
     }
 
@@ -317,7 +391,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.documentElement.classList.remove('vx-lock');
         document.body.style.overflow = '';
         if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
-        setTimeout(() => { if (!modal.classList.contains('active')) player.src = 'about:blank'; }, 400);
+        if (ytReady) yt.stopVideo();
         if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
     }
 
@@ -327,8 +401,8 @@ document.addEventListener('DOMContentLoaded', function () {
         load(videoData[(i + dir + videoData.length) % videoData.length]);
     }
 
-    bigPlay.addEventListener('click', () => poster.classList.add('hidden'));
-    poster.addEventListener('click', e => { if (e.target === poster || e.target === posterImg) poster.classList.add('hidden'); });
+    bigPlay.addEventListener('click', () => { if (ytReady) yt.playVideo(); else wantPlay = true; poster.classList.add('hidden'); });
+    poster.addEventListener('click', e => { if (e.target === poster || e.target === posterImg) bigPlay.click(); });
     closeBtn.addEventListener('click', closePlayer);
     $('.modal-overlay', modal).addEventListener('click', closePlayer);
     $('#vxPrev').addEventListener('click', () => step(-1));
@@ -336,17 +410,6 @@ document.addEventListener('DOMContentLoaded', function () {
     nextList.addEventListener('click', e => {
         const b = e.target.closest('.vx-next-item');
         if (b) { const v = videoData.find(x => x.id === b.dataset.id); if (v) load(v); }
-    });
-
-    const fsBtn = $('#fullscreenBtn');
-    const fsOK = !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
-    if (!fsOK) fsBtn.style.display = 'none';   // e.g. iPhone Safari: use "Open in Drive" instead
-    fsBtn.addEventListener('click', () => {
-        const el = $('#vxScreen');
-        poster.classList.add('hidden');
-        if (!document.fullscreenElement) {
-            (el.requestFullscreen || el.webkitRequestFullscreen || function () { say('Fullscreen is not supported here'); }).call(el);
-        } else if (document.exitFullscreen) document.exitFullscreen();
     });
 
     $('#vxShare').addEventListener('click', async () => {
@@ -361,8 +424,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', e => {
         if (!modal.classList.contains('active')) return;
         if (e.key === 'Escape') closePlayer();
-        else if (e.key === 'ArrowRight' && !e.target.closest('iframe')) step(1);
-        else if (e.key === 'ArrowLeft' && !e.target.closest('iframe')) step(-1);
+        else if (e.key === 'ArrowRight') step(1);
+        else if (e.key === 'ArrowLeft') step(-1);
         else if (e.key === 'Tab') {   // keep focus inside the dialog
             const f = $$('button, [href], [tabindex]:not([tabindex="-1"])', panel).filter(x => x.offsetParent !== null);
             if (!f.length) return;
@@ -385,6 +448,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { passive: true });
 
     // ---------- init ----------
+    if ('requestIdleCallback' in window) requestIdleCallback(() => loadYTApi(() => { }), { timeout: 3000 });
     render();
     moveThumb();
 });
