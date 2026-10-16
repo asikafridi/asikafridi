@@ -16,77 +16,35 @@ body {
     text-align: center;
 }
 
-.certificates-hero h1 {
-    font-size: 3rem;
+/* Page title uses the same .sec-title font as every section title, just larger */
+.certificates-hero .sec-title.page-title {
+    justify-content: center;
+    font-size: clamp(2.4rem, 6.4vw, 4.8rem) !important;
     margin-bottom: 1rem;
-    background: linear-gradient(45deg, #dd9a3b, #5fb3a3);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.certificates-hero h1 span {
-    background: linear-gradient(45deg,
-            #dd9a3b,
-            #5fb3a3,
-            #c97b84);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradient-text 5s ease infinite;
-}
-
-@keyframes gradient-text {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-.certificates-hero:hover h1 {
-    transform: scale(1.05);
 }
 
 .certificates-hero p {
     color: var(--paper-dim);
     font-size: 1.4rem;
-    max-width: auto;
+    max-width: 46rem;
     margin: 0 auto;
     line-height: 1.6;
 }
 
 @media (max-width: 768px) {
-    .certificates-hero h1 {
-        font-size: 2.5rem;
-    }
-
     .certificates-hero p {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 }
 
 @media (max-width: 480px) {
-    .certificates-hero h1 {
-        font-size: 1.8rem;
+    .certificates-hero .sec-title.page-title {
+        font-size: clamp(2rem, 9.4vw, 2.6rem) !important;
     }
 
     .certificates-hero p {
-        font-size: 1rem;
-        padding: 0 1rem;
-    }
-}
-
-@media (max-width: 360px) {
-    .certificates-hero h1 {
-        font-size: 1.5rem;
+        font-size: 0.95rem;
+        padding: 0 0.5rem;
     }
 }
 
@@ -99,58 +57,19 @@ body {
     margin-bottom: 6rem;
 }
 
-.section-title {
+/* Section titles: same .sec-title font as the page title, centered, smaller */
+.certificate-section .sec-title {
+    justify-content: center;
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-    color: #dd9a3b;
-    position: relative;
-    padding-bottom: 1rem;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 3px;
-    background: #dd9a3b;
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem) !important;
+    margin: 0 auto 1.6rem;
 }
 
 @media (max-width: 768px) {
-    .section-title {
-        font-size: 2.5rem !important;
+    .certificate-section .sec-title {
+        font-size: clamp(1.35rem, 6.2vw, 1.9rem) !important;
+        margin-bottom: 1.2rem;
     }
-}
-
-@media (max-width: 480px) {
-    .section-title {
-        font-size: 1.8rem !important;
-    }
-}
-
-@media (max-width: 360px) {
-    .section-title {
-        font-size: 1.2rem !important;
-    }
-}
-
-.microsoft-section .section-title {
-    color: #5fb3a3;
-}
-
-.microsoft-section .section-title::after {
-    background: #5fb3a3;
-}
-
-.training-section .section-title {
-    color: #dd9a3b;
-}
-
-.training-section .section-title::after {
-    background: #dd9a3b;
 }
 
 .view-controls {
@@ -195,11 +114,13 @@ body {
 }
 
 .carousel-container {
+    --card-w: 300px;
+    --card-h: 400px;
     position: relative;
     perspective: 1500px;
-    height: 500px;
-    margin-top: 150px;
-    margin-bottom: 150px;
+    height: calc(var(--card-h) + 100px);
+    margin-top: 110px;
+    margin-bottom: 110px;
     border-radius: 15px;
 }
 
@@ -213,12 +134,12 @@ body {
 
 .certificate-item {
     position: absolute;
-    width: 300px;
-    height: 400px;
+    width: var(--card-w);
+    height: var(--card-h);
     left: 50%;
     top: 50%;
-    margin-left: -150px;
-    margin-top: -200px;
+    margin-left: calc(var(--card-w) / -2);
+    margin-top: calc(var(--card-h) / -2);
     transition: transform 0.5s ease, opacity 0.5s ease;
     transform-style: preserve-3d;
     cursor: pointer;
@@ -257,7 +178,8 @@ body {
 
 .certificate-front img {
     width: 100%;
-    height: 250px;
+    flex: 1 1 auto;
+    min-height: 0;
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 1rem;
@@ -268,6 +190,14 @@ body {
     font-size: 1.2rem;
     margin: 0;
     line-height: 1.3;
+    flex: 0 0 auto;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .certificate-back {
@@ -290,6 +220,8 @@ body {
 }
 
 .certificate-back p {
+    overflow-y: auto;
+    min-height: 0;
     color: var(--paper-dim);
     margin-bottom: 1.5rem;
     line-height: 1.4;
@@ -371,6 +303,7 @@ body {
 
 .grid-item {
     height: 380px;
+    min-width: 0;
     perspective: 1000px;
     cursor: pointer;
     position: relative;
@@ -404,10 +337,17 @@ body {
 
 .grid-item .certificate-front img {
     width: 100%;
-    height: 200px;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 1rem;
+}
+
+.grid-item .certificate-back h3,
+.grid-item .certificate-front h3 {
+    overflow-wrap: anywhere;
 }
 
 .grid-item .certificate-back {
@@ -731,200 +671,184 @@ body {
     color: #5fb3a3;
 }
 
-/* Mobile Responsiveness */
+/* Mobile Responsiveness
+   Carousel card size comes from --card-w/--card-h; certificates.js derives the
+   ring radius from the card width + number of cards, so any count works. */
 @media (max-width: 768px) {
     .carousel-container {
-        height: 500px !important;
-        perspective: auto;
-        margin-top: 50px;
-        margin-bottom: 50px;
+        --card-w: 240px;
+        --card-h: 360px;
+        perspective: 1100px;
+        height: calc(var(--card-h) + 50px);
+        margin-top: 20px;
+        margin-bottom: 30px;
         max-width: 100%;
         overflow: hidden;
-        transform-style: preserve-3d !important;
-        border-radius: 15px !important;
     }
 
+    /* only the front card and its neighbours are drawn: no clutter behind */
     .certificate-item {
-        width: 250px !important;
-        height: 500px !important;
-        margin-left: -110px !important;
-        margin-top: -250px !important;
-        transform-style: preserve-3d;
+        opacity: 0;
+        pointer-events: none;
     }
 
-    .certificate-front img {
-        height: 150px !important;
+    .certificate-item.is-near {
+        opacity: 0.35;
+    }
+
+    .certificate-item.is-active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .certificate-item:hover {
+        transform: none;
     }
 
     .certificate-front,
     .certificate-back {
-        padding: 1rem !important;
+        padding: 0.9rem;
     }
 
     .certificate-front h3 {
-        font-size: 1rem !important;
+        font-size: 0.98rem;
+        min-height: 2.6em;
+        display: -webkit-box;
+    }
+
+    .certificate-front img {
+        margin-bottom: 0.7rem;
+    }
+
+    .certificate-back {
+        padding: 1rem;
+        gap: 0.6rem;
     }
 
     .certificate-back h3 {
-        font-size: 0.9rem !important;
-        margin-top: 100px;
+        font-size: 0.95rem;
+        margin: 0;
+        flex: 0 0 auto;
     }
 
     .certificate-back p {
-        font-size: 0.75rem !important;
-        margin-bottom: 0.3rem;
+        font-size: 0.8rem;
+        margin: 0;
+        flex: 1 1 auto;
     }
 
     .view-full-btn {
-        padding: 0.5rem 1rem !important;
-        font-size: 0.75rem !important;
-        margin-bottom: 100px;
+        padding: 0.5rem 1.1rem;
+        font-size: 0.78rem;
+        margin-top: 0.2rem;
+        flex: 0 0 auto;
     }
 
     .carousel-nav {
-        width: 35px !important;
-        height: 35px !important;
-        font-size: 0.9rem !important;
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
     }
 
     .carousel-nav.prev {
-        left: 5px !important;
+        left: 6px;
     }
 
     .carousel-nav.next {
-        right: 5px !important;
-    }
-
-    .section-title {
-        font-size: 2rem;
+        right: 6px;
     }
 
     .view-controls {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        margin-bottom: 1.2rem;
     }
 
     .view-btn {
-        width: 200px;
+        padding: 0.65rem 1.2rem;
+        font-size: 0.9rem;
         justify-content: center;
     }
 
+    .grid-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
     .grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
     }
 
     .grid-item {
-        height: 320px;
+        height: 290px;
     }
 
-    .grid-item .certificate-front img {
-        height: 140px;
+    .grid-item .certificate-front,
+    .grid-item .certificate-back {
+        padding: 0.75rem;
+    }
+
+    .grid-item .certificate-front h3 {
+        font-size: 0.85rem;
+        min-height: 2.6em;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+    }
+
+    .grid-item .certificate-back {
+        gap: 0.4rem;
+    }
+
+    .grid-item .certificate-back h3 {
+        font-size: 0.82rem;
+        margin: 0;
+    }
+
+    .grid-item .certificate-back p {
+        font-size: 0.7rem;
+        margin: 0;
+        line-height: 1.35;
+        flex: 1 1 auto;
+    }
+
+    .grid-item .view-full-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.7rem;
+        margin: 0;
+    }
+
+    .certificate-section {
+        margin-bottom: 3.5rem;
     }
 }
 
 @media (max-width: 480px) {
     .carousel-container {
-        height: 500px !important;
-        perspective: auto;
-        margin-top: 10px !important;
-        margin-bottom: 10px !important;
-        max-width: 100%;
-        overflow: hidden;
-        border-radius: 15px !important;
-    }
-
-    .certificate-item {
-        width: 180px !important;
-        height: 250px !important;
-        margin-left: -90px !important;
-        margin-top: -125px !important;
-        transform-style: preserve-3d;
-    }
-
-    .certificate-front img {
-        height: 100px !important;
-    }
-
-    .certificate-front,
-    .certificate-back {
-        padding: 1rem !important;
-    }
-
-    .certificate-front h3 {
-        font-size: 0.9rem !important;
-    }
-
-    .certificate-back h3 {
-        font-size: 0.9rem !important;
-    }
-
-    .certificate-back p {
-        font-size: 0.75rem !important;
-        margin-bottom: 0.8rem;
+        --card-w: 220px;
+        --card-h: 340px;
     }
 
     .grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.7rem;
     }
 
     .grid-item {
-        height: 260px;
-    }
-
-    .grid-item .certificate-front img {
-        height: 110px;
-    }
-
-
-
-    .view-controls {
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .view-btn {
-        width: 100px;
-        justify-content: center;
+        height: 270px;
     }
 }
 
 @media (max-width: 360px) {
     .carousel-container {
-        height: 300px !important;
-        border-radius: 15px !important;
-    }
-
-    .certificate-item {
-        width: 160px !important;
-        height: 220px !important;
-        margin-left: -80px !important;
-        margin-top: -110px !important;
-    }
-
-    .certificate-front img {
-        height: 90px !important;
-    }
-
-    .grid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        --card-w: 200px;
+        --card-h: 320px;
     }
 
     .grid-item {
-        height: 220px;
+        height: 255px;
     }
 
-    .grid-item .certificate-front img {
-        height: 90px;
-    }
-
-    .view-controls {
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .view-btn {
-        width: 100px;
-        justify-content: center;
+    .grid-item .certificate-front h3 {
+        font-size: 0.78rem;
     }
 }
 
